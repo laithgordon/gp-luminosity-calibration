@@ -1,0 +1,25 @@
+# ── Raw simulation data (too large for git — regenerate from GUINEA-PIG++ runs) ──
+*.ref
+*.dat
+output/
+output_nm/
+output_no_pairs/
+sampling/
+sampling_nm/
+
+# ── Scratch / temporary render outputs ──
+temp_*.png
+*.tmp
+
+# ── Python ──
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+*.egg-info/
+.venv/
+venv/
+
+# ── OS / editor cruft ──
+.DS_Store
+Thumbs.db
+*.swp
