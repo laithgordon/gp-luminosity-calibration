@@ -11,6 +11,12 @@ sampling_nm/
 temp_*.png
 *.tmp
 
+# ── Backups & caches ──
+*.bak
+*.bak-*
+.*_cache.json
+lumi_extract_report.txt
+
 # ── Python ──
 __pycache__/
 *.py[cod]
