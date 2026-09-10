@@ -1,0 +1,14 @@
+code,name,value,error,note
+GP++,q_pred,0.214,,"derived pinch exponent, R = Lambda D^q"
+GP++,Lambda,1.88,,"normalisation of R over D_y in [21.5, 137.8]"
+GP++,c_y,20.0,,"vertical cut multiplier, box is +/- c_y sigma_y*"
+GP++,q_fit,0.4018739494488937,0.15153113025389714,free power-law slope of n_y^req vs D_y
+GP++,C_y_fit,26.159342866775727,,normalisation of the free n_y fit
+GP++,b_fit,3.1148844446749657,0.2503343720604374,measured slope of n_m^req/(n_x n_y n_z) vs D_y; b = s - q
+GP++,s_fit,3.3288844446749657,0.2503343720604374,b_fit + q_pred
+GP++,C_m_fit,1.4043588502957162e-07,1.3133900976699317e-07,normalisation of the n_m fit
+GP++,b_cons,3.3,,conservative locus slope actually run on (unchanged)
+GP++,s_cons,3.514,,b_cons + q_pred
+GP++,C_m_cons,2.305e-07,,conservative locus normalisation
+GP++,kappa,0.28360949737701524,0.007614166167205572,"weighted mean, weights 1/sigma_tot^2"
+GP++,kappa_slope,-0.0631260505512024,0.15153113025389714,dln(kappa)/dln(D_y); consistent with 0 means R(D_y) holds

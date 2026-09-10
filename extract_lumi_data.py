@@ -1,35 +1,85 @@
+#!/usr/bin/env python3
 """
 extract_lumi_data.py
 --------------------
 Scan .ref files in output/C3_250/, output_nm/C3_250/, output_no_pairs/C3_250/,
-parse filename parameters and content metrics, save to analysis/data/lumi_extracted.csv.
+parse run parameters from the filename and luminosity metrics from the content,
+and write data/lumi_extracted.csv.
+
+The CSV is REBUILT IN FULL on every run, so parse errors never compound and
+deleted .ref files disappear from the output. What is cached is only the *file
+reading*: a file whose (mtime, size) is unchanged since the last run is not
+re-read from disk, its previously parsed row is reused. Combined with a thread
+pool for the reads that remain, a warm run over ~16k files takes seconds rather
+than ~20 minutes. Use --full to ignore the cache and re-read everything.
+
+Usage
+    python3 extract_lumi_data.py              # incremental; writes both CSVs
+    python3 extract_lumi_data.py --full       # re-read every .ref file
+    python3 extract_lumi_data.py --workers 8  # fewer threads
+    python3 extract_lumi_data.py --out /tmp/x.csv    # override destination(s)
+    python3 extract_lumi_data.py --test       # 10 files/dir, writes nothing
+
+UNITS (read this before using lumi_ee / lumi_fine)
+    GP++ prints `lumi_ee` and `lumi_fine` in the .ref file as the luminosity of
+    ONE bunch crossing in m^-2 (see src/resultsCPP.cc: f_rep*n_b is applied only
+    to the lumi[j1][j2] matrix, never to lumi_ee). This script converts them to
+    a rate in cm^-2 s^-1 using the f_rep and n_b echoed in the SAME .ref file:
+
+        lumi_ee [cm^-2 s^-1] = lumi_ee_m2 [m^-2 / crossing] * 1e-4 * n_b * f_rep
+
+    (= x 1.5960 for the C3-250 deck, n_b = 133, f_rep = 120 Hz). The raw values
+    are kept in `lumi_ee_m2` / `lumi_fine_m2`, and `f_rep` / `n_b` are recorded
+    per row. A row whose .ref lacks the f_rep/n_b echo gets an EMPTY lumi_ee
+    and is listed in the report - it is never silently left unconverted.
+
+Outputs
+    data/lumi_extracted.csv             (this tree - what the notebooks read)
+    ../analysis/data/lumi_extracted.csv (kept in sync; both trees hold analysis code)
+    data/lumi_extract_report.txt        (unparsed filenames, rows missing lumi_ee)
+    data/.lumi_extract_cache.json       (read cache; safe to delete any time)
 """
 
+import argparse
+import csv
+import gzip
+import json
 import os
 import re
-import glob
-import csv
-import math
+import sys
+import time
+from concurrent.futures import ThreadPoolExecutor
 
 # ── Paths ──────────────────────────────────────────────────────────────────────
 BASE = "/fs/ddn/sdf/group/atlas/d/laithg/GuineaPig_Feb_2025"
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+
 SOURCE_DIRS = {
-    "output":       os.path.join(BASE, "output",         "C3_250"),
-    "output_nm":    os.path.join(BASE, "output_nm",      "C3_250"),
+    "output":          os.path.join(BASE, "output",          "C3_250"),
+    "output_nm":       os.path.join(BASE, "output_nm",       "C3_250"),
     "output_no_pairs": os.path.join(BASE, "output_no_pairs", "C3_250"),
 }
-OUT_CSV = os.path.join(BASE, "analysis", "data", "lumi_extracted.csv")
-BATCH_SIZE = 500
+
+# Both trees hold analysis code that reads this CSV. Writing both by default
+# stops them silently diverging - which is how a 5-week-stale copy came to be
+# read by GitHub_Analysis/ notebooks while a fresh extract landed in analysis/.
+DEFAULT_OUT_CSVS = [
+    os.path.join(SCRIPT_DIR, "data", "lumi_extracted.csv"),
+    os.path.join(BASE, "analysis", "data", "lumi_extracted.csv"),
+]
+CACHE_PATH  = os.path.join(SCRIPT_DIR, "data", ".lumi_extract_cache.json")
+REPORT_PATH = os.path.join(SCRIPT_DIR, "data", "lumi_extract_report.txt")
+CACHE_VERSION = 3          # bump to invalidate every cached row (3: lumi unit conversion)
 
 # ── Filename regex patterns ────────────────────────────────────────────────────
-# Common tail shared by both patterns (after offsety value):
-#   optional: _integration_method_{val}
-#   optional: _cutx{val}_cuty{val}_cutz{val}
-#   required: _seed_{seed}.ref
+# Common tail shared by both patterns (after the offsety value). Every optional
+# group has been seen in production filenames; `grids` is the one whose absence
+# silently dropped 280 grid-extent files before CACHE_VERSION 2.
 _TAIL = (
     r"(?:_integration_method_(?P<integration_method>[0-9.eE+-]+))?"
     r"(?:_nt(?P<n_t>[0-9.eE+-]+))?"
     r"(?:_cutx(?P<cut_x>[0-9.eE+-]+)_cuty(?P<cut_y>[0-9.eE+-]+)_cutz(?P<cut_z>[0-9.eE+-]+))?"
+    r"(?:_grids(?P<grids>[0-9.eE+-]+))?"
     r"_seed_(?P<seed>\d+)\.ref$"
 )
 
@@ -53,35 +103,32 @@ PATTERN_NM = re.compile(
 )
 
 # ── Content regex patterns ─────────────────────────────────────────────────────
-RE_LUMI_EE   = re.compile(r"\blumi_ee\b\s*=\s*([0-9.eE+-]+)")
-RE_LUMI_FINE = re.compile(r"\blumi_fine\b\s*=\s*([0-9.eE+-]+)")
-RE_PHOT_E1   = re.compile(r"\bphot-e1\b\s*=\s*([0-9.eE+-]+)")
-RE_PHOT_E2   = re.compile(r"\bphot-e2\b\s*=\s*([0-9.eE+-]+)")
-RE_N_PHOT1   = re.compile(r"\bn_phot1\b\s*=\s*([0-9.eE+-]+)")
-RE_N_PHOT2   = re.compile(r"\bn_phot2\b\s*=\s*([0-9.eE+-]+)")
-RE_DE1       = re.compile(r"\bde1\b\s*=\s*([0-9.eE+-]+)")
-RE_DE2       = re.compile(r"\bde2\b\s*=\s*([0-9.eE+-]+)")
-RE_N_PAIRS   = re.compile(r"\bn_pairs\b\s*=\s*([0-9.eE+-]+)")
-RE_E_PAIRS   = re.compile(r"\be_pairs\b\s*=\s*([0-9.eE+-]+)")
-RE_OUT1      = re.compile(r"out\.1=([0-9]+)")
-RE_OUT2      = re.compile(r"out\.2=([0-9]+)")
-
+# Byte patterns: .ref files are ASCII, and skipping the UTF-8 decode of ~180 MB
+# is measurably cheaper than decoding and then matching str patterns.
+_NUM = rb"([0-9.eE+-]+)"
 CONTENT_PATTERNS = [
-    ("lumi_ee",   RE_LUMI_EE,   float),
-    ("lumi_fine", RE_LUMI_FINE, float),
-    ("phot_e1",   RE_PHOT_E1,   float),
-    ("phot_e2",   RE_PHOT_E2,   float),
-    ("n_phot1",   RE_N_PHOT1,   float),
-    ("n_phot2",   RE_N_PHOT2,   float),
-    ("de1",       RE_DE1,       float),
-    ("de2",       RE_DE2,       float),
-    ("n_pairs",   RE_N_PAIRS,   float),
-    ("e_pairs",   RE_E_PAIRS,   float),
-    ("out_1",     RE_OUT1,      int),
-    ("out_2",     RE_OUT2,      int),
+    # raw per-crossing values exactly as printed (m^-2); converted in build_row
+    ("lumi_ee_m2",   re.compile(rb"\blumi_ee\b\s*=\s*"   + _NUM), float),
+    ("lumi_fine_m2", re.compile(rb"\blumi_fine\b\s*=\s*" + _NUM), float),
+    # collider rate factors echoed by GP++ in the SWITCHES block of every .ref
+    ("f_rep",     re.compile(rb"\bf_rep\s*=\s*"     + _NUM), float),
+    ("n_b",       re.compile(rb"\bn_b\s*=\s*([0-9]+)"),        int),
+    ("phot_e1",   re.compile(rb"\bphot-e1\b\s*=\s*"   + _NUM), float),
+    ("phot_e2",   re.compile(rb"\bphot-e2\b\s*=\s*"   + _NUM), float),
+    ("n_phot1",   re.compile(rb"\bn_phot1\b\s*=\s*"   + _NUM), float),
+    ("n_phot2",   re.compile(rb"\bn_phot2\b\s*=\s*"   + _NUM), float),
+    ("de1",       re.compile(rb"\bde1\b\s*=\s*"       + _NUM), float),
+    ("de2",       re.compile(rb"\bde2\b\s*=\s*"       + _NUM), float),
+    ("n_pairs",   re.compile(rb"\bn_pairs\b\s*=\s*"   + _NUM), float),
+    ("e_pairs",   re.compile(rb"\be_pairs\b\s*=\s*"   + _NUM), float),
+    ("out_1",     re.compile(rb"out\.1=([0-9]+)"),             int),
+    ("out_2",     re.compile(rb"out\.2=([0-9]+)"),             int),
 ]
 
 # ── CSV columns ───────────────────────────────────────────────────────────────
+# Order is load-bearing for downstream analysis: everything through "out_2" is
+# identical to the original schema. `grids` is appended LAST so any positional
+# reader of the original columns is unaffected.
 COLUMNS = [
     "source_dir", "filename",
     "n_x", "n_y", "n_z", "n_m",
@@ -98,12 +145,20 @@ COLUMNS = [
     "de1", "de2",
     "n_pairs", "e_pairs",
     "out_1", "out_2",
+    "grids",
+    # appended 2026-09-09 (unit fix): raw per-crossing values and rate factors.
+    # lumi_ee / lumi_fine above are cm^-2 s^-1 = *_m2 * 1e-4 * n_b * f_rep.
+    "lumi_ee_m2", "lumi_fine_m2", "f_rep", "n_b",
 ]
+
+# m^-2 per crossing -> cm^-2 s^-1
+def lumi_rate(L_m2, f_rep, n_b):
+    return L_m2 * 1e-4 * n_b * f_rep
 
 # ── Helpers ────────────────────────────────────────────────────────────────────
 
 def parse_filename(fn):
-    """Return dict of parameters or None if no pattern matches."""
+    """Return dict of parameters, or None if no pattern matches."""
     for pat in (PATTERN_NM, PATTERN_NO_NM):
         m = pat.match(fn)
         if m:
@@ -112,15 +167,15 @@ def parse_filename(fn):
 
 
 def parse_content(path):
-    """Read .ref file and return dict of extracted metric values."""
+    """Read one .ref file; return dict of metrics, or None if unreadable."""
     try:
-        with open(path, "r", errors="replace") as fh:
-            content = fh.read()
+        with open(path, "rb") as fh:
+            blob = fh.read()
     except OSError:
-        return {}
+        return None
     result = {}
     for col, regex, cast in CONTENT_PATTERNS:
-        m = regex.search(content)
+        m = regex.search(blob)
         if m:
             try:
                 result[col] = cast(m.group(1))
@@ -129,33 +184,69 @@ def parse_content(path):
     return result
 
 
-def process_files(paths, source_key, test_mode=False):
-    """Process a list of .ref paths; return (records, n_parsed, n_failed)."""
-    records = []
-    n_parsed = 0
-    n_failed = 0
-    limit = 10 if test_mode else len(paths)
-    for path in paths[:limit]:
-        fn = os.path.basename(path)
-        params = parse_filename(fn)
-        if params is None:
-            n_failed += 1
-            continue
-        metrics = parse_content(path)
-        row = {col: "" for col in COLUMNS}
-        row["source_dir"] = source_key
-        row["filename"] = fn
-        # filename params
-        for k, v in params.items():
-            if k in row and v is not None:
-                row[k] = v
-        # content metrics
-        for col, _, _ in CONTENT_PATTERNS:
-            if col in metrics:
-                row[col] = metrics[col]
-        n_parsed += 1
-        records.append(row)
-    return records, n_parsed, n_failed
+def build_row(source_key, fn, params, metrics):
+    row = {col: "" for col in COLUMNS}
+    row["source_dir"] = source_key
+    row["filename"] = fn
+    for k, v in params.items():
+        if k in row and v is not None:
+            row[k] = v
+    for col in metrics:
+        if col in row:
+            row[col] = metrics[col]
+    # Convert the per-crossing m^-2 values to cm^-2 s^-1 with the run's own
+    # f_rep / n_b. Missing factors -> lumi_ee left blank (reported), never raw.
+    f_rep, n_b = metrics.get("f_rep"), metrics.get("n_b")
+    if f_rep is not None and n_b is not None:
+        for raw, conv in (("lumi_ee_m2", "lumi_ee"), ("lumi_fine_m2", "lumi_fine")):
+            if raw in metrics:
+                row[conv] = lumi_rate(metrics[raw], f_rep, n_b)
+    return row
+
+
+def scan_dir(source_key, src_dir):
+    """One pass over a source dir -> list of (key, fn, path, mtime_ns, size).
+    os.scandir carries stat data in the dirent, so this is one syscall per entry
+    instead of glob + a separate stat() per file."""
+    out = []
+    if not os.path.isdir(src_dir):
+        print(f"  WARNING: missing source dir {src_dir}", file=sys.stderr)
+        return out
+    with os.scandir(src_dir) as it:
+        for e in it:
+            if not e.name.endswith(".ref"):
+                continue
+            try:
+                st = e.stat()
+            except OSError:
+                continue
+            out.append((f"{source_key}/{e.name}", e.name, e.path,
+                        st.st_mtime_ns, st.st_size))
+    return out
+
+
+def load_cache(path, disabled=False):
+    if disabled or not os.path.exists(path):
+        return {}
+    try:
+        opener = gzip.open if path.endswith(".gz") else open
+        with opener(path, "rt") as fh:
+            blob = json.load(fh)
+        if blob.get("version") != CACHE_VERSION:
+            print(f"  cache version {blob.get('version')} != {CACHE_VERSION}; ignoring it")
+            return {}
+        return blob.get("entries", {})
+    except (OSError, ValueError, EOFError) as exc:
+        print(f"  cache unreadable ({exc}); ignoring it")
+        return {}
+
+
+def save_cache(path, entries):
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    tmp = path + ".tmp"
+    with open(tmp, "w") as fh:
+        json.dump({"version": CACHE_VERSION, "entries": entries}, fh)
+    os.replace(tmp, path)
 
 
 def sanity_check(records):
@@ -163,79 +254,157 @@ def sanity_check(records):
     from collections import defaultdict
     buckets = defaultdict(list)
     for r in records:
-        ey = r.get("emitt_y", "")
-        lee = r.get("lumi_ee", "")
+        ey, lee = r.get("emitt_y", ""), r.get("lumi_ee", "")
         if ey != "" and lee != "":
             try:
                 buckets[float(ey)].append(float(lee))
             except (ValueError, TypeError):
                 pass
-    print("\n--- Sanity check: mean lumi_ee by emitt_y ---")
+    print("\n--- Sanity check: mean lumi_ee by emitt_y  [1e34 cm^-2 s^-1] ---")
     for ey in sorted(buckets):
         vals = buckets[ey]
-        mean = sum(vals) / len(vals)
-        print(f"  emitt_y={ey:.4f} mm.mrad  n={len(vals):5d}  mean_lumi_ee={mean:.4e}")
+        print(f"  emitt_y={ey:.4f} mm.mrad  n={len(vals):5d}  "
+              f"mean_lumi_ee={sum(vals)/len(vals)/1e34:.4f}e34")
 
 
 # ── Main ───────────────────────────────────────────────────────────────────────
 
 def main():
-    # ── Test run on 10 files first ──
-    print("=== TEST RUN (10 files each dir) ===")
-    test_ok = True
-    for src_key, src_dir in SOURCE_DIRS.items():
-        sample = glob.glob(os.path.join(src_dir, "*.ref"))[:10]
-        recs, nparsed, nfailed = process_files(sample, src_key, test_mode=True)
-        print(f"  {src_key}: {nparsed} parsed, {nfailed} failed")
-        if recs:
-            r0 = recs[0]
-            print(f"    sample: emitt_y={r0['emitt_y']}  lumi_ee={r0['lumi_ee']}")
-        if nfailed > 0 and nparsed == 0:
-            print(f"  WARNING: all test files failed to parse in {src_key}")
-            test_ok = False
+    ap = argparse.ArgumentParser(
+        description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("--full", action="store_true",
+                    help="ignore the read cache and re-read every .ref file")
+    ap.add_argument("--workers", type=int,
+                    default=min(32, (os.cpu_count() or 4) * 4),
+                    help="thread-pool size for file reads (default: %(default)s)")
+    ap.add_argument("--out", action="append", metavar="PATH",
+                    help="CSV destination; repeatable. Default: both known trees")
+    ap.add_argument("--test", action="store_true",
+                    help="parse 10 files per dir, print a sample, write nothing")
+    args = ap.parse_args()
 
-    if not test_ok:
-        print("Aborting — fix filename patterns before full run.")
+    out_csvs = args.out if args.out else DEFAULT_OUT_CSVS
+    t0 = time.time()
+
+    # ── inventory ──
+    print("=== INVENTORY ===")
+    listing = []
+    for key, src in SOURCE_DIRS.items():
+        found = scan_dir(key, src)
+        print(f"  {key}: {len(found)} .ref files")
+        listing.extend(found)
+    print(f"  total: {len(listing)} .ref files  ({time.time()-t0:.1f}s)")
+
+    if args.test:
+        print("\n=== TEST RUN (10 files per dir) ===")
+        for key in SOURCE_DIRS:
+            sample = [x for x in listing if x[0].startswith(key + "/")][:10]
+            ok = fail = 0
+            for _, fn, path, _, _ in sample:
+                p = parse_filename(fn)
+                if p is None:
+                    fail += 1
+                    continue
+                ok += 1
+                if ok == 1:
+                    m = parse_content(path) or {}
+                    print(f"  {key} sample: emitt_y={p['emitt_y']} "
+                          f"lumi_ee_m2={m.get('lumi_ee_m2')} f_rep={m.get('f_rep')} "
+                          f"n_b={m.get('n_b')}")
+            print(f"  {key}: {ok} parsed, {fail} failed")
+        print("\n--test: nothing written.")
         return
 
-    print("\n=== FULL RUN ===")
-    all_records = []
-    total_parsed = 0
-    total_failed = 0
+    # ── decide what needs re-reading ──
+    cache = load_cache(CACHE_PATH, disabled=args.full)
+    reuse, todo = {}, []
+    for key, fn, path, mtime_ns, size in listing:
+        hit = cache.get(key)
+        if hit and hit.get("mtime_ns") == mtime_ns and hit.get("size") == size:
+            reuse[key] = hit
+        else:
+            todo.append((key, fn, path, mtime_ns, size))
+    print(f"\n=== READ PLAN ===")
+    print(f"  reused from cache (unchanged): {len(reuse)}")
+    print(f"  to read (new / changed / uncached): {len(todo)}")
 
-    for src_key, src_dir in SOURCE_DIRS.items():
-        all_paths = sorted(glob.glob(os.path.join(src_dir, "*.ref")))
-        n_total = len(all_paths)
-        print(f"\n{src_key}: {n_total} .ref files")
-        src_parsed = 0
-        src_failed = 0
+    # ── read what changed, in parallel (I/O bound -> threads) ──
+    unparsed, no_lumi, no_rate, read_err = [], [], [], []
+    fresh = {}
+    if todo:
+        def work(item):
+            key, fn, path, mtime_ns, size = item
+            params = parse_filename(fn)
+            if params is None:
+                return key, fn, None, None, mtime_ns, size
+            return key, fn, params, parse_content(path), mtime_ns, size
 
-        # process in batches
-        for batch_start in range(0, n_total, BATCH_SIZE):
-            batch = all_paths[batch_start : batch_start + BATCH_SIZE]
-            recs, np_, nf = process_files(batch, src_key)
-            all_records.extend(recs)
-            src_parsed += np_
-            src_failed += nf
-            if (batch_start // BATCH_SIZE + 1) % 5 == 0 or batch_start + BATCH_SIZE >= n_total:
-                print(f"  ... {batch_start + len(batch)}/{n_total} processed")
+        done = 0
+        with ThreadPoolExecutor(max_workers=args.workers) as pool:
+            for key, fn, params, metrics, mtime_ns, size in pool.map(work, todo):
+                done += 1
+                if done % 2000 == 0 or done == len(todo):
+                    print(f"  ... {done}/{len(todo)} read ({time.time()-t0:.1f}s)")
+                if params is None:
+                    unparsed.append(fn)
+                    continue
+                if metrics is None:
+                    read_err.append(fn)
+                    continue
+                if "lumi_ee_m2" not in metrics:
+                    no_lumi.append(fn)
+                elif "f_rep" not in metrics or "n_b" not in metrics:
+                    no_rate.append(fn)
+                fresh[key] = {"mtime_ns": mtime_ns, "size": size,
+                              "row": build_row(key.split("/", 1)[0], fn,
+                                               params, metrics)}
 
-        print(f"  parsed={src_parsed}  failed={src_failed}")
-        total_parsed += src_parsed
-        total_failed += src_failed
+    # ── rebuild the full record set from cache + fresh ──
+    entries = dict(reuse)
+    entries.update(fresh)
+    src_order = {k: i for i, k in enumerate(SOURCE_DIRS)}
+    records = [entries[k]["row"] for k in
+               sorted(entries,
+                      key=lambda k: (src_order.get(k.split("/", 1)[0], 99), k))]
 
-    print(f"\nTotal: {total_parsed} parsed, {total_failed} failed")
+    print(f"\n=== RESULT ===")
+    print(f"  rows written:          {len(records)}")
+    print(f"  unparsed filenames:    {len(unparsed)}")
+    print(f"  parsed but no lumi_ee: {len(no_lumi)}")
+    print(f"  lumi but no f_rep/n_b (lumi_ee left blank): {len(no_rate)}")
+    print(f"  unreadable:            {len(read_err)}")
 
-    # ── Write CSV ──
-    os.makedirs(os.path.dirname(OUT_CSV), exist_ok=True)
-    with open(OUT_CSV, "w", newline="") as fh:
-        writer = csv.DictWriter(fh, fieldnames=COLUMNS)
-        writer.writeheader()
-        writer.writerows(all_records)
-    print(f"Saved: {OUT_CSV}  ({len(all_records)} rows)")
+    # ── write CSVs atomically ──
+    for out_csv in out_csvs:
+        os.makedirs(os.path.dirname(out_csv), exist_ok=True)
+        tmp = out_csv + ".tmp"
+        with open(tmp, "w", newline="") as fh:
+            w = csv.DictWriter(fh, fieldnames=COLUMNS)
+            w.writeheader()
+            w.writerows(records)
+        os.replace(tmp, out_csv)
+        print(f"  saved: {out_csv}")
 
-    # ── Sanity check ──
-    sanity_check(all_records)
+    save_cache(CACHE_PATH, entries)
+
+    # ── failure report ──
+    os.makedirs(os.path.dirname(REPORT_PATH), exist_ok=True)
+    with open(REPORT_PATH, "w") as fh:
+        fh.write("extract_lumi_data.py report\n")
+        fh.write(f"files seen: {len(listing)}   rows written: {len(records)}\n")
+        fh.write(f"re-read this run: {len(todo)}   reused from cache: {len(reuse)}\n\n")
+        for title, items in (("UNPARSED FILENAMES", unparsed),
+                             ("PARSED BUT NO lumi_ee", no_lumi),
+                             ("lumi_ee PRESENT BUT NO f_rep/n_b ECHO (lumi_ee left blank, lumi_ee_m2 kept)", no_rate),
+                             ("UNREADABLE", read_err)):
+            fh.write(f"== {title} ({len(items)}) ==\n")
+            for fn in sorted(items):
+                fh.write(f"  {fn}\n")
+            fh.write("\n")
+    print(f"  report: {REPORT_PATH}")
+
+    sanity_check(records)
+    print(f"\nelapsed: {time.time()-t0:.1f}s")
 
 
 if __name__ == "__main__":
