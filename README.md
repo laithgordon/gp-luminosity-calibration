@@ -17,6 +17,7 @@ beam-induced background (BIB) at the calibrated settings.
 | `bib_nominal_vs_calibrated.py` | Per-channel BIB pair yield and detector reach, nominal vs calibrated grid → `data/bib_nominal_vs_calibrated.csv`. |
 | `bib_stats_table.py`, `bib_stats_render.py` | Per-channel BIB statistics (count, reach fraction, p_T / energy / angle) → `data/bib_stats_cache.csv` (per seed) and `data/bib_stats_summary.csv` (mean ± STD). |
 | `pairs_reachability.py`, `reachability_analysis.py` | Detector-reach test used by the BIB scripts (SiD-o2-v04: B = 5 T, r_det = 14 mm, z_max = 76 mm). `reachability_analysis.py` is from [dntounis/Beam_Beam_Backgrounds](https://github.com/dntounis/Beam_Beam_Backgrounds). |
+| `inputs/` | GUINEA-PIG++ input file with the nominal C³-250 beam and grid parameters, a template SLURM submit script, and an example scan file. See `inputs/README.md`. |
 | `plots/` | Final rendered figures, PDF + PNG. |
 | `data/` | Processed datasets (see below). |
 

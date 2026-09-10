@@ -32,3 +32,6 @@ Thumbs.db
 
 # ── Not part of the published analysis (working files, drafts, backups) ──
 unpublished/
+
+# ── Published GP++ input file (the *.dat rule above is for raw dumps) ──
+!inputs/*.dat

@@ -1,0 +1,13 @@
+# Example scan file for submit_template_S3DF_SLURM.sh: one run per row.
+# Every column overrides the corresponding value in acc_C3_250_nominal.dat, so
+# a row equal to the nominal reproduces the default run exactly.
+#
+# Format:
+# particles emitt_x emitt_y beta_x beta_y sigma_z offset_y n_x n_y n_z n_m integration_method n_t
+#
+# Row 1 is the nominal operating point. Rows 2-4 are the n_m sweep at eps_y=8nm
+# used in the convergence scan.
+0.624 0.9 0.008 12.0 0.12 100 0 512 512 25 100000 2 6
+0.624 0.9 0.008 12.0 0.12 100 0 512 512 25  10000 2 6
+0.624 0.9 0.008 12.0 0.12 100 0 512 512 25 500000 2 6
+0.624 0.9 0.008 12.0 0.12 100 0 512 512 25 1000000 2 6

@@ -1,0 +1,42 @@
+# GUINEA-PIG++ input file for the C3-250 luminosity-calibration studies.
+#
+# ONE default parameter set: the nominal beam and the nominal grid. Every run in
+# this repository starts from this file; the submit script
+# (inputs/submit_template_S3DF_SLURM.sh) copies it per run and overrides the
+# quantities being varied with sed. The values below are the defaults and the
+# scan-file rows are the deviations from them.
+#
+# Invoke as
+#     guinea --acc_file <this file> C3_250 Jim_pars_Aug2023 <out.ref>
+#
+# Units follow GP++: energy GeV, particles x1e10, beta_x/beta_y mm,
+# emitt_x/emitt_y mm.mrad (so emitt_y=0.008 is 8 nm.rad), sigma_z um, cuts in
+# units of the beam sigma, offset_y nm.
+
+$ACCELERATOR:: C3_250
+{energy=125.0;particles=0.624;charge_sign=-1;
+beta_x=12.0;beta_y=0.12;
+emitt_x=0.9;emitt_y=0.008;
+sigma_z=100;
+scale_step=1.0;
+polar_z.1=-0.8;polar_z.2=0;
+espread=0.003;which_espread=3; dist_z=0;
+f_rep=120;n_b=133;
+offset_y=0.0;offset_x=0;
+waist_y=0;}
+
+# Nominal grid: 512 x 512 x 25 cells, n_m = 1e5 macroparticles, n_t = 6,
+# FFT field solver (integration_method=2), cuts 20/20/3.5 sigma.
+# Secondary-particle production, per-step particle dumps and the beam-size log
+# are all OFF here; the submit script switches them on for the BIB and
+# pinched-size studies (PAIRS / DUMP / SIZE_LOG settings).
+$PARAMETERS:: Jim_pars_Aug2023
+{n_z=25; n_t=6; n_m=100000; cut_z=3.5*sigma_z.1; n_x=512; n_y=512;
+cut_x=20*sigma_x.1; cut_y=20*sigma_y.1; pair_q2=1;
+beam_size=1; grids=7; store_beam=1; do_pairs=0; track_pairs=0;
+store_pairs=0; do_photons=0; store_photons=0; do_hadrons=0;
+do_jets=0; do_coherent=0; electron_ratio=1; photon_ratio=1;
+do_eloss=1; do_espread=1; rndm_seed=236548; rndm_load=0; rndm_save=1;
+do_lumi=1; do_dump=0; dump_particle=1; dump_step=1; do_size_log=0;
+automatic_grid_sizing=0;bmt_precession=1;pair_ecut=0.;integration_method=2;
+}
