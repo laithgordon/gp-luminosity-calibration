@@ -124,8 +124,8 @@ The manuscript's GUINEA-PIG++ discretization figure
 | `tab:ny_recommendations` (`n_y^rec`, `n_m^rec` per ε_y) | `constants.py`, `data/D_y_table.json` | `inputs/make_conservative_decks.py` |
 | `tab:bib_yields` | `data/bib_stats_cache.csv` | `bib_stats_render.py` |
 | Nominal, conservative and 40–100 nm luminosities of the code comparison | raw `.ref` | `export_for_wx.py` |
-| Fitted constants `C_y,fit`, `q_n,fit`, `C_m,fit`, `s_fit`, `κ` | `data/lumi_extracted.csv` | notebook |
-| Requirements with uncertainties, for WarpX | `data/gp_calibration_export.csv`, `data/error_budget.csv` | `export_for_wx.py` |
+| Fitted constants `C_y,fit`, `q_n,fit`, `C_m,fit`, `s_fit` | `data/lumi_extracted.csv`, with `q_p` from `constants.py` | notebook |
+| Requirements with uncertainties (`sigma_log`), exported to WarpX; κ for both simulators is computed in the WarpX repository from this export | `data/gp_calibration_export.csv` | `export_for_wx.py` |
 
 ## Which rule set each configuration
 
@@ -149,7 +149,7 @@ pre-campaign `n_y` at every ε_y.
 | Path | Role |
 |---|---|
 | `paths.py` | Locates the raw output (`GP_RAW_ROOT`) and the repository data. |
-| `constants.py` | Frozen conservative-locus constants and the `n_y`/`n_m` locus functions. |
+| `constants.py` | Frozen conservative-locus constants and locus functions, and `q_p` (envelope-integration exponent, shared with the WarpX repository) with `q_n^pred = q_p + 1/4`. |
 | `extract_lumi_data.py` | Raw `.ref` → `data/lumi_extracted.csv`. |
 | `GP_CALIBRATION.ipynb` | Tuning ladders, fits, and every figure except `L_vs_nm_by_nx_20nm`. |
 | `bib_stats_table.py`, `bib_stats_render.py` | BIB statistics from `pairs.dat` (`find_dumps` refuses ambiguous dumps) → `tab:bib_yields`. |
@@ -164,7 +164,7 @@ pre-campaign `n_y` at every ε_y.
 | `data/lumi_extracted.csv` | notebook, `bib_reach_per_seed.py` |
 | `data/lumi_bib_per_seed_cache.csv` | notebook |
 | `data/bib_stats_cache.csv` | `bib_stats_render.py` |
-| `data/gp_calibration_export.csv`, `data/gp_constants_export.csv`, `data/error_budget.csv` | `export_for_wx.py` |
+| `data/gp_calibration_export.csv`, `data/gp_constants_export.csv` | `export_for_wx.py` |
 | `data/D_y_table.json` | `export_for_wx.py`, `inputs/make_conservative_decks.py` |
 | `data/L_vs_nm_by_nx_20nm.csv` | `nx_nm_convergence.py` |
 | `data/gp_luminosity_for_wx.csv`, `data/gp_requirements_for_wx.csv` | the WarpX analysis |
@@ -173,5 +173,4 @@ pre-campaign `n_y` at every ε_y.
 cm⁻² s⁻¹, converted per row from GUINEA-PIG++'s per-crossing m⁻² value with the
 `f_rep` and `n_b` echoed in the same `.ref` (× 10⁻⁴·n_b·f_rep = 1.596 for
 C³-250). The raw per-crossing values are in `lumi_ee_m2` and `lumi_fine_m2`. Do
-not apply the factor again. `data/error_budget.csv` is carried as recorded data:
-the uncertainty budget that produced it is not part of the notebook.
+not apply the factor again.

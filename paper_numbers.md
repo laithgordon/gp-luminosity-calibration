@@ -86,30 +86,30 @@ H_D = L / L_geom, L_geom = N^2 n_b f_rep / (4 pi sigma_x sigma_y), no hourglass 
 |---|---|---|---|
 | n_y free | q_n | 0.402 ± 0.152 | 1.02/5 |
 | n_y free | C_y | 26.2 | |
-| n_y, q_n = 0.465 | C_y | 21.32 | 1.20/6 |
-| n_m | s | 3.329 ± 0.250 | 7.49/5 |
+| n_y, q_n = 0.4653 | C_y | 21.30 | 1.20/6 |
+| n_m | s | 3.330 ± 0.250 | 7.49/5 |
 | n_m | C_m | 1.4×10^-7 | |
 
-q_n free fit: -0.42 σ from q_n = 0.465, 2.65 σ from 0.
+q_n free fit: -0.42 σ from q_n = 0.4653, 2.65 σ from 0.
 
 Conservative loci, **frozen** values used to define the production runs (not refit):
 
 - n_y^cons = 2^⌈log₂(50·D_y^0.402)⌉
-- n_m^cons = 2.305×10^-7·D_y^3.300·n_x n_y n_z, i.e. s_cons = 3.514 with q_p = 0.214
+- n_m^cons = 2.305×10^-7·D_y^3.300·n_x n_y n_z, i.e. s_cons = 3.515 with q_p = 0.2153
 
-## 5. κ
+## 5. Inputs exported for κ
 
-| ε_y [nm] | D_y | κ | σ |
+Kappa for both simulators is computed in the warpx repository from this export; this repository does not compute kappa.
+
+| ε_y [nm] | D_y | n_y^req | σ(ln) |
 |---|---|---|---|
-| 1 | 97.4 | 0.210 | 0.068 |
-| 2 | 68.8 | 0.248 | 0.133 |
-| 4 | 48.5 | 0.253 | 0.170 |
-| 8 | 34.2 | 0.292 | 0.021 |
-| 12 | 27.9 | 0.257 | 0.133 |
-| 16 | 24.1 | 0.283 | 0.008 |
-| 20 | 21.5 | 0.288 | 0.041 |
-
-Weighted mean κ = **0.284 ± 0.008**; d ln κ / d ln D_y = **-0.063 ± 0.152** (χ²/ndf 1.02/5)
+| 1 | 97.4 | 132.7 | 0.322 |
+| 2 | 68.8 | 133.5 | 0.534 |
+| 4 | 48.5 | 115.9 | 0.672 |
+| 8 | 34.2 | 113.6 | 0.072 |
+| 12 | 27.9 | 90.9 | 0.516 |
+| 16 | 24.1 | 93.4 | 0.030 |
+| 20 | 21.5 | 90.1 | 0.142 |
 
 ## 6. Recommendation table
 

@@ -11,9 +11,9 @@ that moves if the ladder data change; this locus does not.
     n_y_cons = 2^ceil(log2(C_Y_CONS * D_y^Q_N_CONS))                  rounded up
     n_m_cons = C_M_CONS * D_y^NM_EXPONENT_CONS * n_x * n_y_cons * n_z
 
-NM_EXPONENT_CONS is the effective exponent s_cons - q_p = 3.300 (quoted as
-s_cons = 3.515 with q_p = 0.215, or 3.514 with q_p = 0.214; the product is the
-same). D_y per eps_y is data/D_y_table.json.
+NM_EXPONENT_CONS is the effective exponent s_cons - q_p = 3.300. It, not s_cons,
+defines the runs; with Q_P below, s_cons = NM_EXPONENT_CONS + Q_P = 3.5153.
+D_y per eps_y is data/D_y_table.json.
 """
 import math
 
@@ -23,6 +23,11 @@ C_M_CONS = 2.305e-7        # n_m normalisation
 NM_EXPONENT_CONS = 3.300   # effective n_m exponent, s_cons - q_p
 N_X_CONS = 512             # transverse cells held fixed on the locus
 N_Z_CONS = 64              # longitudinal slices held fixed on the locus
+
+# q_p is the envelope-integration (first-waist) pinch exponent, shared with the WarpX
+# repository; the predicted n_y exponent q_n^pred = q_p + 1/4 is derived from it.
+Q_P = 0.2153
+Q_N_PRED = Q_P + 0.25
 
 
 def n_y_cons(d_y: float) -> int:

@@ -11,7 +11,8 @@ substituted number if an input is missing or disagrees with the analysis exports
 
 Contents: luminosity dataset; derived luminosity quantities (conservative/nominal,
 H_D, 20 -> 2 nm gain, seed scatter); n_y^req and n_m^req; fitted constants and the
-frozen conservative loci; kappa; the recommendation table; D_y; the IPC background
+frozen conservative loci; the n_y^req inputs exported for kappa (kappa itself is
+computed in the WarpX repository); the recommendation table; D_y; the IPC background
 table; the derived background quantities; the n_x convergence study.
 """
 from __future__ import annotations
@@ -34,6 +35,7 @@ sys.path.insert(0, str(REPO))
 INPUTS = {
     "luminosity_export": "data/gp_luminosity_for_wx.csv",
     "requirements_export": "data/gp_calibration_export.csv",
+    "requirements_for_warpx": "data/gp_requirements_for_wx.csv",
     "constants_export": "data/gp_constants_export.csv",
     "bib_cache": "data/bib_stats_cache.csv",
     "luminosity_snapshot": "data/lumi_extracted.csv",
@@ -198,8 +200,11 @@ def main() -> None:
     if not gamma_m:
         fail("GP_CALIBRATION.ipynb: GAMMA = 125e9 / m_e c^2 not found")
     GAMMA = 125e9 / float(gamma_m.group(1))
-    Q_P = notebook_literal(nb_src, "Q_PINCH")
-    Q_N = notebook_literal(nb_src, "Q_NY")
+    # q_p (envelope-integration exponent, shared with the WarpX repository) and
+    # q_n^pred = q_p + 1/4 are defined once, in constants.py; the notebook imports them.
+    Q_P, Q_N = float(frozen.Q_P), float(frozen.Q_N_PRED)
+    if not re.search(r"from constants import Q_P as Q_PINCH, Q_N_PRED as Q_NY", nb_src):
+        fail("GP_CALIBRATION.ipynb does not take q_p and q_n^pred from constants.py")
     beam = dict(energy_GeV=float(acc["energy"]), particles_per_bunch=float(acc["particles"]) * 1e10,
                 beta_x_mm=float(acc["beta_x"]), beta_y_mm=float(acc["beta_y"]),
                 emitt_x_normalised_mm_mrad=float(acc["emitt_x"]), sigma_z_um=float(acc["sigma_z"]),
@@ -348,7 +353,7 @@ def main() -> None:
                          "q_n_minus_prediction_in_sigma": (fy["slope"] - Q_N) / math.sqrt(fy["var_slope"]),
                          "q_n_over_sigma": fy["slope"] / math.sqrt(fy["var_slope"])},
         "n_y_constrained_fit": {"law": "n_y^req = C_y D_y^q_n with q_n fixed", "q_n_fixed": Q_N,
-                                "q_n_definition": "q_p + 1/4, the derived exponent adopted in GP_CALIBRATION.ipynb",
+                                "q_n_definition": f"q_p + 1/4 with q_p = {Q_P} from constants.py",
                                 "C_y": math.exp(lnc), "sigma_ln_C_y": unc(1 / math.sqrt(w.sum()), SIG_FIT),
                                 "chi2": chi2_c, "ndf": len(x) - 1, "p_value": float(chi2_dist.sf(chi2_c, len(x) - 1))},
         "n_m_fit": {"law": "n_m^req / (n_x n_y n_z) = C_m D_y^(s - q_p)",
@@ -362,27 +367,21 @@ def main() -> None:
             "n_y_cons": {"law": "n_y = 2^ceil(log2(C_y_cons D_y^q_n_cons))", "C_y_cons": frozen.C_Y_CONS, "q_n_cons": frozen.Q_N_CONS},
             "n_m_cons": {"law": "n_m = C_m_cons D_y^(s_cons - q_p) n_x n_y n_z", "C_m_cons": frozen.C_M_CONS,
                          "s_cons_minus_q_p": frozen.NM_EXPONENT_CONS,
-                         "s_cons": frozen.NM_EXPONENT_CONS + Q_P, "s_cons_definition": f"s_cons_minus_q_p + q_p with q_p = {Q_P} as adopted in GP_CALIBRATION.ipynb",
+                         "s_cons": frozen.NM_EXPONENT_CONS + Q_P, "s_cons_definition": f"s_cons_minus_q_p + q_p with q_p = {Q_P} from constants.py (envelope-integration exponent)",
                          "n_x": frozen.N_X_CONS, "n_z": frozen.N_Z_CONS}},
     }
 
-    # ── 5. kappa ──
-    c_y, Lam = cv("c_y"), cv("Lambda")
-    kap = ny.value.values / (2 * c_y * Lam * ny.D_y.values ** Q_N)
-    sk = kap * s
-    kmean = float((w * kap).sum() / w.sum())
-    kerr = float(math.sqrt((w ** 2 * sk ** 2).sum()) / w.sum())
-    fk = wls(x, np.log(kap), s)
-    close(kmean, cv("kappa"), what="kappa mean"); close(kerr, ce("kappa"), what="kappa mean error")
-    close(fk["slope"], cv("kappa_slope"), what="kappa slope"); close(math.sqrt(fk["var_slope"]), ce("kappa_slope"), what="kappa slope error")
-    out["kappa"] = {
-        "definition": "kappa = n_y^req / (2 c_y Lambda D_y^q_n)",
-        "parameters": {"c_y": c_y, "Lambda": Lam, "q_n": Q_N},
-        "provenance": f"recomputed from {INPUTS['requirements_export']}, c_y and Lambda from {INPUTS['constants_export']}; checked against the notebook's exported mean and slope",
-        "rows": [{"eps_y_nm": float(e), "D_y": float(d), "kappa": float(k), "sigma_kappa": unc(float(u), "kappa * sigma_ln(n_y^req)")}
-                 for e, d, k, u in zip(ny.eps_y_nm, ny.D_y, kap, sk)],
-        "weighted_mean": {"value": kmean, "uncertainty": unc(kerr, "error of the weighted mean, weights 1/sigma_ln(n_y^req)^2")},
-        "slope_ln_kappa_vs_ln_D_y": {"value": fk["slope"], "uncertainty": unc(math.sqrt(fk["var_slope"]), SIG_FIT), "chi2": fk["chi2"], "ndf": fk["ndf"]},
+    # ── 5. inputs exported for kappa (kappa is computed in the WarpX repository) ──
+    wxr = pd.read_csv(P["requirements_for_warpx"], comment="#")
+    ki = wxr[wxr.quantity == "n_y_req"].sort_values("eps_y_nm")
+    if not (list(ki.eps_y_nm) == list(ny.eps_y_nm) and np.array_equal(ki.value.values, ny.value.values)
+            and np.array_equal(ki.D_y.values, ny.D_y.values) and np.array_equal(ki.sigma_log.values, ny.sigma_log.values)):
+        fail(f"{INPUTS['requirements_for_warpx']} n_y_req rows differ from {INPUTS['requirements_export']}")
+    out["kappa_inputs_exported_to_warpx"] = {
+        "note": "kappa for both simulators is computed in the WarpX repository from this export; this repository does not compute kappa",
+        "provenance": f"{INPUTS['requirements_for_warpx']} (written by export_for_wx.py), identical to the n_y rows of {INPUTS['requirements_export']}",
+        "rows": [{"eps_y_nm": float(r.eps_y_nm), "D_y": float(r.D_y), "n_y_req": float(r.value),
+                  "sigma_ln": unc(float(r.sigma_log), SIG_LN_REQ)} for r in ki.itertuples()],
     }
 
     # ── 6. recommendation table ──
@@ -545,10 +544,10 @@ def render_md(o: dict) -> str:
           "Conservative loci, **frozen** values used to define the production runs (not refit):", "",
           f"- n_y^cons = 2^⌈log₂({lc['n_y_cons']['C_y_cons']:g}·D_y^{lc['n_y_cons']['q_n_cons']})⌉",
           f"- n_m^cons = {sf(lc['n_m_cons']['C_m_cons'],4)}·D_y^{lc['n_m_cons']['s_cons_minus_q_p']:.3f}·n_x n_y n_z, i.e. s_cons = {lc['n_m_cons']['s_cons']:.3f} with q_p = {f3['q_p']}", ""]
-    k = o["kappa"]
-    M += ["## 5. κ", "", "| ε_y [nm] | D_y | κ | σ |", "|---|---|---|---|"]
-    M += [f"| {r['eps_y_nm']:g} | {r['D_y']:.1f} | {r['kappa']:.3f} | {r['sigma_kappa']['value']:.3f} |" for r in k["rows"]]
-    M += ["", f"Weighted mean κ = **{k['weighted_mean']['value']:.3f} ± {k['weighted_mean']['uncertainty']['value']:.3f}**; d ln κ / d ln D_y = **{k['slope_ln_kappa_vs_ln_D_y']['value']:+.3f} ± {k['slope_ln_kappa_vs_ln_D_y']['uncertainty']['value']:.3f}** (χ²/ndf {k['slope_ln_kappa_vs_ln_D_y']['chi2']:.2f}/{k['slope_ln_kappa_vs_ln_D_y']['ndf']})", ""]
+    k = o["kappa_inputs_exported_to_warpx"]
+    M += ["## 5. Inputs exported for κ", "", k["note"].capitalize() + ".", "", "| ε_y [nm] | D_y | n_y^req | σ(ln) |", "|---|---|---|---|"]
+    M += [f"| {r['eps_y_nm']:g} | {r['D_y']:.1f} | {r['n_y_req']:.1f} | {r['sigma_ln']['value']:.3f} |" for r in k["rows"]]
+    M += [""]
     rt = o["recommendation_table"]
     M += ["## 6. Recommendation table", "", "| ε_y [nm] | D_y | n_y^rec | n_m^rec |", "|---|---|---|---|"]
     M += [f"| {r['eps_y_nm']:g} | {r['D_y']:.1f} | {r['n_y_rec']} | {sf(r['n_m_rec'])}{' (outside fitted D_y band)' if r['outside_fitted_D_y_band'] else ''} |" for r in rt["rows"]]

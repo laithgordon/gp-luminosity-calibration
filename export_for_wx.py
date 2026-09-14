@@ -16,8 +16,8 @@ Writes two canonical tables that the WarpX analysis reads:
   data/gp_requirements_for_wx.csv   the tuning-ladder requirements n_y^req and
                                     n_m^req per eps_y, re-exported from
                                     data/gp_calibration_export.csv (written by
-                                    GP_CALIBRATION.ipynb) with sigma_tot from
-                                    data/error_budget.csv; no refit.
+                                    GP_CALIBRATION.ipynb) with its sigma_log
+                                    uncertainty column; no refit.
 
 Luminosity is lumi_ee [m^-2 per crossing] * 1e-4 * n_b * f_rep, with n_b and
 f_rep read from each .ref (factor 1.596 for C3-250), applied once; mean, sample
@@ -43,7 +43,7 @@ import numpy as np
 import pandas as pd
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from constants import N_X_CONS as N_X, N_Z_CONS as N_Z, n_m_cons, n_y_cons  # noqa: E402  (frozen locus)
+from constants import N_X_CONS as N_X, N_Z_CONS as N_Z, Q_N_PRED, Q_P, n_m_cons, n_y_cons  # noqa: E402  (frozen locus)
 from paths import DATA_DIR, RAW_ROOT  # noqa: E402
 from refparse import GAMMA, parse_ref  # noqa: E402
 
@@ -74,7 +74,7 @@ EMITTY_STR = {0.5: "0.0005", 1.0: "0.001", 2.0: "0.002", 4.0: "0.004", 8.0: "0.0
 LUMI_COLS = ["eps_y_nm", "D_y", "block", "n_x", "n_y", "n_z", "n_t", "n_m", "n_m_cons",
              "ratio_nm", "n_seeds", "L_mean_1e34", "L_std_1e34", "L_sem_1e34",
              "do_photons", "do_pairs", "deck_path"]
-REQ_COLS = ["quantity", "eps_y_nm", "D_y", "value", "sigma_tot", "n_seeds"]
+REQ_COLS = ["quantity", "eps_y_nm", "D_y", "value", "sigma_log", "n_seeds"]
 
 
 def fmt(x) -> str:
@@ -189,25 +189,25 @@ def write_luminosity(path) -> None:
 
 def write_requirements(path) -> None:
     cal = pd.read_csv(DATA_DIR / "gp_calibration_export.csv")
-    eb = pd.read_csv(DATA_DIR / "error_budget.csv")
     con = pd.read_csv(DATA_DIR / "gp_constants_export.csv").set_index("name")
     rows = []
     for fam, qty in (("n_y", "n_y_req"), ("n_m", "n_m_req")):
         for r in cal[cal.family == fam].sort_values("eps_y_nm").itertuples():
-            m = eb[(eb.calibration == fam) & np.isclose(eb.eps_y_nm, r.eps_y_nm)]
             rows.append(dict(quantity=qty, eps_y_nm=float(r.eps_y_nm), D_y=float(r.D_y), value=float(r.value),
-                             sigma_tot=float(m.sigma_tot.iloc[0]) if len(m) else None, n_seeds=None))
+                             sigma_log=float(r.sigma_log), n_seeds=None))
     published = [("C_y_fit", 26.2, None, "C_y_fit"), ("q_n_fit", 0.402, 0.152, "q_fit"),
-                 ("C_m_fit", 1.4e-7, None, "C_m_fit"), ("s_fit", 3.329, 0.250, "s_fit"),
+                 ("C_m_fit", 1.4e-7, None, "C_m_fit"), ("s_fit", 3.330, 0.250, "s_fit"),
                  ("C_y_cons", 50.0, None, None), ("C_m_cons", 2.305e-7, None, "C_m_cons"),
                  ("s_cons", 3.515, None, "s_cons")]
     hdr = [
         "# gp_requirements_for_wx.csv -- GUINEA-PIG++ tuning-ladder requirements, re-exported unchanged (no refit)",
         "# written by export_for_wx.py",
-        "# source: data/gp_calibration_export.csv (written by GP_CALIBRATION.ipynb) for value and D_y; data/error_budget.csv for sigma_tot",
+        "# source: data/gp_calibration_export.csv (written by GP_CALIBRATION.ipynb) for value, D_y and sigma_log",
+        "# CHANGED 2026-09-14: the uncertainty column is now sigma_log, the budget behind the published fits. Earlier versions of this file carried sigma_tot from data/error_budget.csv, an older budget that no longer matches the notebook; do not mix the two versions",
         "# n_y_req rows: value = n_y^req (vertical cells)",
         "# n_m_req rows: value = n_m^req / (n_x n_y n_z), i.e. required macroparticles PER CELL, as exported -- multiply by n_x n_y n_z for an absolute n_m",
-        "# sigma_tot = total uncertainty on ln(value) (MC, window and jackknife terms in quadrature), dimensionless",
+        "# sigma_log = standard deviation of ln(value): Monte Carlo parameter noise (seeded), window selection and jackknife terms in quadrature (sigma_log_total in GP_CALIBRATION.ipynb), dimensionless",
+        f"# q_p = {Q_P} (constants.py): the envelope-integration exponent shared with the WarpX repository; q_n^pred = q_p + 1/4 = {Q_N_PRED!r}",
         "# n_seeds: not recorded in the ladder exports; left empty rather than inferred",
         "# D_y for n_m_req rows is as exported (rounded to 2 decimals in the source); for n_y_req rows at full precision",
     ]
@@ -221,8 +221,7 @@ def write_requirements(path) -> None:
         ok = (round(val, dec) == pub) if dec is not None else abs(val / pub - 1) < 0.005
         if pub_err is not None and err is not None:
             ok = ok and round(err, 3) == pub_err
-        note = (" -- stored s_cons = b_cons + q_p = 3.300 + 0.214; the published 3.515 uses q_p = 0.215. "
-                "Effective exponent s - q_p = 3.300 is identical either way") if (name == "s_cons" and not ok) else ""
+        note = ""
         hdr.append(f"# constant {name:<9s} published {pub}{' +- ' + str(pub_err) if pub_err is not None else ''}"
                    f" | stored in export {val!r}{' +- ' + repr(err) if err is not None else ''}"
                    f" | reproduces: {'yes' if ok else 'NO'}{note}")
