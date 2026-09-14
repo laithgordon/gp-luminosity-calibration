@@ -1,0 +1,9 @@
+# BIB pair-dump at the tuned eps_y = 4 nm point -- the fallback if 2 nm proves
+# intractable. Sits inside the safe boundary from CALIBRATION_METHODS.md sec 10
+# (eps_y >~ 3-4 nm for pairs-on work on the tuned grid).
+#   n_y^req = 34.70 * D_y^0.312 = 116.5 -> 128
+#   n_m     = C_m * D_y^(s-1/2) * n_x*n_y*n_z = 353,910
+#   n_x = 512, n_z = 64.  Pairs-off cost 1.19 h; pairs-on predicted ~4 h.
+#
+# Format: particles emitt_x emitt_y beta_x beta_y sigma_z offset_y n_x n_y n_z n_m integration_method n_t
+0.624 0.9 0.004 12.0 0.12 100 0 512 128 64 353910 2 6

@@ -1,0 +1,14 @@
+# BIB pair-dump at the tuned eps_y = 2 nm point.
+#   n_y^req = 34.70 * D_y^0.312 = 129.9 -> 256 (rounded up to a power of two)
+#   n_m     = C_m * D_y^(s-1/2) * n_x*n_y*n_z = 2,235,661  (C_m=2.305e-7, s=3.8)
+#   n_x = 512, n_z = 64
+#
+# COST WARNING (CALIBRATION_METHODS.md sec 10): pairs-off this point costs 5.3 h;
+# scaling by the 8 nm pairs-on/pairs-off ratio (3.24x) predicts ~17 h, but the
+# pair cost steepens with n_m faster than that ratio implies -- the eps_y = 1 nm
+# point (n_m = 7.05e6, only 3.2x larger) exceeded 240 h and never completed.
+# 2 nm is therefore untested territory, which is why it is probed with one seed
+# before the rest are committed.
+#
+# Format: particles emitt_x emitt_y beta_x beta_y sigma_z offset_y n_x n_y n_z n_m integration_method n_t
+0.624 0.9 0.002 12.0 0.12 100 0 512 256 64 2235661 2 6

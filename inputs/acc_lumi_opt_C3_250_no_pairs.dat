@@ -1,0 +1,145 @@
+
+$ACCELERATOR:: C3_250
+{energy=125.0;particles=0.7654;charge_sign=-1;
+beta_x=5.2707;beta_y=1.2189;
+emitt_x=3.519;emitt_y=0.0144;
+sigma_z=583.7629;
+scale_step=1.0;
+polar_z.1=-0.8;polar_z.2=0;
+espread=0.003;which_espread=3; dist_z=0;
+f_rep=120;n_b=133;
+offset_y=0.0;offset_x=0;
+waist_y=0;}
+
+
+
+
+
+
+
+
+
+$PARAMETERS:: C3_comp_pars
+{n_z=25; n_t=1; n_m=100000; cut_z=3.1*sigma_z.1; n_x=128; n_y=1024;
+cut_x=12*sigma_x.1; cut_y=64*sigma_y.1; pair_q2=1;
+beam_size=1; grids=7; store_beam=1; do_pairs=1; track_pairs=1;
+store_pairs=1; do_photons=1; store_photons=1; do_hadrons=1;
+do_jets=1; do_coherent=1; electron_ratio=1; photon_ratio=1;
+do_eloss=1; do_espread=1; rndm_seed=495043; rndm_load=0; rndm_save=1;
+do_lumi=1;
+automatic_grid_sizing=0;bmt_precession=1;pair_ecut=0.;
+}
+
+
+$PARAMETERS:: Jim_pars_Aug2023
+{n_z=25; n_t=6; n_m=100000; cut_z=3.5*sigma_z.1; n_x=512; n_y=512;
+cut_x=20*sigma_x.1; cut_y=20*sigma_y.1; pair_q2=1;
+beam_size=1; grids=7; store_beam=1; do_pairs=0; track_pairs=0;
+store_pairs=0; do_photons=0; store_photons=0; do_hadrons=0;
+do_jets=0; do_coherent=0; electron_ratio=1; photon_ratio=1;
+do_eloss=1; do_espread=1; rndm_seed=236548; rndm_load=0; rndm_save=1;
+do_lumi=1;
+automatic_grid_sizing=0;bmt_precession=1;pair_ecut=0.;integration_method=2;
+}
+
+$PARAMETERS:: Jim_pars_Aug2023_nz16
+{n_z=16; n_t=6; n_m=100000; cut_z=3.5*sigma_z.1; n_x=512; n_y=512;
+cut_x=20*sigma_x.1; cut_y=20*sigma_y.1; pair_q2=1;
+beam_size=1; grids=7; store_beam=1; do_pairs=1; track_pairs=1;
+store_pairs=1; do_photons=1; store_photons=1; do_hadrons=1;
+do_jets=1; do_coherent=1; electron_ratio=1; photon_ratio=1;
+do_eloss=1; do_espread=1; rndm_seed=236548; rndm_load=0; rndm_save=1;
+do_lumi=1;
+automatic_grid_sizing=0;bmt_precession=1;pair_ecut=0.;
+}
+
+$PARAMETERS:: Jim_pars_Aug2023_nz32
+{n_z=32; n_t=6; n_m=100000; cut_z=3.5*sigma_z.1; n_x=512; n_y=512;
+cut_x=20*sigma_x.1; cut_y=20*sigma_y.1; pair_q2=1;
+beam_size=1; grids=7; store_beam=1; do_pairs=1; track_pairs=1;
+store_pairs=1; do_photons=1; store_photons=1; do_hadrons=1;
+do_jets=1; do_coherent=1; electron_ratio=1; photon_ratio=1;
+do_eloss=1; do_espread=1; rndm_seed=236548; rndm_load=0; rndm_save=1;
+do_lumi=1;
+automatic_grid_sizing=0;bmt_precession=1;pair_ecut=0.;
+}
+
+$PARAMETERS:: Jim_pars_Aug2023_nz64
+{n_z=64; n_t=6; n_m=100000; cut_z=3.5*sigma_z.1; n_x=512; n_y=512;
+cut_x=20*sigma_x.1; cut_y=20*sigma_y.1; pair_q2=1;
+beam_size=1; grids=7; store_beam=1; do_pairs=1; track_pairs=1;
+store_pairs=1; do_photons=1; store_photons=1; do_hadrons=1;
+do_jets=1; do_coherent=1; electron_ratio=1; photon_ratio=1;
+do_eloss=1; do_espread=1; rndm_seed=236548; rndm_load=0; rndm_save=1;
+do_lumi=1;
+automatic_grid_sizing=0;bmt_precession=1;pair_ecut=0.;
+}
+
+$PARAMETERS:: Jim_pars_Aug2023_nz128
+{n_z=128; n_t=6; n_m=100000; cut_z=3.5*sigma_z.1; n_x=512; n_y=512;
+cut_x=20*sigma_x.1; cut_y=20*sigma_y.1; pair_q2=1;
+beam_size=1; grids=7; store_beam=1; do_pairs=1; track_pairs=1;
+store_pairs=1; do_photons=1; store_photons=1; do_hadrons=1;
+do_jets=1; do_coherent=1; electron_ratio=1; photon_ratio=1;
+do_eloss=1; do_espread=1; rndm_seed=236548; rndm_load=0; rndm_save=1;
+do_lumi=1;
+automatic_grid_sizing=0;bmt_precession=1;pair_ecut=0.;
+}
+
+$PARAMETERS:: Jim_pars_Aug2023_nz256
+{n_z=256; n_t=6; n_m=100000; cut_z=3.5*sigma_z.1; n_x=512; n_y=512;
+cut_x=20*sigma_x.1; cut_y=20*sigma_y.1; pair_q2=1;
+beam_size=1; grids=7; store_beam=1; do_pairs=1; track_pairs=1;
+store_pairs=1; do_photons=1; store_photons=1; do_hadrons=1;
+do_jets=1; do_coherent=1; electron_ratio=1; photon_ratio=1;
+do_eloss=1; do_espread=1; rndm_seed=236548; rndm_load=0; rndm_save=1;
+do_lumi=1;
+automatic_grid_sizing=0;bmt_precession=1;pair_ecut=0.;
+}
+
+
+$PARAMETERS:: Jim_pars_Aug2023_fast
+{n_z=25; n_t=6; n_m=100000; cut_z=3.5*sigma_z.1; n_x=512; n_y=512;
+cut_x=15*sigma_x.1; cut_y=15*sigma_y.1; pair_q2=1;
+beam_size=1; grids=7; store_beam=1; do_pairs=1; track_pairs=0;
+store_pairs=0; do_photons=0; store_photons=0; do_hadrons=0;
+do_jets=0; do_coherent=0; electron_ratio=1; photon_ratio=1;
+do_eloss=1; do_espread=1; rndm_seed=495043; rndm_load=0; rndm_save=1;
+do_lumi=1;
+automatic_grid_sizing=0;bmt_precession=1;pair_ecut=0.;
+}
+
+
+$PARAMETERS:: Jim_pars_Aug2023_super_fast
+{n_z=5; n_t=6; n_m=1000; cut_z=3.5*sigma_z.1; n_x=512; n_y=512;
+cut_x=5*sigma_x.1; cut_y=5*sigma_y.1; pair_q2=1;
+beam_size=1; grids=7; store_beam=1; do_pairs=1; track_pairs=0;  
+store_pairs=0; do_photons=0; store_photons=0; do_hadrons=0;
+do_jets=0; do_coherent=0; electron_ratio=1; photon_ratio=1;
+do_eloss=1; do_espread=1; rndm_seed=495043; rndm_load=0; rndm_save=1;
+do_lumi=1;
+automatic_grid_sizing=0;bmt_precession=1;pair_ecut=0.;
+}
+
+
+
+$PARAMETERS::  par_pairs_Schuetz
+{n_z=12; n_t=6; n_m=80000; cut_z=3.5*sigma_z.1; n_x=256; n_y=256;
+cut_x=4*sigma_x.1; cut_y=4*sigma_y.1; pair_ecut=1e-3; pair_q2=2;
+beam_size=1; grids=7; store_beam=1; do_pairs=1; track_pairs=1;
+store_pairs=1; do_photons=1; store_photons=1; do_hadrons=1;
+do_jets=1; do_coherent=1; electron_ratio=1; photon_ratio=1;
+do_eloss=1; do_espread=1; rndm_seed=495043; rndm_load=0; rndm_save=0;}
+
+
+
+$PARAMETERS:: Jim_pars_Aug2023_do_dump
+{n_z=25; n_t=6; n_m=100000; cut_z=3.5*sigma_z.1; n_x=512; n_y=512;
+cut_x=20*sigma_x.1; cut_y=20*sigma_y.1; pair_q2=1;
+beam_size=1; grids=7; store_beam=1; do_pairs=1; track_pairs=1;
+store_pairs=1; do_photons=1; store_photons=1; do_hadrons=1;
+do_jets=1; do_coherent=1; electron_ratio=1; photon_ratio=1;
+do_eloss=1; do_espread=1; rndm_seed=495043; rndm_load=0; rndm_save=1;
+do_lumi=1;do_dump=1;
+automatic_grid_sizing=0;bmt_precession=1;pair_ecut=0.;
+}

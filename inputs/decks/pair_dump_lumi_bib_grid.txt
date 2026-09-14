@@ -1,0 +1,17 @@
+# Pair-dump runs for the luminosity-vs-BIB tradeoff plot
+# (analysis/lumi_bib_plot.ipynb).
+#
+# Baseline for the plot:  ε_x = 900 nm, ε_y = 20 nm  (Nominal-m2 sim).
+# Curve A (fixed ε_x = 900 nm, sweep ε_y): only the missing ε_y points land here.
+# Curve B (fixed ε_y = 20 nm, sweep ε_x): all nine ε_x points at ε_y = 20 nm.
+# Format: particles emitt_x emitt_y beta_x beta_y sigma_z offset_y n_x n_y n_z n_m integration_method n_t
+0.624 0.9 0.003 12.0 0.12 100 0 512 512 25 100000 2 6
+0.624 0.9 0.020 12.0 0.12 100 0 512 512 25 100000 2 6
+0.624 0.1 0.020 12.0 0.12 100 0 512 512 25 100000 2 6
+0.624 0.2 0.020 12.0 0.12 100 0 512 512 25 100000 2 6
+0.624 0.3 0.020 12.0 0.12 100 0 512 512 25 100000 2 6
+0.624 0.4 0.020 12.0 0.12 100 0 512 512 25 100000 2 6
+0.624 0.5 0.020 12.0 0.12 100 0 512 512 25 100000 2 6
+0.624 0.6 0.020 12.0 0.12 100 0 512 512 25 100000 2 6
+0.624 0.7 0.020 12.0 0.12 100 0 512 512 25 100000 2 6
+0.624 0.8 0.020 12.0 0.12 100 0 512 512 25 100000 2 6

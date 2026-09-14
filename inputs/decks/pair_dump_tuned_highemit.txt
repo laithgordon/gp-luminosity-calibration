@@ -1,0 +1,17 @@
+# GP++ tuned (calibrated) configs extending the eps_y scan from 20 nm to 100 nm.
+# Parameters from the conservative calibration formulas:
+#   n_y^req = C_y * D_y^q ,  C_y = 34.70, q = 0.312   (CALIBRATION_RESULTS sec 3.2)
+#            -> rounded UP to a power of two
+#   n_m^req = max(NM_FLOOR, C_m * D_y^(s-1/2) * n_x*n_y*n_z),
+#            C_m = 2.305e-7, s = S_CONS = 3.8, NM_FLOOR = 50000
+#   n_x = 512, n_z = 64 (held fixed, as in the n_y calibration)
+#
+# At these emittances D_y is small (9.5-15.1) so the locus asks for only
+# 1.6e3-7.6e3 macroparticles; every point is therefore pinned to the 50k floor,
+# which still sits >2x above the measured n_m^req at 20 nm (22147).
+#
+# Format: particles emitt_x emitt_y beta_x beta_y sigma_z offset_y n_x n_y n_z n_m integration_method n_t
+0.624 0.9 0.04 12.0 0.12 100 0 512 128 64 50000 2 6
+0.624 0.9 0.06 12.0 0.12 100 0 512 128 64 50000 2 6
+0.624 0.9 0.08 12.0 0.12 100 0 512 128 64 50000 2 6
+0.624 0.9 0.1 12.0 0.12 100 0 512 128 64 50000 2 6
