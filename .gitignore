@@ -38,3 +38,12 @@ unpublished/
 
 # ── Superseded material kept locally, never pushed (canonicalization, Rule 1) ──
 archive/
+
+# ── Never pushed: verification round outputs, the archive, logs ──
+verification/
+*.log
+
+# ── Regenerated when the pipeline runs, but read by no script, so not tracked ──
+data/bib_stats_summary.csv
+data/bib_stats_table.md
+data/gp_kappa_export.csv
