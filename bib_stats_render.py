@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 """Render the GP++ BIB statistics table (mean +- sample STD over seeds)."""
-import os
+import os, sys
 import numpy as np, pandas as pd
 
-REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-D = os.path.join(REPO, 'GitHub_Analysis', 'data')
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from paths import DATA_DIR  # noqa: E402
+
+D = str(DATA_DIR)
 df = pd.read_csv(os.path.join(D, 'bib_stats_cache.csv'))
 
 MET = ['n_pairs','n_reach','reach_pct','frac_of_total_pct','reach_frac_of_total_pct',

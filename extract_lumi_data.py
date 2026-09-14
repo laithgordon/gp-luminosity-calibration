@@ -2,7 +2,7 @@
 """
 extract_lumi_data.py
 --------------------
-Scan .ref files in output/C3_250/, output_nm/C3_250/, output_no_pairs/C3_250/,
+Scan .ref files in $GP_RAW_ROOT/{output,output_nm,output_no_pairs}/C3_250/ (paths.py),
 parse run parameters from the filename and luminosity metrics from the content,
 and write data/lumi_extracted.csv.
 
@@ -14,10 +14,13 @@ pool for the reads that remain, a warm run over ~16k files takes seconds rather
 than ~20 minutes. Use --full to ignore the cache and re-read everything.
 
 Usage
-    python3 extract_lumi_data.py              # incremental; writes both CSVs
+    python3 extract_lumi_data.py              # incremental; writes data/lumi_extracted.csv
     python3 extract_lumi_data.py --full       # re-read every .ref file
     python3 extract_lumi_data.py --workers 8  # fewer threads
     python3 extract_lumi_data.py --out /tmp/x.csv    # override destination(s)
+    python3 extract_lumi_data.py --restrict-to data/lumi_extracted.csv --out /tmp/x.csv
+                                              # re-extract exactly the runs listed in the
+                                              # committed snapshot, ignoring later runs
     python3 extract_lumi_data.py --test       # 10 files/dir, writes nothing
 
 UNITS (read this before using lumi_ee / lumi_fine)
@@ -34,8 +37,7 @@ UNITS (read this before using lumi_ee / lumi_fine)
     and is listed in the report - it is never silently left unconverted.
 
 Outputs
-    data/lumi_extracted.csv             (this tree - what the notebooks read)
-    ../analysis/data/lumi_extracted.csv (kept in sync; both trees hold analysis code)
+    data/lumi_extracted.csv             (what GP_CALIBRATION.ipynb reads)
     data/lumi_extract_report.txt        (unparsed filenames, rows missing lumi_ee)
     data/.lumi_extract_cache.json       (read cache; safe to delete any time)
 """
@@ -51,22 +53,16 @@ import time
 from concurrent.futures import ThreadPoolExecutor
 
 # ── Paths ──────────────────────────────────────────────────────────────────────
-BASE = "/fs/ddn/sdf/group/atlas/d/laithg/GuineaPig_Feb_2025"
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from paths import RAW_ROOT  # noqa: E402  (set GP_RAW_ROOT, see paths.py)
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 
-SOURCE_DIRS = {
-    "output":          os.path.join(BASE, "output",          "C3_250"),
-    "output_nm":       os.path.join(BASE, "output_nm",       "C3_250"),
-    "output_no_pairs": os.path.join(BASE, "output_no_pairs", "C3_250"),
-}
+SOURCE_DIRS = {key: os.path.join(str(RAW_ROOT), key, "C3_250")
+               for key in ("output", "output_nm", "output_no_pairs")}
 
-# Both trees hold analysis code that reads this CSV. Writing both by default
-# stops them silently diverging - which is how a 5-week-stale copy came to be
-# read by GitHub_Analysis/ notebooks while a fresh extract landed in analysis/.
-DEFAULT_OUT_CSVS = [
-    os.path.join(SCRIPT_DIR, "data", "lumi_extracted.csv"),
-    os.path.join(BASE, "analysis", "data", "lumi_extracted.csv"),
-]
+# Only this repository's copy is written by default. Pass --out (repeatable)
+# to refresh a mirror elsewhere as well.
+DEFAULT_OUT_CSVS = [os.path.join(SCRIPT_DIR, "data", "lumi_extracted.csv")]
 CACHE_PATH  = os.path.join(SCRIPT_DIR, "data", ".lumi_extract_cache.json")
 REPORT_PATH = os.path.join(SCRIPT_DIR, "data", "lumi_extract_report.txt")
 CACHE_VERSION = 3          # bump to invalidate every cached row (3: lumi unit conversion)
@@ -278,7 +274,11 @@ def main():
                     default=min(32, (os.cpu_count() or 4) * 4),
                     help="thread-pool size for file reads (default: %(default)s)")
     ap.add_argument("--out", action="append", metavar="PATH",
-                    help="CSV destination; repeatable. Default: both known trees")
+                    help="CSV destination; repeatable. Default: data/lumi_extracted.csv")
+    ap.add_argument("--restrict-to", metavar="CSV",
+                    help="extract only the runs (source_dir, filename) listed in CSV, e.g. the "
+                         "committed snapshot data/lumi_extracted.csv; runs added to the raw "
+                         "tree later are ignored")
     ap.add_argument("--test", action="store_true",
                     help="parse 10 files per dir, print a sample, write nothing")
     args = ap.parse_args()
@@ -294,6 +294,18 @@ def main():
         print(f"  {key}: {len(found)} .ref files")
         listing.extend(found)
     print(f"  total: {len(listing)} .ref files  ({time.time()-t0:.1f}s)")
+
+    if args.restrict_to:
+        with open(args.restrict_to, newline="") as fh:
+            wanted = {f"{r['source_dir']}/{r['filename']}" for r in csv.DictReader(fh)}
+        on_disk = {x[0] for x in listing}
+        listing = [x for x in listing if x[0] in wanted]
+        absent = sorted(wanted - on_disk)
+        print(f"  --restrict-to {args.restrict_to}: {len(wanted)} runs listed, "
+              f"{len(listing)} found on disk, {len(absent)} missing, "
+              f"{len(on_disk - wanted)} later runs ignored")
+        for key in absent[:20]:
+            print(f"    missing: {key}")
 
     if args.test:
         print("\n=== TEST RUN (10 files per dir) ===")
@@ -385,7 +397,8 @@ def main():
         os.replace(tmp, out_csv)
         print(f"  saved: {out_csv}")
 
-    save_cache(CACHE_PATH, entries)
+    # A restricted run must not shrink the read cache for later full runs.
+    save_cache(CACHE_PATH, {**load_cache(CACHE_PATH), **entries} if args.restrict_to else entries)
 
     # ── failure report ──
     os.makedirs(os.path.dirname(REPORT_PATH), exist_ok=True)

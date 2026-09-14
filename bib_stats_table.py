@@ -19,13 +19,13 @@ import argparse, glob, hashlib, os, re, sys
 import numpy as np, pandas as pd
 
 ANA = os.path.dirname(os.path.abspath(__file__))
-REPO = os.path.dirname(ANA)
 sys.path.insert(0, ANA)
-from pairs_reachability import load_pairs_dat, reaches_detector
+from paths import DATA_DIR, RAW_ROOT  # noqa: E402  (set GP_RAW_ROOT, see paths.py)
+from pairs_reachability import load_pairs_dat, reaches_detector  # noqa: E402
 
 CHAN = {0: 'BW', 1: 'BH', 2: 'LL'}
 GEO = dict(mag_field=5.0, detector_radius=14.0, z_max=76.0, charge=0.3)
-CACHE = os.path.join(REPO, 'GitHub_Analysis', 'data', 'bib_stats_cache.csv')
+CACHE = str(DATA_DIR / 'bib_stats_cache.csv')
 
 # (dataset, eps_y_nm, n_x, n_y, n_z, n_m)
 CONFIGS = [
@@ -40,7 +40,7 @@ CONFIGS = [
     ('tuned',   8.0,  512, 128, 64, 250000),
     ('tuned',   20.0, 512, 128, 64, 80000),
     # eps_y = 1 nm tuned (n_y=256, n_m=7.05e6) is omitted: every seed exceeded
-    # the 10-day wall without completing (CALIBRATION_METHODS sec 10).
+    # the 10-day wall without completing (see README.md, "Which rule set each configuration").
 ]
 
 def _sha256(path, chunk=1 << 22):
@@ -63,7 +63,7 @@ def find_dumps(eps_nm, nx, ny, nz, nm, cap):
     # raised instead of being resolved arbitrarily.
     cand: dict[int, set] = {}
     for src in ('output_nm', 'output'):
-        d = os.path.join(REPO, src, 'C3_250')
+        d = os.path.join(str(RAW_ROOT), src, 'C3_250')
         for pat in (f'{nx}_{ny}_{nz}_{nm}_testC3_250_pairs_*emittx_0.9_emitty_*'
                     f'_offsety_0_*.dat',
                     f'{nx}_{ny}_{nz}_testC3_250_pairs_*emittx_0.9_emitty_*'
