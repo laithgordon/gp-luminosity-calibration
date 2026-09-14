@@ -1,0 +1,1556 @@
+{
+ "about": {
+  "script": "reproduce_paper_numbers.py",
+  "simulator": "GUINEA-PIG++, C3-250",
+  "luminosity_units": "1e34 cm^-2 s^-1",
+  "determinism": "no random numbers are drawn; per-emittance requirement uncertainties are read from the notebook export, whose Monte Carlo term used rng_seed = 23",
+  "inputs_sha256": {
+   "data/gp_luminosity_for_wx.csv": "f04e5f24a90e6a10104cbdc7000ad5dc5b365f721e423d8d06aa3eebadcb9100",
+   "data/gp_calibration_export.csv": "683c3a494d640a65c5a7769a180397ebe64d09ab8045fd63f55582dd4ae16b00",
+   "data/gp_constants_export.csv": "8f3b8a4605cd28703d7cff29a4f4846596187df3c5d95edf618d0908a7e77bee",
+   "data/bib_stats_cache.csv": "8a29712dd65035cce534893f3ac741f77192a227fb4ec7ed3289fe186722a8d9",
+   "data/lumi_extracted.csv": "dff1a79b28b318772ac6640bda679a609a4d66558e7cc159e944eac4ff3c2aca",
+   "data/L_vs_nm_by_nx_20nm.csv": "6f5cfe684b9e53681f36d1ef2ff2924a82b8f6fe3e8ffddd5738e6fa0033b407",
+   "data/D_y_table.json": "706dec6bafe25afe9afcb84fceaaf893254f2e1ff4211ab195934f5c3aac61f5",
+   "inputs/acc_lumi_opt_C3_250_no_pairs.dat": "faff45ca3c10f269c4feadccaa039ab73bef0695dd780a70441efffa4742589d",
+   "inputs/acc_C3_250_nominal.dat": "ef5e4d2d54c9da08fd2b66924db45713940b0761f48b240e20bf832c27aff09d",
+   "inputs/decks/round4_cons_20nm.txt": "ec342fe910dd24e5239b68df75a98b7403b759a9953935843ce61070ef27902a",
+   "GP_CALIBRATION.ipynb": "92220bbf503f101f409543268ff087d94391b4e92efc2793d53a999c5fc74c19",
+   "constants.py": "ba8dc7568545ef2d71efb1728e3fa29fda42e51c3228864964aba0cdd50f4208"
+  }
+ },
+ "disruption_parameter": {
+  "expression": "D_y = 2 r_e N sigma_z / (gamma sigma_y (sigma_x + sigma_y)), sigma_{x,y} = sqrt(eps*_{x,y} beta*_{x,y} / gamma)",
+  "parameters": {
+   "r_e_m": 2.8179403262e-15,
+   "gamma": 244618.8998118562,
+   "N": 6240000000.0,
+   "sigma_z_m": 9.999999999999999e-05,
+   "eps_x_normalised_m_rad": 9e-07,
+   "beta_x_m": 0.012,
+   "beta_y_m": 0.00012
+  },
+  "provenance": "expression and r_e, gamma from GP_CALIBRATION.ipynb (D_y_full); beam from inputs/acc_C3_250_nominal.dat, identical to the beam columns of every deck in inputs/decks/",
+  "rows": [
+   {
+    "eps_y_nm": 0.5,
+    "D_y": 137.82767719476487,
+    "D_y_deck_value": 137.828,
+    "D_y_deck_value_definition": "three-decimal D_y used to write the conservative decks (data/D_y_table.json)"
+   },
+   {
+    "eps_y_nm": 1.0,
+    "D_y": 97.36405113780731,
+    "D_y_deck_value": 97.364,
+    "D_y_deck_value_definition": "three-decimal D_y used to write the conservative decks (data/D_y_table.json)"
+   },
+   {
+    "eps_y_nm": 1.5,
+    "D_y": 79.43810155059896,
+    "D_y_deck_value": null,
+    "D_y_deck_value_definition": null
+   },
+   {
+    "eps_y_nm": 2.0,
+    "D_y": 68.75216923874842,
+    "D_y_deck_value": 68.752,
+    "D_y_deck_value_definition": "three-decimal D_y used to write the conservative decks (data/D_y_table.json)"
+   },
+   {
+    "eps_y_nm": 2.5,
+    "D_y": 61.459772761853934,
+    "D_y_deck_value": null,
+    "D_y_deck_value_definition": null
+   },
+   {
+    "eps_y_nm": 4.0,
+    "D_y": 48.52082680874172,
+    "D_y_deck_value": 48.521,
+    "D_y_deck_value_definition": "three-decimal D_y used to write the conservative decks (data/D_y_table.json)"
+   },
+   {
+    "eps_y_nm": 8.0,
+    "D_y": 34.215547758447414,
+    "D_y_deck_value": 34.215,
+    "D_y_deck_value_definition": "three-decimal D_y used to write the conservative decks (data/D_y_table.json)"
+   },
+   {
+    "eps_y_nm": 12.0,
+    "D_y": 27.878357623225753,
+    "D_y_deck_value": 27.878,
+    "D_y_deck_value_definition": "three-decimal D_y used to write the conservative decks (data/D_y_table.json)"
+   },
+   {
+    "eps_y_nm": 16.0,
+    "D_y": 24.100805421447365,
+    "D_y_deck_value": 24.101,
+    "D_y_deck_value_definition": "three-decimal D_y used to write the conservative decks (data/D_y_table.json)"
+   },
+   {
+    "eps_y_nm": 20.0,
+    "D_y": 21.52298879634266,
+    "D_y_deck_value": 21.523,
+    "D_y_deck_value_definition": "three-decimal D_y used to write the conservative decks (data/D_y_table.json)"
+   }
+  ]
+ },
+ "luminosity_dataset": {
+  "provenance": "data/gp_luminosity_for_wx.csv (written by export_for_wx.py from the raw .ref files); cut multipliers, n_t and solver from inputs/acc_lumi_opt_C3_250_no_pairs.dat $PARAMETERS:: Jim_pars_Aug2023, which the scan rows do not override",
+  "selection": "nominal: every seed of the 512x512x25, n_m = 1e5 deck at that eps_y. conservative: runs with deck n_y == n_y_cons and deck n_m / n_m_cons in [0.99, 1.10], photons and pairs off, all seeds of the qualifying deck",
+  "excluded": [
+   "frozen_extension block of the export: not one of the GUINEA-PIG++ configurations the manuscript reports",
+   "EXCLUDED conservative eps_y=0.5 nm: no run on the locus (n_y_cons=512, n_m_cons=44381750.2; on disk at n_y_cons: n_m=250000 ratio 0.0056 (15 seeds, photons/pairs 0/0))"
+  ],
+  "rows": [
+   {
+    "configuration": "conservative",
+    "eps_y_nm": 1.0,
+    "L_mean_1e34": 6.125498008000002,
+    "L_std_1e34": {
+     "value": 0.1957428139020856,
+     "definition": "sample standard deviation over seeds, ddof = 1"
+    },
+    "L_sem_1e34": {
+     "value": 0.0505405772255036,
+     "definition": "standard error of the mean, sample standard deviation (ddof = 1) / sqrt(n_seeds)"
+    },
+    "n_seeds": 15,
+    "grid": {
+     "n_x": 512,
+     "n_y": 512,
+     "n_z": 64,
+     "n_t": 6,
+     "n_m": 14100000,
+     "integration_method": 2,
+     "cut_multipliers_sigma": [
+      20.0,
+      20.0,
+      3.5
+     ]
+    },
+    "do_photons": 0,
+    "do_pairs": 0,
+    "runs": "output_nm/C3_250/512_512_64_14100000_test_C3_250_particles_0.624_emittx_0.9_emitty_0.001_betax_12.0_betay_0.12_sigmaz_100_offsety_0_integration_method_2_nt6_seed_*.ref"
+   },
+   {
+    "configuration": "conservative",
+    "eps_y_nm": 2.0,
+    "L_mean_1e34": 4.555367040000001,
+    "L_std_1e34": {
+     "value": 0.0889450086093379,
+     "definition": "sample standard deviation over seeds, ddof = 1"
+    },
+    "L_sem_1e34": {
+     "value": 0.0229655024714827,
+     "definition": "standard error of the mean, sample standard deviation (ddof = 1) / sqrt(n_seeds)"
+    },
+    "n_seeds": 15,
+    "grid": {
+     "n_x": 512,
+     "n_y": 512,
+     "n_z": 64,
+     "n_t": 6,
+     "n_m": 4471286,
+     "integration_method": 2,
+     "cut_multipliers_sigma": [
+      20.0,
+      20.0,
+      3.5
+     ]
+    },
+    "do_photons": 0,
+    "do_pairs": 0,
+    "runs": "output_nm/C3_250/512_512_64_4471286_test_C3_250_particles_0.624_emittx_0.9_emitty_0.002_betax_12.0_betay_0.12_sigmaz_100_offsety_0_seed_*.ref"
+   },
+   {
+    "configuration": "conservative",
+    "eps_y_nm": 4.0,
+    "L_mean_1e34": 3.1602364080000007,
+    "L_std_1e34": {
+     "value": 0.0773444381315331,
+     "definition": "sample standard deviation over seeds, ddof = 1"
+    },
+    "L_sem_1e34": {
+     "value": 0.0199702480536798,
+     "definition": "standard error of the mean, sample standard deviation (ddof = 1) / sqrt(n_seeds)"
+    },
+    "n_seeds": 15,
+    "grid": {
+     "n_x": 512,
+     "n_y": 256,
+     "n_z": 64,
+     "n_t": 6,
+     "n_m": 707831,
+     "integration_method": 2,
+     "cut_multipliers_sigma": [
+      20.0,
+      20.0,
+      3.5
+     ]
+    },
+    "do_photons": 0,
+    "do_pairs": 0,
+    "runs": "output_nm/C3_250/512_256_64_707831_test_C3_250_particles_0.624_emittx_0.9_emitty_0.004_betax_12.0_betay_0.12_sigmaz_100_offsety_0_seed_*.ref"
+   },
+   {
+    "configuration": "conservative",
+    "eps_y_nm": 8.0,
+    "L_mean_1e34": 2.225697544,
+    "L_std_1e34": {
+     "value": 0.0362378310652808,
+     "definition": "sample standard deviation over seeds, ddof = 1"
+    },
+    "L_sem_1e34": {
+     "value": 0.0093565677479007,
+     "definition": "standard error of the mean, sample standard deviation (ddof = 1) / sqrt(n_seeds)"
+    },
+    "n_seeds": 15,
+    "grid": {
+     "n_x": 512,
+     "n_y": 256,
+     "n_z": 64,
+     "n_t": 6,
+     "n_m": 223499,
+     "integration_method": 2,
+     "cut_multipliers_sigma": [
+      20.0,
+      20.0,
+      3.5
+     ]
+    },
+    "do_photons": 0,
+    "do_pairs": 0,
+    "runs": "output_nm/C3_250/512_256_64_223499_test_C3_250_particles_0.624_emittx_0.9_emitty_0.008_betax_12.0_betay_0.12_sigmaz_100_offsety_0_seed_*.ref"
+   },
+   {
+    "configuration": "conservative",
+    "eps_y_nm": 12.0,
+    "L_mean_1e34": 1.7866836960000003,
+    "L_std_1e34": {
+     "value": 0.0244374976337071,
+     "definition": "sample standard deviation over seeds, ddof = 1"
+    },
+    "L_sem_1e34": {
+     "value": 0.006309734757222,
+     "definition": "standard error of the mean, sample standard deviation (ddof = 1) / sqrt(n_seeds)"
+    },
+    "n_seeds": 15,
+    "grid": {
+     "n_x": 512,
+     "n_y": 256,
+     "n_z": 64,
+     "n_t": 6,
+     "n_m": 113691,
+     "integration_method": 2,
+     "cut_multipliers_sigma": [
+      20.0,
+      20.0,
+      3.5
+     ]
+    },
+    "do_photons": 0,
+    "do_pairs": 0,
+    "runs": "output_nm/C3_250/512_256_64_113691_test_C3_250_particles_0.624_emittx_0.9_emitty_0.012_betax_12.0_betay_0.12_sigmaz_100_offsety_0_seed_*.ref"
+   },
+   {
+    "configuration": "conservative",
+    "eps_y_nm": 16.0,
+    "L_mean_1e34": 1.5267674352000002,
+    "L_std_1e34": {
+     "value": 0.0183281965407862,
+     "definition": "sample standard deviation over seeds, ddof = 1"
+    },
+    "L_sem_1e34": {
+     "value": 0.0047323199978987,
+     "definition": "standard error of the mean, sample standard deviation (ddof = 1) / sqrt(n_seeds)"
+    },
+    "n_seeds": 15,
+    "grid": {
+     "n_x": 512,
+     "n_y": 256,
+     "n_z": 64,
+     "n_t": 6,
+     "n_m": 70320,
+     "integration_method": 2,
+     "cut_multipliers_sigma": [
+      20.0,
+      20.0,
+      3.5
+     ]
+    },
+    "do_photons": 0,
+    "do_pairs": 0,
+    "runs": "output_nm/C3_250/512_256_64_70320_test_C3_250_particles_0.624_emittx_0.9_emitty_0.016_betax_12.0_betay_0.12_sigmaz_100_offsety_0_seed_*.ref"
+   },
+   {
+    "configuration": "conservative",
+    "eps_y_nm": 20.0,
+    "L_mean_1e34": 1.3500570384,
+    "L_std_1e34": {
+     "value": 0.0172850600989785,
+     "definition": "sample standard deviation over seeds, ddof = 1"
+    },
+    "L_sem_1e34": {
+     "value": 0.0044629833267692,
+     "definition": "standard error of the mean, sample standard deviation (ddof = 1) / sqrt(n_seeds)"
+    },
+    "n_seeds": 15,
+    "grid": {
+     "n_x": 512,
+     "n_y": 256,
+     "n_z": 64,
+     "n_t": 6,
+     "n_m": 48411,
+     "integration_method": 2,
+     "cut_multipliers_sigma": [
+      20.0,
+      20.0,
+      3.5
+     ]
+    },
+    "do_photons": 0,
+    "do_pairs": 0,
+    "runs": "output_nm/C3_250/512_256_64_48411_test_C3_250_particles_0.624_emittx_0.9_emitty_0.02_betax_12.0_betay_0.12_sigmaz_100_offsety_0_seed_*.ref"
+   },
+   {
+    "configuration": "nominal",
+    "eps_y_nm": 0.5,
+    "L_mean_1e34": 6.275203872000001,
+    "L_std_1e34": {
+     "value": 0.3150681805645187,
+     "definition": "sample standard deviation over seeds, ddof = 1"
+    },
+    "L_sem_1e34": {
+     "value": 0.0813502544164168,
+     "definition": "standard error of the mean, sample standard deviation (ddof = 1) / sqrt(n_seeds)"
+    },
+    "n_seeds": 15,
+    "grid": {
+     "n_x": 512,
+     "n_y": 512,
+     "n_z": 25,
+     "n_t": 6,
+     "n_m": 100000,
+     "integration_method": 2,
+     "cut_multipliers_sigma": [
+      20.0,
+      20.0,
+      3.5
+     ]
+    },
+    "do_photons": 0,
+    "do_pairs": 0,
+    "runs": "output_nm/C3_250/512_512_25_100000_test_C3_250_particles_0.624_emittx_0.9_emitty_0.0005_betax_12.0_betay_0.12_sigmaz_100_offsety_0_integration_method_2_nt6_seed_*.ref"
+   },
+   {
+    "configuration": "nominal",
+    "eps_y_nm": 1.0,
+    "L_mean_1e34": 4.947435080000002,
+    "L_std_1e34": {
+     "value": 0.1942210946088029,
+     "definition": "sample standard deviation over seeds, ddof = 1"
+    },
+    "L_sem_1e34": {
+     "value": 0.0501476709934712,
+     "definition": "standard error of the mean, sample standard deviation (ddof = 1) / sqrt(n_seeds)"
+    },
+    "n_seeds": 15,
+    "grid": {
+     "n_x": 512,
+     "n_y": 512,
+     "n_z": 25,
+     "n_t": 6,
+     "n_m": 100000,
+     "integration_method": 2,
+     "cut_multipliers_sigma": [
+      20.0,
+      20.0,
+      3.5
+     ]
+    },
+    "do_photons": 0,
+    "do_pairs": 0,
+    "runs": "output_nm/C3_250/512_512_25_100000_test_C3_250_particles_0.624_emittx_0.9_emitty_0.001_betax_12.0_betay_0.12_sigmaz_100_offsety_0_integration_method_2_nt6_seed_*.ref"
+   },
+   {
+    "configuration": "nominal",
+    "eps_y_nm": 2.0,
+    "L_mean_1e34": 3.922267888000001,
+    "L_std_1e34": {
+     "value": 0.1334898837687506,
+     "definition": "sample standard deviation over seeds, ddof = 1"
+    },
+    "L_sem_1e34": {
+     "value": 0.0344669397815689,
+     "definition": "standard error of the mean, sample standard deviation (ddof = 1) / sqrt(n_seeds)"
+    },
+    "n_seeds": 15,
+    "grid": {
+     "n_x": 512,
+     "n_y": 512,
+     "n_z": 25,
+     "n_t": 6,
+     "n_m": 100000,
+     "integration_method": 2,
+     "cut_multipliers_sigma": [
+      20.0,
+      20.0,
+      3.5
+     ]
+    },
+    "do_photons": 0,
+    "do_pairs": 0,
+    "runs": "output_nm/C3_250/512_512_25_100000_test_C3_250_particles_0.624_emittx_0.9_emitty_0.002_betax_12.0_betay_0.12_sigmaz_100_offsety_0_integration_method_2_nt6_seed_*.ref"
+   },
+   {
+    "configuration": "nominal",
+    "eps_y_nm": 4.0,
+    "L_mean_1e34": 3.030523104,
+    "L_std_1e34": {
+     "value": 0.0788319864969077,
+     "definition": "sample standard deviation over seeds, ddof = 1"
+    },
+    "L_sem_1e34": {
+     "value": 0.0203543313900647,
+     "definition": "standard error of the mean, sample standard deviation (ddof = 1) / sqrt(n_seeds)"
+    },
+    "n_seeds": 15,
+    "grid": {
+     "n_x": 512,
+     "n_y": 512,
+     "n_z": 25,
+     "n_t": 6,
+     "n_m": 100000,
+     "integration_method": 2,
+     "cut_multipliers_sigma": [
+      20.0,
+      20.0,
+      3.5
+     ]
+    },
+    "do_photons": 0,
+    "do_pairs": 0,
+    "runs": "output_nm/C3_250/512_512_25_100000_test_C3_250_particles_0.624_emittx_0.9_emitty_0.004_betax_12.0_betay_0.12_sigmaz_100_offsety_0_integration_method_2_nt6_seed_*.ref"
+   },
+   {
+    "configuration": "nominal",
+    "eps_y_nm": 8.0,
+    "L_mean_1e34": 2.224335624,
+    "L_std_1e34": {
+     "value": 0.030896480607717,
+     "definition": "sample standard deviation over seeds, ddof = 1"
+    },
+    "L_sem_1e34": {
+     "value": 0.0079774369900072,
+     "definition": "standard error of the mean, sample standard deviation (ddof = 1) / sqrt(n_seeds)"
+    },
+    "n_seeds": 15,
+    "grid": {
+     "n_x": 512,
+     "n_y": 512,
+     "n_z": 25,
+     "n_t": 6,
+     "n_m": 100000,
+     "integration_method": 2,
+     "cut_multipliers_sigma": [
+      20.0,
+      20.0,
+      3.5
+     ]
+    },
+    "do_photons": 0,
+    "do_pairs": 0,
+    "runs": "output_nm/C3_250/512_512_25_100000_test_C3_250_particles_0.624_emittx_0.9_emitty_0.008_betax_12.0_betay_0.12_sigmaz_100_offsety_0.000000_integration_method_2_nt6_seed_*.ref"
+   },
+   {
+    "configuration": "nominal",
+    "eps_y_nm": 12.0,
+    "L_mean_1e34": 1.811175912,
+    "L_std_1e34": {
+     "value": 0.017076842228028,
+     "definition": "sample standard deviation over seeds, ddof = 1"
+    },
+    "L_sem_1e34": {
+     "value": 0.0044092217036642,
+     "definition": "standard error of the mean, sample standard deviation (ddof = 1) / sqrt(n_seeds)"
+    },
+    "n_seeds": 15,
+    "grid": {
+     "n_x": 512,
+     "n_y": 512,
+     "n_z": 25,
+     "n_t": 6,
+     "n_m": 100000,
+     "integration_method": 2,
+     "cut_multipliers_sigma": [
+      20.0,
+      20.0,
+      3.5
+     ]
+    },
+    "do_photons": 0,
+    "do_pairs": 0,
+    "runs": "output_nm/C3_250/512_512_25_100000_test_C3_250_particles_0.624_emittx_0.9_emitty_0.012_betax_12.0_betay_0.12_sigmaz_100_offsety_0_integration_method_2_nt6_seed_*.ref"
+   },
+   {
+    "configuration": "nominal",
+    "eps_y_nm": 16.0,
+    "L_mean_1e34": 1.5500555224,
+    "L_std_1e34": {
+     "value": 0.0105002666075016,
+     "definition": "sample standard deviation over seeds, ddof = 1"
+    },
+    "L_sem_1e34": {
+     "value": 0.0027111571801061,
+     "definition": "standard error of the mean, sample standard deviation (ddof = 1) / sqrt(n_seeds)"
+    },
+    "n_seeds": 15,
+    "grid": {
+     "n_x": 512,
+     "n_y": 512,
+     "n_z": 25,
+     "n_t": 6,
+     "n_m": 100000,
+     "integration_method": 2,
+     "cut_multipliers_sigma": [
+      20.0,
+      20.0,
+      3.5
+     ]
+    },
+    "do_photons": 0,
+    "do_pairs": 0,
+    "runs": "output_nm/C3_250/512_512_25_100000_test_C3_250_particles_0.624_emittx_0.9_emitty_0.016_betax_12.0_betay_0.12_sigmaz_100_offsety_0_integration_method_2_nt6_seed_*.ref"
+   },
+   {
+    "configuration": "nominal",
+    "eps_y_nm": 20.0,
+    "L_mean_1e34": 1.3679591576000003,
+    "L_std_1e34": {
+     "value": 0.0077289781651468,
+     "definition": "sample standard deviation over seeds, ddof = 1"
+    },
+    "L_sem_1e34": {
+     "value": 0.0019956135811209,
+     "definition": "standard error of the mean, sample standard deviation (ddof = 1) / sqrt(n_seeds)"
+    },
+    "n_seeds": 15,
+    "grid": {
+     "n_x": 512,
+     "n_y": 512,
+     "n_z": 25,
+     "n_t": 6,
+     "n_m": 100000,
+     "integration_method": 2,
+     "cut_multipliers_sigma": [
+      20.0,
+      20.0,
+      3.5
+     ]
+    },
+    "do_photons": 1,
+    "do_pairs": 1,
+    "runs": "output/C3_250/512_512_25_test_C3_250_particles_0.624_emittx_0.9_emitty_0.020_betax_12.0_betay_0.12_sigmaz_100_offsety_0_seed_*.ref"
+   }
+  ]
+ },
+ "derived_luminosity": {
+  "provenance": "computed from the luminosity_dataset rows of this file",
+  "conservative_over_nominal": [
+   {
+    "eps_y_nm": 1.0,
+    "conservative_over_nominal": 1.2381158941857202,
+    "standard_error": {
+     "value": 0.016181799405952962,
+     "definition": "standard error of the ratio of two means, first-order propagation of the two standard errors, treated as independent"
+    }
+   },
+   {
+    "eps_y_nm": 2.0,
+    "conservative_over_nominal": 1.1614115022426026,
+    "standard_error": {
+     "value": 0.011766198218581754,
+     "definition": "standard error of the ratio of two means, first-order propagation of the two standard errors, treated as independent"
+    }
+   },
+   {
+    "eps_y_nm": 4.0,
+    "conservative_over_nominal": 1.0428022818333877,
+    "standard_error": {
+     "value": 0.009616605079572583,
+     "definition": "standard error of the ratio of two means, first-order propagation of the two standard errors, treated as independent"
+    }
+   },
+   {
+    "eps_y_nm": 8.0,
+    "conservative_over_nominal": 1.0006122817012437,
+    "standard_error": {
+     "value": 0.00552924421706188,
+     "definition": "standard error of the ratio of two means, first-order propagation of the two standard errors, treated as independent"
+    }
+   },
+   {
+    "eps_y_nm": 12.0,
+    "conservative_over_nominal": 0.98647717439387,
+    "standard_error": {
+     "value": 0.004231319420785322,
+     "definition": "standard error of the ratio of two means, first-order propagation of the two standard errors, treated as independent"
+    }
+   },
+   {
+    "eps_y_nm": 16.0,
+    "conservative_over_nominal": 0.9849759657873789,
+    "standard_error": {
+     "value": 0.0035055422302679054,
+     "definition": "standard error of the ratio of two means, first-order propagation of the two standard errors, treated as independent"
+    }
+   },
+   {
+    "eps_y_nm": 20.0,
+    "conservative_over_nominal": 0.9869132648438068,
+    "standard_error": {
+     "value": 0.0035660650209203464,
+     "definition": "standard error of the ratio of two means, first-order propagation of the two standard errors, treated as independent"
+    }
+   }
+  ],
+  "enhancement_factor": {
+   "definition": "H_D = L / L_geom, L_geom = N^2 n_b f_rep / (4 pi sigma_x sigma_y), no hourglass factor, sigma from normalised emittance and beta*",
+   "parameters": {
+    "energy_GeV": 125.0,
+    "particles_per_bunch": 6240000000.0,
+    "beta_x_mm": 12.0,
+    "beta_y_mm": 0.12,
+    "emitt_x_normalised_mm_mrad": 0.9,
+    "sigma_z_um": 100.0,
+    "n_b": 133,
+    "f_rep_Hz": 120.0,
+    "gamma": 244618.8998118562
+   },
+   "provenance": "beam parameters from inputs/acc_C3_250_nominal.dat (the beam of every production deck); gamma as in GP_CALIBRATION.ipynb",
+   "rows": [
+    {
+     "configuration": "conservative",
+     "eps_y_nm": 1.0,
+     "H_D": 1.8228951640660584,
+     "L_geom_1e34": 3.3603128302434975,
+     "relative_seed_scatter": {
+      "value": 0.03195541222059696,
+      "definition": "sample standard deviation (ddof = 1) divided by the mean luminosity"
+     }
+    },
+    {
+     "configuration": "conservative",
+     "eps_y_nm": 2.0,
+     "H_D": 1.917161340329305,
+     "L_geom_1e34": 2.3760999891733365,
+     "relative_seed_scatter": {
+      "value": 0.019525322071377565,
+      "definition": "sample standard deviation (ddof = 1) divided by the mean luminosity"
+     }
+    },
+    {
+     "configuration": "conservative",
+     "eps_y_nm": 4.0,
+     "H_D": 1.8809179785627288,
+     "L_geom_1e34": 1.6801564151217487,
+     "relative_seed_scatter": {
+      "value": 0.02447425703208122,
+      "definition": "sample standard deviation (ddof = 1) divided by the mean luminosity"
+     }
+    },
+    {
+     "configuration": "conservative",
+     "eps_y_nm": 8.0,
+     "H_D": 1.873403942713991,
+     "L_geom_1e34": 1.1880499945866683,
+     "relative_seed_scatter": {
+      "value": 0.01628156133027606,
+      "definition": "sample standard deviation (ddof = 1) divided by the mean luminosity"
+     }
+    },
+    {
+     "configuration": "conservative",
+     "eps_y_nm": 12.0,
+     "H_D": 1.841868358609161,
+     "L_geom_1e34": 0.970038758551218,
+     "relative_seed_scatter": {
+      "value": 0.01367757353381429,
+      "definition": "sample standard deviation (ddof = 1) divided by the mean luminosity"
+     }
+    },
+    {
+     "configuration": "conservative",
+     "eps_y_nm": 16.0,
+     "H_D": 1.817411071325007,
+     "L_geom_1e34": 0.8400782075608744,
+     "relative_seed_scatter": {
+      "value": 0.012004576544027009,
+      "definition": "sample standard deviation (ddof = 1) divided by the mean luminosity"
+     }
+    },
+    {
+     "configuration": "conservative",
+     "eps_y_nm": 20.0,
+     "H_D": 1.7967489718186098,
+     "L_geom_1e34": 0.7513887914089172,
+     "relative_seed_scatter": {
+      "value": 0.012803207277422615,
+      "definition": "sample standard deviation (ddof = 1) divided by the mean luminosity"
+     }
+    },
+    {
+     "configuration": "nominal",
+     "eps_y_nm": 0.5,
+     "H_D": 1.3204839654460823,
+     "L_geom_1e34": 4.752199978346673,
+     "relative_seed_scatter": {
+      "value": 0.05020843736573322,
+      "definition": "sample standard deviation (ddof = 1) divided by the mean luminosity"
+     }
+    },
+    {
+     "configuration": "nominal",
+     "eps_y_nm": 1.0,
+     "H_D": 1.47231383800701,
+     "L_geom_1e34": 3.3603128302434975,
+     "relative_seed_scatter": {
+      "value": 0.039256926360477444,
+      "definition": "sample standard deviation (ddof = 1) divided by the mean luminosity"
+     }
+    },
+    {
+     "configuration": "nominal",
+     "eps_y_nm": 2.0,
+     "H_D": 1.6507166810621416,
+     "L_geom_1e34": 2.3760999891733365,
+     "relative_seed_scatter": {
+      "value": 0.034033851735919614,
+      "definition": "sample standard deviation (ddof = 1) divided by the mean luminosity"
+     }
+    },
+    {
+     "configuration": "nominal",
+     "eps_y_nm": 4.0,
+     "H_D": 1.8037148664997358,
+     "L_geom_1e34": 1.6801564151217487,
+     "relative_seed_scatter": {
+      "value": 0.026012666391771456,
+      "definition": "sample standard deviation (ddof = 1) divided by the mean luminosity"
+     }
+    },
+    {
+     "configuration": "nominal",
+     "eps_y_nm": 8.0,
+     "H_D": 1.8722575936493848,
+     "L_geom_1e34": 1.1880499945866683,
+     "relative_seed_scatter": {
+      "value": 0.013890206259501511,
+      "definition": "sample standard deviation (ddof = 1) divided by the mean luminosity"
+     }
+    },
+    {
+     "configuration": "nominal",
+     "eps_y_nm": 12.0,
+     "H_D": 1.8671170569566164,
+     "L_geom_1e34": 0.970038758551218,
+     "relative_seed_scatter": {
+      "value": 0.00942859393992868,
+      "definition": "sample standard deviation (ddof = 1) divided by the mean luminosity"
+     }
+    },
+    {
+     "configuration": "nominal",
+     "eps_y_nm": 16.0,
+     "H_D": 1.845132403684783,
+     "L_geom_1e34": 0.8400782075608744,
+     "relative_seed_scatter": {
+      "value": 0.006774122898026069,
+      "definition": "sample standard deviation (ddof = 1) divided by the mean luminosity"
+     }
+    },
+    {
+     "configuration": "nominal",
+     "eps_y_nm": 20.0,
+     "H_D": 1.8205743461184212,
+     "L_geom_1e34": 0.7513887914089172,
+     "relative_seed_scatter": {
+      "value": 0.005650006524103259,
+      "definition": "sample standard deviation (ddof = 1) divided by the mean luminosity"
+     }
+    }
+   ]
+  },
+  "conservative_luminosity_gain_2nm_over_20nm": {
+   "value": 3.3742033932127242,
+   "standard_error": {
+    "value": 0.020341723493849818,
+    "definition": "standard error of the ratio of two means, first-order propagation of the two standard errors, treated as independent"
+   },
+   "definition": "L(conservative, 2 nm) / L(conservative, 20 nm), from the conservative runs with photons and pairs off",
+   "n_seeds_2nm": 15,
+   "n_seeds_20nm": 15
+  }
+ },
+ "requirements": {
+  "provenance": "data/gp_calibration_export.csv (written by GP_CALIBRATION.ipynb): the +-5 % crossing of each Richardson-fitted tuning ladder built from data/lumi_extracted.csv",
+  "n_y_req": [
+   {
+    "eps_y_nm": 1.0,
+    "D_y": 97.3640511378073,
+    "value": 132.66493152355466,
+    "sigma_ln": {
+     "value": 0.3221358464638391,
+     "definition": "standard deviation of ln(requirement): parameter noise (Monte Carlo over the Richardson fit, seeded), window selection and jackknife terms in quadrature, as computed by sigma_log_total in GP_CALIBRATION.ipynb"
+    }
+   },
+   {
+    "eps_y_nm": 2.0,
+    "D_y": 68.75216923874842,
+    "value": 133.54817959007644,
+    "sigma_ln": {
+     "value": 0.5340815949351884,
+     "definition": "standard deviation of ln(requirement): parameter noise (Monte Carlo over the Richardson fit, seeded), window selection and jackknife terms in quadrature, as computed by sigma_log_total in GP_CALIBRATION.ipynb"
+    }
+   },
+   {
+    "eps_y_nm": 4.0,
+    "D_y": 48.52082680874171,
+    "value": 115.86178030036692,
+    "sigma_ln": {
+     "value": 0.6715627485215111,
+     "definition": "standard deviation of ln(requirement): parameter noise (Monte Carlo over the Richardson fit, seeded), window selection and jackknife terms in quadrature, as computed by sigma_log_total in GP_CALIBRATION.ipynb"
+    }
+   },
+   {
+    "eps_y_nm": 8.0,
+    "D_y": 34.21554775844742,
+    "value": 113.62270956706864,
+    "sigma_ln": {
+     "value": 0.0715854338842078,
+     "definition": "standard deviation of ln(requirement): parameter noise (Monte Carlo over the Richardson fit, seeded), window selection and jackknife terms in quadrature, as computed by sigma_log_total in GP_CALIBRATION.ipynb"
+    }
+   },
+   {
+    "eps_y_nm": 12.0,
+    "D_y": 27.87835762322576,
+    "value": 90.85986852707344,
+    "sigma_ln": {
+     "value": 0.5157301701610287,
+     "definition": "standard deviation of ln(requirement): parameter noise (Monte Carlo over the Richardson fit, seeded), window selection and jackknife terms in quadrature, as computed by sigma_log_total in GP_CALIBRATION.ipynb"
+    }
+   },
+   {
+    "eps_y_nm": 16.0,
+    "D_y": 24.100805421447365,
+    "value": 93.40383025926585,
+    "sigma_ln": {
+     "value": 0.0298168900765705,
+     "definition": "standard deviation of ln(requirement): parameter noise (Monte Carlo over the Richardson fit, seeded), window selection and jackknife terms in quadrature, as computed by sigma_log_total in GP_CALIBRATION.ipynb"
+    }
+   },
+   {
+    "eps_y_nm": 20.0,
+    "D_y": 21.522988796342663,
+    "value": 90.12731130028916,
+    "sigma_ln": {
+     "value": 0.1424385818771354,
+     "definition": "standard deviation of ln(requirement): parameter noise (Monte Carlo over the Richardson fit, seeded), window selection and jackknife terms in quadrature, as computed by sigma_log_total in GP_CALIBRATION.ipynb"
+    }
+   }
+  ],
+  "n_m_req_per_cell": [
+   {
+    "eps_y_nm": 0.5,
+    "D_y": 137.83,
+    "value": 0.3730084003092892,
+    "definition": "n_m^req / (n_x n_y n_z), required macroparticles per grid cell",
+    "sigma_ln": {
+     "value": 0.6272,
+     "definition": "standard deviation of ln(requirement): parameter noise (Monte Carlo over the Richardson fit, seeded), window selection and jackknife terms in quadrature, as computed by sigma_log_total in GP_CALIBRATION.ipynb"
+    }
+   },
+   {
+    "eps_y_nm": 1.0,
+    "D_y": 97.36,
+    "value": 0.1355335550429394,
+    "definition": "n_m^req / (n_x n_y n_z), required macroparticles per grid cell",
+    "sigma_ln": {
+     "value": 0.3931,
+     "definition": "standard deviation of ln(requirement): parameter noise (Monte Carlo over the Richardson fit, seeded), window selection and jackknife terms in quadrature, as computed by sigma_log_total in GP_CALIBRATION.ipynb"
+    }
+   },
+   {
+    "eps_y_nm": 2.0,
+    "D_y": 68.75,
+    "value": 0.1418950322807474,
+    "definition": "n_m^req / (n_x n_y n_z), required macroparticles per grid cell",
+    "sigma_ln": {
+     "value": 0.3655,
+     "definition": "standard deviation of ln(requirement): parameter noise (Monte Carlo over the Richardson fit, seeded), window selection and jackknife terms in quadrature, as computed by sigma_log_total in GP_CALIBRATION.ipynb"
+    }
+   },
+   {
+    "eps_y_nm": 4.0,
+    "D_y": 48.52,
+    "value": 0.0287030353150979,
+    "definition": "n_m^req / (n_x n_y n_z), required macroparticles per grid cell",
+    "sigma_ln": {
+     "value": 0.7049,
+     "definition": "standard deviation of ln(requirement): parameter noise (Monte Carlo over the Richardson fit, seeded), window selection and jackknife terms in quadrature, as computed by sigma_log_total in GP_CALIBRATION.ipynb"
+    }
+   },
+   {
+    "eps_y_nm": 8.0,
+    "D_y": 34.22,
+    "value": 0.0095837431911533,
+    "definition": "n_m^req / (n_x n_y n_z), required macroparticles per grid cell",
+    "sigma_ln": {
+     "value": 0.1792,
+     "definition": "standard deviation of ln(requirement): parameter noise (Monte Carlo over the Richardson fit, seeded), window selection and jackknife terms in quadrature, as computed by sigma_log_total in GP_CALIBRATION.ipynb"
+    }
+   },
+   {
+    "eps_y_nm": 12.0,
+    "D_y": 27.88,
+    "value": 0.0037178734486448,
+    "definition": "n_m^req / (n_x n_y n_z), required macroparticles per grid cell",
+    "sigma_ln": {
+     "value": 0.3512,
+     "definition": "standard deviation of ln(requirement): parameter noise (Monte Carlo over the Richardson fit, seeded), window selection and jackknife terms in quadrature, as computed by sigma_log_total in GP_CALIBRATION.ipynb"
+    }
+   },
+   {
+    "eps_y_nm": 20.0,
+    "D_y": 21.52,
+    "value": 0.0013200480902667,
+    "definition": "n_m^req / (n_x n_y n_z), required macroparticles per grid cell",
+    "sigma_ln": {
+     "value": 0.3657,
+     "definition": "standard deviation of ln(requirement): parameter noise (Monte Carlo over the Richardson fit, seeded), window selection and jackknife terms in quadrature, as computed by sigma_log_total in GP_CALIBRATION.ipynb"
+    }
+   }
+  ],
+  "coverage": {
+   "n_y_req_eps_nm": [
+    1.0,
+    2.0,
+    4.0,
+    8.0,
+    12.0,
+    16.0,
+    20.0
+   ],
+   "n_m_req_eps_nm": [
+    0.5,
+    1.0,
+    2.0,
+    4.0,
+    8.0,
+    12.0,
+    20.0
+   ]
+  },
+  "note_D_y": "n_m rows carry D_y rounded to 2 decimals, as in the notebook table the n_m fit reads"
+ },
+ "fitted_constants": {
+  "method": "weighted least squares in ln-ln space, weights 1/sigma_ln^2 from the requirements section; chi2 = sum of weighted squared residuals",
+  "provenance": "recomputed from data/gp_calibration_export.csv; checked against data/gp_constants_export.csv to 1e-12",
+  "n_y_free_fit": {
+   "law": "n_y^req = C_y D_y^q_n",
+   "q_n": 0.40187394944885685,
+   "sigma_q_n": {
+    "value": 0.1515311302539019,
+    "definition": "one-standard-deviation parameter uncertainty from the weighted least-squares covariance"
+   },
+   "C_y": 26.159342866768096,
+   "sigma_ln_C_y": {
+    "value": 0.4918958803055536,
+    "definition": "one-standard-deviation parameter uncertainty from the weighted least-squares covariance"
+   },
+   "chi2": 1.0228425290207388,
+   "ndf": 5,
+   "p_value": 0.9607024034165741,
+   "q_n_minus_prediction_in_sigma": -0.41658800040210014,
+   "q_n_over_sigma": 2.652088377982046
+  },
+  "n_y_constrained_fit": {
+   "law": "n_y^req = C_y D_y^q_n with q_n fixed",
+   "q_n_fixed": 0.465,
+   "q_n_definition": "q_p + 1/4, the derived exponent adopted in GP_CALIBRATION.ipynb",
+   "C_y": 21.318893877892204,
+   "sigma_ln_C_y": {
+    "value": 0.026838025317064463,
+    "definition": "one-standard-deviation parameter uncertainty from the weighted least-squares covariance"
+   },
+   "chi2": 1.1963880910999907,
+   "ndf": 6,
+   "p_value": 0.977062739537849
+  },
+  "n_m_fit": {
+   "law": "n_m^req / (n_x n_y n_z) = C_m D_y^(s - q_p)",
+   "slope_s_minus_q_p": 3.1148844446749795,
+   "q_p": 0.214,
+   "s": 3.3288844446749795,
+   "sigma_s": {
+    "value": 0.2503343720604374,
+    "definition": "one-standard-deviation parameter uncertainty from the weighted least-squares covariance"
+   },
+   "C_m": 1.4043588502956363e-07,
+   "sigma_C_m": {
+    "value": 1.3133900976698568e-07,
+    "definition": "one-standard-deviation parameter uncertainty from the weighted least-squares covariance, propagated to C_m = exp(intercept)"
+   },
+   "chi2": 7.487840031425717,
+   "ndf": 5,
+   "p_value": 0.18681236353340702
+  },
+  "conservative_loci": {
+   "status": "FROZEN: the values used to define the production runs, fixed when those runs were submitted; not recomputed from the fits above",
+   "provenance": "constants.py",
+   "n_y_cons": {
+    "law": "n_y = 2^ceil(log2(C_y_cons D_y^q_n_cons))",
+    "C_y_cons": 50.0,
+    "q_n_cons": 0.402
+   },
+   "n_m_cons": {
+    "law": "n_m = C_m_cons D_y^(s_cons - q_p) n_x n_y n_z",
+    "C_m_cons": 2.305e-07,
+    "s_cons_minus_q_p": 3.3,
+    "s_cons": 3.514,
+    "s_cons_definition": "s_cons_minus_q_p + q_p with q_p = 0.214 as adopted in GP_CALIBRATION.ipynb",
+    "n_x": 512,
+    "n_z": 64
+   }
+  }
+ },
+ "kappa": {
+  "definition": "kappa = n_y^req / (2 c_y Lambda D_y^q_n)",
+  "parameters": {
+   "c_y": 20.0,
+   "Lambda": 1.88,
+   "q_n": 0.465
+  },
+  "provenance": "recomputed from data/gp_calibration_export.csv, c_y and Lambda from data/gp_constants_export.csv; checked against the notebook's exported mean and slope",
+  "rows": [
+   {
+    "eps_y_nm": 1.0,
+    "D_y": 97.3640511378073,
+    "kappa": 0.20986157648099696,
+    "sigma_kappa": {
+     "value": 0.06760393657994165,
+     "definition": "kappa * sigma_ln(n_y^req)"
+    }
+   },
+   {
+    "eps_y_nm": 2.0,
+    "D_y": 68.75216923874842,
+    "kappa": 0.24836017282477388,
+    "sigma_kappa": {
+     "value": 0.13264459722063426,
+     "definition": "kappa * sigma_ln(n_y^req)"
+    }
+   },
+   {
+    "eps_y_nm": 4.0,
+    "D_y": 48.52082680874171,
+    "kappa": 0.253376158400499,
+    "sigma_kappa": {
+     "value": 0.17015798934526086,
+     "definition": "kappa * sigma_ln(n_y^req)"
+    }
+   },
+   {
+    "eps_y_nm": 8.0,
+    "D_y": 34.21554775844742,
+    "kappa": 0.29230306886260904,
+    "sigma_kappa": {
+     "value": 0.020924642010215336,
+     "definition": "kappa * sigma_ln(n_y^req)"
+    }
+   },
+   {
+    "eps_y_nm": 12.0,
+    "D_y": 27.87835762322576,
+    "kappa": 0.2571017439282179,
+    "sigma_kappa": {
+     "value": 0.13259512614479704,
+     "definition": "kappa * sigma_ln(n_y^req)"
+    }
+   },
+   {
+    "eps_y_nm": 16.0,
+    "D_y": 24.100805421447365,
+    "kappa": 0.2828148252558393,
+    "sigma_kappa": {
+     "value": 0.008432658556677854,
+     "definition": "kappa * sigma_ln(n_y^req)"
+    }
+   },
+   {
+    "eps_y_nm": 20.0,
+    "D_y": 21.522988796342663,
+    "kappa": 0.28763310874677633,
+    "sigma_kappa": {
+     "value": 0.04097005211080269,
+     "definition": "kappa * sigma_ln(n_y^req)"
+    }
+   }
+  ],
+  "weighted_mean": {
+   "value": 0.28360949737701524,
+   "uncertainty": {
+    "value": 0.007614166167205566,
+    "definition": "error of the weighted mean, weights 1/sigma_ln(n_y^req)^2"
+   }
+  },
+  "slope_ln_kappa_vs_ln_D_y": {
+   "value": -0.06312605055120629,
+   "uncertainty": {
+    "value": 0.1515311302539019,
+    "definition": "one-standard-deviation parameter uncertainty from the weighted least-squares covariance"
+   },
+   "chi2": 1.0228425290207344,
+   "ndf": 5
+  }
+ },
+ "recommendation_table": {
+  "definition": "n_y_rec from the frozen n_y locus (rounded up to a power of two), n_m_rec from the frozen n_m locus at that n_y, n_x = 512, n_z = 64",
+  "provenance": "constants.py with D_y from the disruption_parameter expression",
+  "fitted_D_y_band": [
+   21.522988796342663,
+   97.3640511378073
+  ],
+  "rows": [
+   {
+    "eps_y_nm": 0.5,
+    "D_y": 137.82767719476487,
+    "n_y_rec": 512,
+    "n_m_rec": 44381407.16876884,
+    "outside_fitted_D_y_band": true
+   },
+   {
+    "eps_y_nm": 1.0,
+    "D_y": 97.36405113780731,
+    "n_y_rec": 512,
+    "n_m_rec": 14096338.620379077,
+    "outside_fitted_D_y_band": false
+   },
+   {
+    "eps_y_nm": 1.5,
+    "D_y": 79.43810155059896,
+    "n_y_rec": 512,
+    "n_m_rec": 7202546.197691093,
+    "outside_fitted_D_y_band": false
+   },
+   {
+    "eps_y_nm": 2.0,
+    "D_y": 68.75216923874842,
+    "n_y_rec": 512,
+    "n_m_rec": 4471322.17458313,
+    "outside_fitted_D_y_band": false
+   },
+   {
+    "eps_y_nm": 2.5,
+    "D_y": 61.459772761853934,
+    "n_y_rec": 512,
+    "n_m_rec": 3088452.7484855577,
+    "outside_fitted_D_y_band": false
+   },
+   {
+    "eps_y_nm": 4.0,
+    "D_y": 48.52082680874172,
+    "n_y_rec": 256,
+    "n_m_rec": 707821.6889855892,
+    "outside_fitted_D_y_band": false
+   },
+   {
+    "eps_y_nm": 8.0,
+    "D_y": 34.215547758447414,
+    "n_y_rec": 256,
+    "n_m_rec": 223510.72650493262,
+    "outside_fitted_D_y_band": false
+   },
+   {
+    "eps_y_nm": 12.0,
+    "D_y": 27.878357623225753,
+    "n_y_rec": 256,
+    "n_m_rec": 113695.30739953338,
+    "outside_fitted_D_y_band": false
+   },
+   {
+    "eps_y_nm": 16.0,
+    "D_y": 24.100805421447365,
+    "n_y_rec": 256,
+    "n_m_rec": 70317.75005830823,
+    "outside_fitted_D_y_band": false
+   },
+   {
+    "eps_y_nm": 20.0,
+    "D_y": 21.52298879634266,
+    "n_y_rec": 256,
+    "n_m_rec": 48410.47486677081,
+    "outside_fitted_D_y_band": false
+   }
+  ]
+ },
+ "ipc_background_table": {
+  "provenance": "data/bib_stats_cache.csv (bib_stats_table.py, pair dumps resolved by find_dumps), channel ALL, per bunch crossing",
+  "reach_definition": "pairs whose helix from the IP reaches the SiD-o2-v04 barrel (B = 5 T, r_det = 14 mm, z_max = 76 mm)",
+  "datasets": "nominal: 512x512x25, n_m = 1e5. tuned: pre-campaign tuned grid, n_x = 512, n_z = 64, n_y and n_m per row",
+  "rows": [
+   {
+    "dataset": "nominal",
+    "eps_y_nm": 2.0,
+    "grid": {
+     "n_x": 512,
+     "n_y": 512,
+     "n_z": 25,
+     "n_m": 100000
+    },
+    "produced_mean": 104982.6,
+    "produced_std": {
+     "value": 2972.3983657047793,
+     "definition": "sample standard deviation over seeds, ddof = 1"
+    },
+    "reaching_mean": 101.2,
+    "reaching_std": {
+     "value": 9.138441393974746,
+     "definition": "sample standard deviation over seeds, ddof = 1"
+    },
+    "n_seeds": 10,
+    "seeds": [
+     100805,
+     105469,
+     105648,
+     130471,
+     135135,
+     143455,
+     145992,
+     153768,
+     159302,
+     167029
+    ]
+   },
+   {
+    "dataset": "nominal",
+    "eps_y_nm": 4.0,
+    "grid": {
+     "n_x": 512,
+     "n_y": 512,
+     "n_z": 25,
+     "n_m": 100000
+    },
+    "produced_mean": 87081.0,
+    "produced_std": {
+     "value": 1738.5460719936198,
+     "definition": "sample standard deviation over seeds, ddof = 1"
+    },
+    "reaching_mean": 85.0,
+    "reaching_std": {
+     "value": 14.476033833738976,
+     "definition": "sample standard deviation over seeds, ddof = 1"
+    },
+    "n_seeds": 10,
+    "seeds": [
+     100805,
+     105469,
+     105648,
+     130471,
+     135135,
+     143455,
+     145992,
+     153768,
+     159302,
+     167029
+    ]
+   },
+   {
+    "dataset": "nominal",
+    "eps_y_nm": 8.0,
+    "grid": {
+     "n_x": 512,
+     "n_y": 512,
+     "n_z": 25,
+     "n_m": 100000
+    },
+    "produced_mean": 68956.0,
+    "produced_std": {
+     "value": 814.0237506772555,
+     "definition": "sample standard deviation over seeds, ddof = 1"
+    },
+    "reaching_mean": 62.7,
+    "reaching_std": {
+     "value": 6.961002482082272,
+     "definition": "sample standard deviation over seeds, ddof = 1"
+    },
+    "n_seeds": 10,
+    "seeds": [
+     100805,
+     105469,
+     105648,
+     130471,
+     135135,
+     143455,
+     145992,
+     153768,
+     159302,
+     167029
+    ]
+   },
+   {
+    "dataset": "nominal",
+    "eps_y_nm": 20.0,
+    "grid": {
+     "n_x": 512,
+     "n_y": 512,
+     "n_z": 25,
+     "n_m": 100000
+    },
+    "produced_mean": 47333.4,
+    "produced_std": {
+     "value": 579.3406597158531,
+     "definition": "sample standard deviation over seeds, ddof = 1"
+    },
+    "reaching_mean": 45.7,
+    "reaching_std": {
+     "value": 6.464432603785801,
+     "definition": "sample standard deviation over seeds, ddof = 1"
+    },
+    "n_seeds": 10,
+    "seeds": [
+     100805,
+     105469,
+     130471,
+     135135,
+     143455,
+     145992,
+     153768,
+     159302,
+     167029,
+     167815
+    ]
+   },
+   {
+    "dataset": "tuned",
+    "eps_y_nm": 2.0,
+    "grid": {
+     "n_x": 512,
+     "n_y": 256,
+     "n_z": 64,
+     "n_m": 2235661
+    },
+    "produced_mean": 112719.2,
+    "produced_std": {
+     "value": 1323.0124547998614,
+     "definition": "sample standard deviation over seeds, ddof = 1"
+    },
+    "reaching_mean": 113.8,
+    "reaching_std": {
+     "value": 15.788884979278585,
+     "definition": "sample standard deviation over seeds, ddof = 1"
+    },
+    "n_seeds": 10,
+    "seeds": [
+     100805,
+     105469,
+     130471,
+     135135,
+     143455,
+     145992,
+     153768,
+     159302,
+     167029,
+     167815
+    ]
+   },
+   {
+    "dataset": "tuned",
+    "eps_y_nm": 4.0,
+    "grid": {
+     "n_x": 512,
+     "n_y": 128,
+     "n_z": 64,
+     "n_m": 353910
+    },
+    "produced_mean": 84784.6,
+    "produced_std": {
+     "value": 1095.0819553297774,
+     "definition": "sample standard deviation over seeds, ddof = 1"
+    },
+    "reaching_mean": 83.0,
+    "reaching_std": {
+     "value": 8.94427190999916,
+     "definition": "sample standard deviation over seeds, ddof = 1"
+    },
+    "n_seeds": 10,
+    "seeds": [
+     100805,
+     105469,
+     130471,
+     135135,
+     143455,
+     145992,
+     153768,
+     159302,
+     167029,
+     167815
+    ]
+   },
+   {
+    "dataset": "tuned",
+    "eps_y_nm": 8.0,
+    "grid": {
+     "n_x": 512,
+     "n_y": 128,
+     "n_z": 64,
+     "n_m": 250000
+    },
+    "produced_mean": 66949.0,
+    "produced_std": {
+     "value": 759.7158825654642,
+     "definition": "sample standard deviation over seeds, ddof = 1"
+    },
+    "reaching_mean": 64.6,
+    "reaching_std": {
+     "value": 10.905656024895217,
+     "definition": "sample standard deviation over seeds, ddof = 1"
+    },
+    "n_seeds": 10,
+    "seeds": [
+     100805,
+     105469,
+     130471,
+     135135,
+     143455,
+     145992,
+     153768,
+     159302,
+     167029,
+     167815
+    ]
+   },
+   {
+    "dataset": "tuned",
+    "eps_y_nm": 20.0,
+    "grid": {
+     "n_x": 512,
+     "n_y": 128,
+     "n_z": 64,
+     "n_m": 80000
+    },
+    "produced_mean": 45806.2,
+    "produced_std": {
+     "value": 398.7764063008521,
+     "definition": "sample standard deviation over seeds, ddof = 1"
+    },
+    "reaching_mean": 41.4,
+    "reaching_std": {
+     "value": 10.793001847905376,
+     "definition": "sample standard deviation over seeds, ddof = 1"
+    },
+    "n_seeds": 10,
+    "seeds": [
+     100805,
+     105469,
+     130471,
+     135135,
+     143455,
+     145992,
+     153768,
+     159302,
+     167029,
+     167815
+    ]
+   }
+  ]
+ },
+ "derived_background": {
+  "provenance": "tuned rows of ipc_background_table (this file); BIB-run luminosity from data/lumi_extracted.csv: the runs on the same grid and ten seeds as the BIB rows, offset_y = 0, with pair production on (n_pairs recorded in the .ref)",
+  "excluded": [
+   "pairs-off tuning-ladder runs on the 20 nm BIB grid with the same seeds: not the runs the background was counted in"
+  ],
+  "produced_ratio_2nm_over_20nm": {
+   "value": 2.460784784592479,
+   "standard_error": {
+    "value": 0.01137171670705982,
+    "definition": "standard error of the ratio of two means, first-order propagation of the two standard errors, treated as independent"
+   }
+  },
+  "reaching_ratio_2nm_over_20nm": {
+   "value": 2.748792270531401,
+   "standard_error": {
+    "value": 0.25670573272717123,
+    "definition": "standard error of the ratio of two means, first-order propagation of the two standard errors, treated as independent"
+   }
+  },
+  "BIB_RUN_luminosity_ratio_2nm_over_20nm": {
+   "value": 3.3036409334934396,
+   "standard_error": {
+    "value": 0.019195787772136732,
+    "definition": "standard error of the ratio of two means, first-order propagation of the two standard errors, treated as independent"
+   },
+   "definition": "luminosity of the tuned-grid BIB runs themselves (photons and pairs on), NOT the conservative-run gain of derived_luminosity",
+   "L_2nm_1e34": 4.394434380000001,
+   "L_20nm_1e34": 1.3301791776000003,
+   "n_seeds": 10
+  },
+  "produced_per_luminosity_reduction_pct": {
+   "value": 25.512946650944947,
+   "uncertainty": {
+    "value": 0.5529985470564626,
+    "definition": "first-order propagation of the standard errors of the produced ratio and the BIB-run luminosity ratio, treated as independent"
+   },
+   "definition": "100 (1 - produced ratio / BIB-run luminosity ratio)"
+  },
+  "reaching_per_luminosity_reduction_pct": {
+   "value": 16.795065630068727,
+   "uncertainty": {
+    "value": 7.785414030138693,
+    "definition": "first-order propagation of the standard errors of the reaching ratio and the BIB-run luminosity ratio, treated as independent"
+   },
+   "definition": "100 (1 - reaching ratio / BIB-run luminosity ratio)"
+  }
+ },
+ "nx_convergence_20nm": {
+  "provenance": "data/L_vs_nm_by_nx_20nm.csv; n_y = 512, n_z = 64, eps_y = 20 nm, seed 100805",
+  "definition": "L_converged: exact three-point Richardson extrapolation L = L_inf + C n_m^-p through n_m = 1e6, 5e6, 1e7 (the n_m = 1e7 value where the three points admit no decaying solution); converged: relative change from 5e6 to 1e7 below 0.1 %",
+  "rows": [
+   {
+    "n_x": 256,
+    "L_converged_1e34": 1.378439664,
+    "L_at_n_m_1e7_1e34": 1.378439664,
+    "n_seeds": 1,
+    "converged": true
+   },
+   {
+    "n_x": 512,
+    "L_converged_1e34": 1.3844785231363321,
+    "L_at_n_m_1e7_1e34": 1.38412302,
+    "n_seeds": 1,
+    "converged": true
+   },
+   {
+    "n_x": 1024,
+    "L_converged_1e34": 1.3858398446158955,
+    "L_at_n_m_1e7_1e34": 1.387444296,
+    "n_seeds": 1,
+    "converged": true
+   },
+   {
+    "n_x": 2048,
+    "L_converged_1e34": 1.4042875948488123,
+    "L_at_n_m_1e7_1e34": 1.4128925160000003,
+    "n_seeds": 1,
+    "converged": false
+   }
+  ],
+  "agreement_between_converged_n_x": {
+   "max_pairwise_relative_difference": 0.005351129585716011,
+   "definition": "largest |L_converged(i) - L_converged(j)| over converged n_x, divided by their mean"
+  },
+  "excluded": [
+   "n_x = 2048: not converged at n_m = 1e7"
+  ]
+ }
+}

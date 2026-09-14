@@ -6,6 +6,25 @@ converged luminosity as a function of vertical emittance, the conservative
 settings derived from them, the beam-induced background (BIB) at those settings,
 and the luminosity exported for the WarpX code comparison.
 
+## Paper numbers
+
+`reproduce_paper_numbers.py` regenerates every GUINEA-PIG++ number the paper
+reports, from the committed data alone: no raw output, no network, no random
+numbers. Run it from a fresh clone:
+
+```bash
+python3 reproduce_paper_numbers.py   # -> paper_numbers.json, paper_numbers.md
+```
+
+`paper_numbers.md` holds the tables rounded as the manuscript rounds them;
+`paper_numbers.json` holds the same quantities at full precision, with the
+definition of every uncertainty and the data file and selection rule behind
+every quantity. Its output corresponds to the numbers in the paper, so a
+reviewer can compare the two directly. It stops with an error, rather than
+writing a partial file, if an input is missing or a recomputed fit disagrees
+with the notebook's exports. What it covers and the few manuscript values it
+does not reproduce are listed in `REPRODUCTION.md`.
+
 ## Reproducing the results
 
 Python 3 with `numpy`, `pandas`, `matplotlib` and `scipy`, plus Jupyter
