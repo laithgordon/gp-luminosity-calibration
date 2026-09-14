@@ -77,8 +77,13 @@ conservative-locus luminosities are read straight from the raw `.ref` files by
 
 | File | Content | Produced by |
 |---|---|---|
+| `L_vs_nm` | `L` vs `n_m` at seven ε_y with Richardson fits and the ±5 % crossing `n_m^req`. | notebook |
 | `nm_req_tuning` | `n_m^req/(n_x n_y n_z)` vs disruption `D_y`: the `n_m` law `C_m·D_y^(s−q_p)` and the conservative locus. | notebook |
+| `L_vs_ny` | `L` vs `n_y` along the `n_m` locus, with `n_y^req`. | notebook |
 | `ny_req_tuning` | `n_y^req` vs `D_y`: free power-law fit against the derived exponent `q_n`. | notebook |
+| `L_vs_n_by_emittance_6panel` | `L` vs `n_x` and `n_z` at three emittances with Richardson fits. | notebook |
+| `fig4_pseudoflat_instability_all_params` | Coefficient of variation of `L` across grid settings vs ε_y. | notebook |
+| `lumi_bib_tradeoff_PRL` | Luminosity gain vs BIB cost. | notebook |
 
 **Repository only**
 
@@ -86,14 +91,12 @@ conservative-locus luminosities are read straight from the raw `.ref` files by
 |---|---|---|
 | `convergence_scan` | Sweep of each grid parameter about the starting operating point. | notebook |
 | `convergence_scan_refined` | Re-sweep about the converged region. | notebook |
-| `L_vs_nm` | `L` vs `n_m` at seven ε_y with Richardson fits and the ±5 % crossing `n_m^req`. | notebook |
-| `L_vs_ny` | `L` vs `n_y` along the `n_m` locus, with `n_y^req`. | notebook |
-| `kappa_vs_Dy` | `κ`, cells per pinched vertical σ, vs `D_y` (GP++ points only). | notebook |
-| `L_vs_n_by_emittance_6panel` | `L` vs `n_x` and `n_z` at three emittances with Richardson fits. | notebook |
-| `fig4_pseudoflat_instability_all_params` | Coefficient of variation of `L` across grid settings vs ε_y. | notebook |
+| `kappa_vs_Dy` | `κ`, cells per pinched vertical σ, vs `D_y`, GUINEA-PIG++ points only. Not the manuscript's κ figure: that one shows both simulators and is produced in the WarpX repository, under the same filename. | notebook |
 | `variance_3d_lumi_mesh` | Luminosity variance across (`n_x`, `n_y`, ε_y). | notebook |
-| `lumi_bib_tradeoff_PRL` | Luminosity gain vs BIB cost. | notebook |
 | `L_vs_nm_by_nx_20nm` | `L` vs `n_m` at ε_y = 20 nm for n_x = 256, 512, 1024, 2048 (seed 100805). | `nx_nm_convergence.py` |
+
+The manuscript's GUINEA-PIG++ discretization figure
+(`guinea_pig_discretization_final.pdf`) is not produced by this repository.
 
 ## Published numbers
 
