@@ -1,75 +1,155 @@
-# GUINEA-PIG++ Luminosity Calibration Analysis
+# GUINEA-PIG++ Luminosity Tuning Analysis
 
-Analysis code, datasets and paper figures for the GUINEA-PIG++ beam–beam
-luminosity calibration study (C³-250 collider configuration). The study
-calibrates the macroparticle count and grid resolution required for converged
-luminosity as a function of vertical beam emittance, and quantifies the
-beam-induced background (BIB) at the calibrated settings.
+Analysis code, data and figures behind the GUINEA-PIG++ results of the C³-250
+beam–beam study: the grid resolution and macroparticle count required for a
+converged luminosity as a function of vertical emittance, the conservative
+settings derived from them, the beam-induced background (BIB) at those settings,
+and the luminosity exported for the WarpX code comparison.
+
+## Reproducing the results
+
+Python 3 with `numpy`, `pandas`, `matplotlib` and `scipy`, plus Jupyter
+(`nbconvert`) for the notebook. The published figures were produced with Python
+3.13, numpy 2.3, pandas 2.3, matplotlib 3.10.5 and scipy 1.16.
+
+The raw GUINEA-PIG++ output (`.ref` files and `pairs.dat` dumps, several GB) is
+not in git. Steps marked **raw** read it; point `GP_RAW_ROOT` at the directory
+that holds `output/`, `output_nm/` and `output_no_pairs/` (each with a `C3_250/`
+subdirectory). `paths.py` is the only place that path is resolved; if the
+variable is unset, the parent of this repository is used. Every other step runs
+from the committed data alone. Run from the repository root, in this order:
+
+```bash
+export GP_RAW_ROOT=/path/to/GuineaPig_Feb_2025
+
+# 1. raw   luminosity table read by the notebook (committed snapshot, see below)
+python3 extract_lumi_data.py --restrict-to data/lumi_extracted.csv
+
+# 2. raw   BIB statistics per seed, then the tab:bib_yields numbers
+python3 bib_stats_table.py --refresh       # -> data/bib_stats_cache.csv
+python3 bib_stats_render.py                # -> data/bib_stats_summary.csv, data/bib_stats_table.md
+
+# 3. raw   detector reach per seed for the luminosity-vs-BIB figure
+python3 bib_reach_per_seed.py              # -> data/lumi_bib_per_seed_cache.csv
+
+# 4.       every notebook figure and the fitted constants
+jupyter nbconvert --to notebook --execute --inplace GP_CALIBRATION.ipynb
+                                           # -> plots/*, data/gp_calibration_export.csv,
+                                           #    data/gp_constants_export.csv
+
+# 5. raw   GP++ numbers for the WarpX comparison
+python3 export_for_wx.py                   # -> data/gp_luminosity_for_wx.csv,
+                                           #    data/gp_requirements_for_wx.csv
+
+# 6. raw   the n_x x n_m convergence figure (drop --refresh to plot the committed table)
+python3 nx_nm_convergence.py --refresh     # -> data/L_vs_nm_by_nx_20nm.csv, plots/L_vs_nm_by_nx_20nm.*
+
+# 7.       conservative-locus scan rows, checked against the production decks
+python3 inputs/make_conservative_decks.py --check
+```
+
+Step 5 reads `data/gp_calibration_export.csv` and `data/gp_constants_export.csv`,
+so it runs after step 4.
+
+The committed `data/lumi_bib_per_seed_cache.csv` is the cache as it was originally
+accumulated: 593 rows, including runs the figure no longer uses. Step 3 rewrites
+it with only the 263 runs on the figure's curves. For those 263, `n_reach`, the
+only column the figure uses, is identical; `n_total` differs by one particle in
+two runs. The figure is unchanged either way.
+
+### The luminosity snapshot
+
+`data/lumi_extracted.csv` is the luminosity table of 2026-09-10 (16,803 runs).
+Every notebook figure and every fitted constant was produced from it, and it
+regenerates exactly from raw output with `--restrict-to`, as in step 1. The raw
+tree has since gained 143 runs: the conservative-locus production runs, the
+conservative BIB reruns, and the n_x × n_m convergence runs. Some of them pass
+the notebook's ladder selection. A plain `python3 extract_lumi_data.py` includes
+them, which changes `L_vs_nm`, `L_vs_ny`, `nm_req_tuning`, `ny_req_tuning` and
+`kappa_vs_Dy` and moves the fitted constants (for example q_n,fit 0.402 → 0.378,
+C_y,fit 26.2 → 27.9). The published values are those of the snapshot. The
+conservative-locus luminosities are read straight from the raw `.ref` files by
+`export_for_wx.py`, so they do not depend on the snapshot.
+
+## Figures (`plots/`, PDF and PNG)
+
+**In the manuscript**
+
+| File | Content | Produced by |
+|---|---|---|
+| `nm_req_tuning` | `n_m^req/(n_x n_y n_z)` vs disruption `D_y`: the `n_m` law `C_m·D_y^(s−q_p)` and the conservative locus. | notebook |
+| `ny_req_tuning` | `n_y^req` vs `D_y`: free power-law fit against the derived exponent `q_n`. | notebook |
+
+**Repository only**
+
+| File | Content | Produced by |
+|---|---|---|
+| `convergence_scan` | Sweep of each grid parameter about the starting operating point. | notebook |
+| `convergence_scan_refined` | Re-sweep about the converged region. | notebook |
+| `L_vs_nm` | `L` vs `n_m` at seven ε_y with Richardson fits and the ±5 % crossing `n_m^req`. | notebook |
+| `L_vs_ny` | `L` vs `n_y` along the `n_m` locus, with `n_y^req`. | notebook |
+| `kappa_vs_Dy` | `κ`, cells per pinched vertical σ, vs `D_y` (GP++ points only). | notebook |
+| `L_vs_n_by_emittance_6panel` | `L` vs `n_x` and `n_z` at three emittances with Richardson fits. | notebook |
+| `fig4_pseudoflat_instability_all_params` | Coefficient of variation of `L` across grid settings vs ε_y. | notebook |
+| `variance_3d_lumi_mesh` | Luminosity variance across (`n_x`, `n_y`, ε_y). | notebook |
+| `lumi_bib_tradeoff_PRL` | Luminosity gain vs BIB cost. | notebook |
+| `L_vs_nm_by_nx_20nm` | `L` vs `n_m` at ε_y = 20 nm for n_x = 256, 512, 1024, 2048 (seed 100805). | `nx_nm_convergence.py` |
+
+## Published numbers
+
+| Result | Source | Script |
+|---|---|---|
+| `tab:ny_recommendations` (`n_y^rec`, `n_m^rec` per ε_y) | `constants.py`, `data/D_y_table.json` | `inputs/make_conservative_decks.py` |
+| `tab:bib_yields` | `data/bib_stats_cache.csv` | `bib_stats_render.py` |
+| Nominal, conservative and 40–100 nm luminosities of the code comparison | raw `.ref` | `export_for_wx.py` |
+| Fitted constants `C_y,fit`, `q_n,fit`, `C_m,fit`, `s_fit`, `κ` | `data/lumi_extracted.csv` | notebook |
+| Requirements with uncertainties, for WarpX | `data/gp_calibration_export.csv`, `data/error_budget.csv` | `export_for_wx.py` |
+
+## Which rule set each configuration
+
+The conservative-locus constants are frozen in `constants.py`: they were fixed
+when the conservative runs were submitted and are never recomputed from the
+current fit.
+
+| Configuration | Used for | `n_y` | `n_m` |
+|---|---|---|---|
+| Nominal, 512×512×25 | nominal rows of the code comparison and of `tab:bib_yields` | fixed 512 | fixed 100 000 |
+| Pre-campaign tuned grid, n_x = 512, n_z = 64: `n_y` = 256, 128, 128, 128 at 2, 4, 8, 20 nm | tuned rows of `tab:bib_yields` | `34.70·D_y^0.312`, rounded up to a power of two | the `n_m` locus at that `n_y` at 2 and 4 nm (2 235 661; 353 910); 250 000 and 80 000 at 8 and 20 nm, above the locus |
+| Frozen extension, 40–100 nm, 512×128×64 | `frozen_extension` block of `gp_luminosity_for_wx.csv` | same pre-campaign rule, saturated at 128 | 50 000 floor |
+| Conservative locus, 1–20 nm, n_x = 512, n_z = 64 | `conservative` block of `gp_luminosity_for_wx.csv`; `tab:ny_recommendations` | `50·D_y^0.402`, rounded up (512, 512, 256, 256, 256, 256, 256) | `⌈2.305×10⁻⁷·D_y^3.300·512·n_y·64⌉`; at 1 nm the existing ladder rung 14 100 000 (ratio 1.0003) |
+
+The pre-campaign and conservative rules round the same way and differ only in
+normalisation and exponent: the conservative `n_y` is exactly twice the
+pre-campaign `n_y` at every ε_y.
 
 ## Contents
 
-| Path | Description |
-|------|-------------|
-| `GP_CALIBRATION.ipynb` | Main analysis notebook. Produces every figure in `plots/` and the `gp_*_export.csv` datasets. |
-| `extract_lumi_data.py` | Scans GUINEA-PIG++ `.ref` output files and writes `data/lumi_extracted.csv`, the root luminosity table every figure is built from. |
-| `rebuild_lumi_nominal_vs_calibrated.py` | Re-sources the luminosity columns of `data/lumi_nominal_vs_calibrated.csv` from `data/lumi_extracted.csv`. |
-| `extract_highemit_extension.py` | Builds `data/lumi_tuned_vs_frozen_highemit.csv` (tuned vs frozen parameter sets, ε_y = 20–100 nm). |
-| `bib_nominal_vs_calibrated.py` | Per-channel BIB pair yield and detector reach, nominal vs calibrated grid → `data/bib_nominal_vs_calibrated.csv`. |
-| `bib_stats_table.py`, `bib_stats_render.py` | Per-channel BIB statistics (count, reach fraction, p_T / energy / angle) → `data/bib_stats_cache.csv` (per seed) and `data/bib_stats_summary.csv` (mean ± STD). |
-| `pairs_reachability.py`, `reachability_analysis.py` | Detector-reach test used by the BIB scripts (SiD-o2-v04: B = 5 T, r_det = 14 mm, z_max = 76 mm). `reachability_analysis.py` is from [dntounis/Beam_Beam_Backgrounds](https://github.com/dntounis/Beam_Beam_Backgrounds). |
-| `inputs/` | GUINEA-PIG++ input file with the nominal C³-250 beam and grid parameters, a template SLURM submit script, and an example scan file. See `inputs/README.md`. |
-| `plots/` | Final rendered figures, PDF + PNG. |
-| `data/` | Processed datasets (see below). |
+| Path | Role |
+|---|---|
+| `paths.py` | Locates the raw output (`GP_RAW_ROOT`) and the repository data. |
+| `constants.py` | Frozen conservative-locus constants and the `n_y`/`n_m` locus functions. |
+| `extract_lumi_data.py` | Raw `.ref` → `data/lumi_extracted.csv`. |
+| `GP_CALIBRATION.ipynb` | Tuning ladders, fits, and every figure except `L_vs_nm_by_nx_20nm`. |
+| `bib_stats_table.py`, `bib_stats_render.py` | BIB statistics from `pairs.dat` (`find_dumps` refuses ambiguous dumps) → `tab:bib_yields`. |
+| `bib_reach_per_seed.py` | Detector reach per seed for `lumi_bib_tradeoff_PRL`. |
+| `pairs_reachability.py`, `reachability_analysis.py` | Detector-reach test (SiD-o2-v04: B = 5 T, r_det = 14 mm, z_max = 76 mm). `reachability_analysis.py` is from [dntounis/Beam_Beam_Backgrounds](https://github.com/dntounis/Beam_Beam_Backgrounds). |
+| `refparse.py`, `export_for_wx.py` | Raw `.ref` parser and the WarpX export. |
+| `nx_nm_convergence.py` | The n_x × n_m convergence figure. |
+| `inputs/` | GP++ input decks, templates, the conservative-deck generator and every run configuration; see `inputs/README.md`. |
 
-## Figures (`plots/`)
+| Data file | Read by |
+|---|---|
+| `data/lumi_extracted.csv` | notebook, `bib_reach_per_seed.py` |
+| `data/lumi_bib_per_seed_cache.csv` | notebook |
+| `data/bib_stats_cache.csv` | `bib_stats_render.py` |
+| `data/gp_calibration_export.csv`, `data/gp_constants_export.csv`, `data/error_budget.csv` | `export_for_wx.py` |
+| `data/D_y_table.json` | `export_for_wx.py`, `inputs/make_conservative_decks.py` |
+| `data/L_vs_nm_by_nx_20nm.csv` | `nx_nm_convergence.py` |
+| `data/gp_luminosity_for_wx.csv`, `data/gp_requirements_for_wx.csv` | the WarpX analysis |
 
-| File | Content |
-|------|---------|
-| `convergence_scan` | Sweep each grid parameter (`n_m`, `n_z`, `n_x`, `n_y`) about the starting operating point and locate luminosity convergence. |
-| `convergence_scan_refined` | Re-sweep each parameter about the converged region. |
-| `L_vs_nm` | `L` vs macroparticle count at seven ε_y; Richardson fits with the ±5 % crossing `n_m^req` marked. |
-| `nm_req_tuning` | `n_m^req/(n_x n_y n_z)` vs disruption `D_y`: the `n_m` law `C_m·D_y^(s−q_p)` and the conservative locus. |
-| `L_vs_ny` | `L` vs vertical resolution along the `n_m` locus, with `n_y^req` marked. |
-| `ny_req_tuning` | `n_y^req` vs `D_y`: free power-law fit against the derived exponent `q_n`. |
-| `kappa_vs_Dy` | `κ`, the cells per pinched vertical σ, vs `D_y` — the test of the pinch model. |
-| `L_vs_n_by_emittance_6panel` | `L` vs `n_x` and `n_z` at three emittances, Richardson fits; held-out points marked. |
-| `fig4_pseudoflat_instability_all_params` | Coefficient of variation of `L` across grid settings vs ε_y. |
-| `variance_3d_lumi_mesh` | Luminosity variance across the (`n_x`, `n_y`, ε_y) grid. |
-| `lumi_bib_tradeoff_PRL` | Luminosity gain vs BIB cost. |
-
-## Datasets (`data/`)
-
-| File | Content |
-|------|---------|
-| `lumi_extracted.csv` | One row per simulation run: run parameters parsed from the filename, luminosity metrics from the `.ref`. **Units:** `lumi_ee`/`lumi_fine` are rates in cm⁻² s⁻¹, converted per row from GP++'s per-crossing m⁻² value with the `f_rep` and `n_b` echoed in the same `.ref` (× 10⁻⁴·n_b·f_rep = 1.596 for C³-250); the raw per-crossing values are in `lumi_ee_m2`/`lumi_fine_m2`. Do not apply the factor again downstream. |
-| `lumi_nominal_vs_calibrated.csv` | Per-seed luminosity at the nominal and calibrated grids, ε_y = 0.5–20 nm. |
-| `lumi_tuned_vs_frozen_highemit.csv` | Per-seed luminosity, tuned vs frozen parameter sets, ε_y = 20–100 nm. |
-| `lumi_bib_per_seed_cache.csv` | Per-seed luminosity and BIB reach feeding `lumi_bib_tradeoff_PRL`. |
-| `bib_nominal_vs_calibrated.csv` | Per-seed, per-channel (BW / BH / LL) pair counts and detector reach, nominal vs calibrated grid. |
-| `bib_stats_cache.csv`, `bib_stats_summary.csv` | Per-channel BIB statistics at ε_y = 1, 8, 20 nm: per seed, and mean ± STD. |
-| `gp_kappa_export.csv` | `κ` per ε_y with `D_y`, `R(D_y)`, `n_y^req`, `c_y` — for cross-code comparison at fixed `κ`. |
-| `gp_calibration_export.csv` | The `n_y` and `n_m` calibration families in one long table. |
-| `gp_constants_export.csv` | Every fitted and derived constant with its error. |
-
-## Regenerating
-
-The raw simulation output (`.ref`, `pairs.dat`, `output*/`) is **not** in this
-repository — it is large and produced by GUINEA-PIG++ runs. To rebuild from raw
-output, point `SOURCE_DIRS` at the top of `extract_lumi_data.py` at your
-GUINEA-PIG++ output directories, then:
-
-```bash
-python3 extract_lumi_data.py          # -> data/lumi_extracted.csv
-jupyter nbconvert --execute GP_CALIBRATION.ipynb --to notebook --inplace
-                                      # -> plots/*, data/gp_*_export.csv
-python3 bib_stats_table.py && python3 bib_stats_render.py
-python3 bib_nominal_vs_calibrated.py  # BIB tables (need pairs.dat dumps)
-```
-
-The BIB scripts and `extract_highemit_extension.py` locate the raw output
-relative to their own directory's parent; adjust the `REPO` path at the top of
-each if the layout differs.
-
-## Requirements
-
-Python 3 with `numpy`, `pandas`, `matplotlib`, `scipy`; Jupyter for the notebook.
+**Units.** `lumi_ee` and `lumi_fine` in `data/lumi_extracted.csv` are rates in
+cm⁻² s⁻¹, converted per row from GUINEA-PIG++'s per-crossing m⁻² value with the
+`f_rep` and `n_b` echoed in the same `.ref` (× 10⁻⁴·n_b·f_rep = 1.596 for
+C³-250). The raw per-crossing values are in `lumi_ee_m2` and `lumi_fine_m2`. Do
+not apply the factor again. `data/error_budget.csv` is carried as recorded data:
+the uncertainty budget that produced it is not part of the notebook.
