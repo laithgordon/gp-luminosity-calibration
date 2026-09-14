@@ -18,11 +18,10 @@ pairs |v|~c, so p_i = E * v_i to excellent approximation.
 from __future__ import annotations
 
 import argparse
-from typing import Optional
 
 import numpy as np
 
-from reachability_analysis import compute_boundary, find_theta_for_pt
+from reachability_analysis import compute_boundary
 
 
 def load_pairs_dat(path: str) -> dict[str, np.ndarray]:
@@ -186,7 +185,10 @@ def _cli() -> None:
     p.add_argument("--mag-field", type=float, default=5.0)
     p.add_argument("--detector-radius", type=float, default=14.0)
     p.add_argument("--z-max", type=float, default=76.0)
-    p.add_argument("--charge", type=float, default=0.3)
+    p.add_argument("--charge", type=float, default=0.3,
+                   help="helix constant q in R[m] = p_T[GeV/c] / (q * B[T]) for a unit-charge "
+                        "track; q = 0.2998 GeV/(c T m). Not a particle charge "
+                        "(default: %(default)s)")
     args = p.parse_args()
 
     n_reach, n_total, _ = count_reaching_particles(

@@ -90,7 +90,9 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument('--pt-max', type=float, default=2.0, help='Maximum pT in GeV/c.')
     parser.add_argument('--pt-samples', type=int, default=500, help='Number of pT samples (log spaced).')
     parser.add_argument('--linear-pt', action='store_true', help='Use linear spacing in pT instead of log.')
-    parser.add_argument('--charge', type=float, default=0.3, help='Effective charge factor q (GeV*T*mm).')
+    parser.add_argument('--charge', type=float, default=0.3,
+                        help='Helix constant q in R[m] = p_T[GeV/c] / (q * B[T]) for a unit-charge '
+                             'track; q = 0.2998 GeV/(c T m). Not a particle charge.')
     parser.add_argument('--mag-field', type=float, default=5.0, help='Magnetic field B0 in Tesla.')
     parser.add_argument('--detector-radius', type=float, default=14.0, help='Detector radius in millimetres.')
     parser.add_argument('--z-max', type=float, default=76.0, help='Maximum z-extent in millimetres.')

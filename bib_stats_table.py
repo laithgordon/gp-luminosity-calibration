@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""GP++ beam-induced-background statistics at eps_y = 1, 8, 20 nm.
+"""GP++ beam-induced-background statistics at eps_y = 2, 4, 8, 20 nm (tab:bib_yields).
 
 Per production channel {BW, BH, LL} and for all channels combined, per seed:
 counts, detector-reaching counts and fraction, and p_T / energy / polar-angle
@@ -9,10 +9,13 @@ z_max=76 mm); this script only selects runs and aggregates.
 
 Datasets:
   nominal  - pre-calibration grid 512x512x25, n_m = 1e5
-  tuned    - conservative-formula grid, n_x=512, n_z=64, n_y/n_m per eps_y
+  tuned    - pre-campaign tuned grid, n_x=512, n_z=64: n_y = 34.70*D_y^0.312
+             rounded up to a power of two, n_m at or above the n_m locus.
+             This is NOT the published conservative locus (which has twice
+             the n_y); see README.md, 'Which rule set each configuration'.
 """
 from __future__ import annotations
-import argparse, glob, os, re, sys
+import argparse, glob, hashlib, os, re, sys
 import numpy as np, pandas as pd
 
 ANA = os.path.dirname(os.path.abspath(__file__))
@@ -31,7 +34,7 @@ CONFIGS = [
     ('nominal', 4.0,  512, 512, 25, 100000),
     ('nominal', 8.0,  512, 512, 25, 100000),
     ('nominal', 20.0, 512, 512, 25, 100000),
-    # tuned: conservative-formula grid, n_y and n_m per eps_y
+    # tuned: pre-campaign tuned grid (not the conservative locus), n_y and n_m per eps_y
     ('tuned',   2.0,  512, 256, 64, 2235661),
     ('tuned',   4.0,  512, 128, 64, 353910),
     ('tuned',   8.0,  512, 128, 64, 250000),
@@ -40,24 +43,67 @@ CONFIGS = [
     # the 10-day wall without completing (CALIBRATION_METHODS sec 10).
 ]
 
+def _sha256(path, chunk=1 << 22):
+    """Content digest of a file, read in chunks (pair dumps reach ~50 MB)."""
+    h = hashlib.sha256()
+    with open(path, "rb") as fh:
+        for block in iter(lambda: fh.read(chunk), b""):
+            h.update(block)
+    return h.hexdigest()
+
 def find_dumps(eps_nm, nx, ny, nz, nm, cap):
     """seed -> pair-dump path, globbing both output dirs and parsing emitt_y
     (the submit scripts write it verbatim, so 20 nm appears as both 0.02/0.020)."""
-    out = {}
+    # Collect EVERY match per seed rather than first-wins. Two defects were
+    # possible with the old `setdefault` form:
+    #   * pattern 1 did not constrain offset_y, so a beam-offset scan file
+    #     (offset_y = 0.313 sigma_y) could displace the production file;
+    #   * whichever pattern/source_dir glob happened to come first silently won.
+    # Both globs now pin `_offsety_0_`, and an ambiguity that survives that is
+    # raised instead of being resolved arbitrarily.
+    cand: dict[int, set] = {}
     for src in ('output_nm', 'output'):
         d = os.path.join(REPO, src, 'C3_250')
-        for pat in (f'{nx}_{ny}_{nz}_{nm}_testC3_250_pairs_*emittx_0.9_emitty_*.dat',
-                    f'{nx}_{ny}_{nz}_testC3_250_pairs_*emittx_0.9_emitty_*.dat'):
+        for pat in (f'{nx}_{ny}_{nz}_{nm}_testC3_250_pairs_*emittx_0.9_emitty_*'
+                    f'_offsety_0_*.dat',
+                    f'{nx}_{ny}_{nz}_testC3_250_pairs_*emittx_0.9_emitty_*'
+                    f'_offsety_0_*.dat'):
             for p in glob.glob(os.path.join(d, pat)):
-                m = re.search(r'_emitty_([0-9.eE+-]+)_', os.path.basename(p))
-                s = re.search(r'_seed_(\d+)\.dat$', os.path.basename(p))
+                b = os.path.basename(p)
+                m = re.search(r'_emitty_([0-9.eE+-]+)_', b)
+                s = re.search(r'_seed_(\d+)\.dat$', b)
                 if not m or not s:
                     continue
                 if not np.isclose(float(m.group(1)), eps_nm / 1000.0):
                     continue
+                # belt and braces: the glob pins offset 0, re-assert it here so a
+                # future pattern edit cannot silently reintroduce the defect.
+                o = re.search(r'_offsety_([0-9.eE+-]+)_', b)
+                if not o or float(o.group(1)) != 0.0:
+                    continue
                 if os.path.getsize(p) == 0:
                     continue
-                out.setdefault(int(s.group(1)), p)
+                cand.setdefault(int(s.group(1)), set()).add(p)
+
+    out = {}
+    for sd, paths in cand.items():
+        if len(paths) > 1:
+            # GP++ wrote some runs under two filenames (with and without the n_m
+            # prefix, in output/ and output_nm/). Two candidates are accepted as
+            # the same run written twice ONLY if they are byte-identical; equal
+            # size is not taken as evidence. Any difference in content means two
+            # different runs claim this (config, seed), and that is refused.
+            digests = {_sha256(p) for p in paths}
+            if len(digests) > 1:
+                raise RuntimeError(
+                    'ambiguous pair dump for seed %d at eps_y=%g nm, grid '
+                    '(%s,%s,%s,%s): %d candidates with differing content:\n  %s'
+                    % (sd, eps_nm, nx, ny, nz, nm, len(paths),
+                       '\n  '.join(sorted(paths))))
+        # One match, or byte-identical copies of a single dump: every candidate
+        # gives identical statistics, so which path is recorded cannot change a
+        # result. sorted() only makes the recorded path deterministic.
+        out[sd] = sorted(paths)[0]
     return {k: out[k] for k in sorted(out)[:cap]}
 
 def stats(path):
