@@ -28,9 +28,9 @@ beam-induced background (BIB) at the calibrated settings.
 | `convergence_scan` | Sweep each grid parameter (`n_m`, `n_z`, `n_x`, `n_y`) about the starting operating point and locate luminosity convergence. |
 | `convergence_scan_refined` | Re-sweep each parameter about the converged region. |
 | `L_vs_nm` | `L` vs macroparticle count at seven ε_y; Richardson fits with the ±5 % crossing `n_m^req` marked. |
-| `nm_req_calibration` | `n_m^req/(n_x n_y n_z)` vs disruption `D_y`: the `n_m` law `C_m·D_y^(s−q_p)` and the conservative locus. |
+| `nm_req_tuning` | `n_m^req/(n_x n_y n_z)` vs disruption `D_y`: the `n_m` law `C_m·D_y^(s−q_p)` and the conservative locus. |
 | `L_vs_ny` | `L` vs vertical resolution along the `n_m` locus, with `n_y^req` marked. |
-| `ny_req_calibration` | `n_y^req` vs `D_y`: free power-law fit against the derived exponent `q_n`. |
+| `ny_req_tuning` | `n_y^req` vs `D_y`: free power-law fit against the derived exponent `q_n`. |
 | `kappa_vs_Dy` | `κ`, the cells per pinched vertical σ, vs `D_y` — the test of the pinch model. |
 | `L_vs_n_by_emittance_6panel` | `L` vs `n_x` and `n_z` at three emittances, Richardson fits; held-out points marked. |
 | `fig4_pseudoflat_instability_all_params` | Coefficient of variation of `L` across grid settings vs ε_y. |
