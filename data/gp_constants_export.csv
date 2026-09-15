@@ -2,11 +2,11 @@ code,name,value,error,note
 GP++,q_pred,0.2153,,"derived pinch exponent, R = Lambda D^q"
 GP++,Lambda,1.856,,"normalisation of R over D_y in [21.5, 137.8]"
 GP++,c_y,20.0,,"vertical cut multiplier, box is +/- c_y sigma_y*"
-GP++,q_fit,0.4018739494488937,0.15153113025389714,free power-law slope of n_y^req vs D_y
-GP++,C_y_fit,26.159342866775727,,normalisation of the free n_y fit
-GP++,b_fit,3.1148844446749657,0.2503343720604374,measured slope of n_m^req/(n_x n_y n_z) vs D_y; b = s - q
-GP++,s_fit,3.3301844446749658,0.2503343720604374,b_fit + q_pred
-GP++,C_m_fit,1.4043588502957162e-07,1.3133900976699317e-07,normalisation of the n_m fit
+GP++,q_fit,0.40187394944877564,0.15153113025384635,free power-law slope of n_y^req vs D_y
+GP++,C_y_fit,26.159342866778342,,normalisation of the free n_y fit
+GP++,b_fit,3.1148844446749586,0.2503343720604374,measured slope of n_m^req/(n_x n_y n_z) vs D_y; b = s - q
+GP++,s_fit,3.3301844446749587,0.2503343720604374,b_fit + q_pred
+GP++,C_m_fit,1.4043588502957935e-07,1.313390097670004e-07,normalisation of the n_m fit
 GP++,b_cons,3.3,,conservative locus slope used by the runs
 GP++,s_cons,3.5153,,b_cons + q_pred
 GP++,C_m_cons,2.305e-07,,conservative locus normalisation

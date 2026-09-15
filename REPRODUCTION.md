@@ -62,4 +62,3 @@ from it. The notebook, the export and this script all read both from there.
 
 - **No reference for H_D.** Nothing committed records H_D values to check against. The script states its definition: L_geom = N² n_b f_rep / (4π σ_x σ_y), without an hourglass factor.
 - **Two D_y evaluations.** The committed D_y table was computed from the beam sizes echoed by each run. It agrees with the D_y expression to 2×10⁻⁶, but the two round differently at 8 nm: 34.215 in the table, 34.216 from the expression.
-- **Committed figures predate q_p = 0.2153.** They were made with q_p = 0.214 and q_n = 0.465, and were deliberately not regenerated. Rerunning the notebook now would change the drawn s_cons label in `nm_req_tuning` from 3.51 to 3.52, and the constrained-fit line in `ny_req_tuning`. It would also change the repository-only `kappa_vs_Dy`, whose manuscript version comes from the WarpX repository.

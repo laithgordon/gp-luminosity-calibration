@@ -6,9 +6,9 @@
   "determinism": "no random numbers are drawn; per-emittance requirement uncertainties are read from the notebook export, whose Monte Carlo term used rng_seed = 23",
   "inputs_sha256": {
    "data/gp_luminosity_for_wx.csv": "8e6e0b3b81b6ac9a2e66126ac28fa10f06ec3bf47430cfef4566e7ead6d64e15",
-   "data/gp_calibration_export.csv": "bc9f89bc45ed96fb3bd8551e5d82487f3cc748f06e753ca4d4f075672d060072",
-   "data/gp_requirements_for_wx.csv": "579ae359d166775e0f7863d70da85de6c91433b3dc0d84a198af2f5b8dc444a2",
-   "data/gp_constants_export.csv": "bef904670d14491df43f432968e113cbabb42323f225e3803e414364ee9abd0d",
+   "data/gp_calibration_export.csv": "7a5a47c80eba072210fa949fde0679d98abbc8c8446a8592d4ffee0ebefc1931",
+   "data/gp_requirements_for_wx.csv": "17e19fdd626eceffbf8efdd4cec1a6bee2a3ced9cee0b35a652efb4905c65ea8",
+   "data/gp_constants_export.csv": "28c143276dfdfebff98ab4897dfee360ab84b461f1f0bc693e4681e8ec89f5c9",
    "data/bib_stats_cache.csv": "8a29712dd65035cce534893f3ac741f77192a227fb4ec7ed3289fe186722a8d9",
    "data/lumi_extracted.csv": "dff1a79b28b318772ac6640bda679a609a4d66558e7cc159e944eac4ff3c2aca",
    "data/L_vs_nm_by_nx_20nm.csv": "6f5cfe684b9e53681f36d1ef2ff2924a82b8f6fe3e8ffddd5738e6fa0033b407",
@@ -16,7 +16,7 @@
    "inputs/acc_lumi_opt_C3_250_no_pairs.dat": "faff45ca3c10f269c4feadccaa039ab73bef0695dd780a70441efffa4742589d",
    "inputs/acc_C3_250_nominal.dat": "ef5e4d2d54c9da08fd2b66924db45713940b0761f48b240e20bf832c27aff09d",
    "inputs/decks/round4_cons_20nm.txt": "ec342fe910dd24e5239b68df75a98b7403b759a9953935843ce61070ef27902a",
-   "GP_CALIBRATION.ipynb": "dbb547183da990c3f0c9c62ac27c29b594f788a3f75de1b216b3ef8098fa6bfb",
+   "GP_CALIBRATION.ipynb": "29879555c26144fb586b388116ea69b8072391ca2b3416293eb3955cf2630591",
    "constants.py": "ee4bf53ff195ff46eb823360ed88403e98586c8e6598ec4a3746e31814331dd2"
   }
  },
@@ -799,63 +799,63 @@
    {
     "eps_y_nm": 1.0,
     "D_y": 97.3640511378073,
-    "value": 132.66493152355466,
+    "value": 132.6649315235549,
     "sigma_ln": {
-     "value": 0.3221358464638391,
+     "value": 0.3221358464638144,
      "definition": "standard deviation of ln(requirement): parameter noise (Monte Carlo over the Richardson fit, seeded), window selection and jackknife terms in quadrature, as computed by sigma_log_total in GP_CALIBRATION.ipynb"
     }
    },
    {
     "eps_y_nm": 2.0,
     "D_y": 68.75216923874842,
-    "value": 133.54817959007644,
+    "value": 133.54817959007732,
     "sigma_ln": {
-     "value": 0.5340815949351884,
+     "value": 0.5340815949352412,
      "definition": "standard deviation of ln(requirement): parameter noise (Monte Carlo over the Richardson fit, seeded), window selection and jackknife terms in quadrature, as computed by sigma_log_total in GP_CALIBRATION.ipynb"
     }
    },
    {
     "eps_y_nm": 4.0,
     "D_y": 48.52082680874171,
-    "value": 115.86178030036692,
+    "value": 115.8617803003687,
     "sigma_ln": {
-     "value": 0.6715627485215111,
+     "value": 0.6715627485215567,
      "definition": "standard deviation of ln(requirement): parameter noise (Monte Carlo over the Richardson fit, seeded), window selection and jackknife terms in quadrature, as computed by sigma_log_total in GP_CALIBRATION.ipynb"
     }
    },
    {
     "eps_y_nm": 8.0,
     "D_y": 34.21554775844742,
-    "value": 113.62270956706864,
+    "value": 113.62270956706428,
     "sigma_ln": {
-     "value": 0.0715854338842078,
+     "value": 0.0715854338841972,
      "definition": "standard deviation of ln(requirement): parameter noise (Monte Carlo over the Richardson fit, seeded), window selection and jackknife terms in quadrature, as computed by sigma_log_total in GP_CALIBRATION.ipynb"
     }
    },
    {
     "eps_y_nm": 12.0,
     "D_y": 27.87835762322576,
-    "value": 90.85986852707344,
+    "value": 90.85986852707612,
     "sigma_ln": {
-     "value": 0.5157301701610287,
+     "value": 0.5157301701619382,
      "definition": "standard deviation of ln(requirement): parameter noise (Monte Carlo over the Richardson fit, seeded), window selection and jackknife terms in quadrature, as computed by sigma_log_total in GP_CALIBRATION.ipynb"
     }
    },
    {
     "eps_y_nm": 16.0,
     "D_y": 24.100805421447365,
-    "value": 93.40383025926585,
+    "value": 93.40383025926576,
     "sigma_ln": {
-     "value": 0.0298168900765705,
+     "value": 0.0298168900765176,
      "definition": "standard deviation of ln(requirement): parameter noise (Monte Carlo over the Richardson fit, seeded), window selection and jackknife terms in quadrature, as computed by sigma_log_total in GP_CALIBRATION.ipynb"
     }
    },
    {
     "eps_y_nm": 20.0,
     "D_y": 21.522988796342663,
-    "value": 90.12731130028916,
+    "value": 90.1273113002906,
     "sigma_ln": {
-     "value": 0.1424385818771354,
+     "value": 0.1424385818766419,
      "definition": "standard deviation of ln(requirement): parameter noise (Monte Carlo over the Richardson fit, seeded), window selection and jackknife terms in quadrature, as computed by sigma_log_total in GP_CALIBRATION.ipynb"
     }
    }
@@ -864,7 +864,7 @@
    {
     "eps_y_nm": 0.5,
     "D_y": 137.83,
-    "value": 0.3730084003092892,
+    "value": 0.3730084003092834,
     "definition": "n_m^req / (n_x n_y n_z), required macroparticles per grid cell",
     "sigma_ln": {
      "value": 0.6272,
@@ -874,7 +874,7 @@
    {
     "eps_y_nm": 1.0,
     "D_y": 97.36,
-    "value": 0.1355335550429394,
+    "value": 0.1355335550429425,
     "definition": "n_m^req / (n_x n_y n_z), required macroparticles per grid cell",
     "sigma_ln": {
      "value": 0.3931,
@@ -884,7 +884,7 @@
    {
     "eps_y_nm": 2.0,
     "D_y": 68.75,
-    "value": 0.1418950322807474,
+    "value": 0.1418950322807424,
     "definition": "n_m^req / (n_x n_y n_z), required macroparticles per grid cell",
     "sigma_ln": {
      "value": 0.3655,
@@ -894,7 +894,7 @@
    {
     "eps_y_nm": 4.0,
     "D_y": 48.52,
-    "value": 0.0287030353150979,
+    "value": 0.0287030353150983,
     "definition": "n_m^req / (n_x n_y n_z), required macroparticles per grid cell",
     "sigma_ln": {
      "value": 0.7049,
@@ -904,7 +904,7 @@
    {
     "eps_y_nm": 8.0,
     "D_y": 34.22,
-    "value": 0.0095837431911533,
+    "value": 0.0095837431911534,
     "definition": "n_m^req / (n_x n_y n_z), required macroparticles per grid cell",
     "sigma_ln": {
      "value": 0.1792,
@@ -914,7 +914,7 @@
    {
     "eps_y_nm": 12.0,
     "D_y": 27.88,
-    "value": 0.0037178734486448,
+    "value": 0.0037178734486449,
     "definition": "n_m^req / (n_x n_y n_z), required macroparticles per grid cell",
     "sigma_ln": {
      "value": 0.3512,
@@ -959,34 +959,34 @@
   "provenance": "recomputed from data/gp_calibration_export.csv; checked against data/gp_constants_export.csv to 1e-12",
   "n_y_free_fit": {
    "law": "n_y^req = C_y D_y^q_n",
-   "q_n": 0.40187394944885685,
+   "q_n": 0.40187394944888677,
    "sigma_q_n": {
-    "value": 0.1515311302539019,
+    "value": 0.15153113025385606,
     "definition": "one-standard-deviation parameter uncertainty from the weighted least-squares covariance"
    },
-   "C_y": 26.159342866768096,
+   "C_y": 26.159342866769524,
    "sigma_ln_C_y": {
-    "value": 0.4918958803055536,
+    "value": 0.4918958803053727,
     "definition": "one-standard-deviation parameter uncertainty from the weighted least-squares covariance"
    },
-   "chi2": 1.0228425290207388,
+   "chi2": 1.0228425290202359,
    "ndf": 5,
-   "p_value": 0.9607024034165741,
-   "q_n_minus_prediction_in_sigma": -0.4185677916139606,
-   "q_n_over_sigma": 2.652088377982046
+   "p_value": 0.9607024034166156,
+   "q_n_minus_prediction_in_sigma": -0.41856779161388985,
+   "q_n_over_sigma": 2.6520883779830458
   },
   "n_y_constrained_fit": {
    "law": "n_y^req = C_y D_y^q_n with q_n fixed",
    "q_n_fixed": 0.4653,
    "q_n_definition": "q_p + 1/4 with q_p = 0.2153 from constants.py",
-   "C_y": 21.298173449380474,
+   "C_y": 21.29817344938035,
    "sigma_ln_C_y": {
-    "value": 0.026838025317064463,
+    "value": 0.026838025317022153,
     "definition": "one-standard-deviation parameter uncertainty from the weighted least-squares covariance"
    },
-   "chi2": 1.1980415251975587,
+   "chi2": 1.1980415251972258,
    "ndf": 6,
-   "p_value": 0.9769813367698013
+   "p_value": 0.9769813367698177
   },
   "n_m_fit": {
    "law": "n_m^req / (n_x n_y n_z) = C_m D_y^(s - q_p)",
@@ -1002,9 +1002,9 @@
     "value": 1.3133900976698568e-07,
     "definition": "one-standard-deviation parameter uncertainty from the weighted least-squares covariance, propagated to C_m = exp(intercept)"
    },
-   "chi2": 7.487840031425717,
+   "chi2": 7.487840031425302,
    "ndf": 5,
-   "p_value": 0.18681236353340755
+   "p_value": 0.18681236353343436
   },
   "conservative_loci": {
    "status": "FROZEN: the values used to define the production runs, fixed when those runs were submitted; not recomputed from the fits above",
@@ -1032,63 +1032,63 @@
    {
     "eps_y_nm": 1.0,
     "D_y": 97.3640511378073,
-    "n_y_req": 132.66493152355466,
+    "n_y_req": 132.6649315235549,
     "sigma_ln": {
-     "value": 0.3221358464638391,
+     "value": 0.3221358464638144,
      "definition": "standard deviation of ln(requirement): parameter noise (Monte Carlo over the Richardson fit, seeded), window selection and jackknife terms in quadrature, as computed by sigma_log_total in GP_CALIBRATION.ipynb"
     }
    },
    {
     "eps_y_nm": 2.0,
     "D_y": 68.75216923874842,
-    "n_y_req": 133.54817959007644,
+    "n_y_req": 133.54817959007732,
     "sigma_ln": {
-     "value": 0.5340815949351884,
+     "value": 0.5340815949352412,
      "definition": "standard deviation of ln(requirement): parameter noise (Monte Carlo over the Richardson fit, seeded), window selection and jackknife terms in quadrature, as computed by sigma_log_total in GP_CALIBRATION.ipynb"
     }
    },
    {
     "eps_y_nm": 4.0,
     "D_y": 48.52082680874171,
-    "n_y_req": 115.86178030036692,
+    "n_y_req": 115.8617803003687,
     "sigma_ln": {
-     "value": 0.6715627485215111,
+     "value": 0.6715627485215567,
      "definition": "standard deviation of ln(requirement): parameter noise (Monte Carlo over the Richardson fit, seeded), window selection and jackknife terms in quadrature, as computed by sigma_log_total in GP_CALIBRATION.ipynb"
     }
    },
    {
     "eps_y_nm": 8.0,
     "D_y": 34.21554775844742,
-    "n_y_req": 113.62270956706864,
+    "n_y_req": 113.62270956706428,
     "sigma_ln": {
-     "value": 0.0715854338842078,
+     "value": 0.0715854338841972,
      "definition": "standard deviation of ln(requirement): parameter noise (Monte Carlo over the Richardson fit, seeded), window selection and jackknife terms in quadrature, as computed by sigma_log_total in GP_CALIBRATION.ipynb"
     }
    },
    {
     "eps_y_nm": 12.0,
     "D_y": 27.87835762322576,
-    "n_y_req": 90.85986852707344,
+    "n_y_req": 90.85986852707612,
     "sigma_ln": {
-     "value": 0.5157301701610287,
+     "value": 0.5157301701619382,
      "definition": "standard deviation of ln(requirement): parameter noise (Monte Carlo over the Richardson fit, seeded), window selection and jackknife terms in quadrature, as computed by sigma_log_total in GP_CALIBRATION.ipynb"
     }
    },
    {
     "eps_y_nm": 16.0,
     "D_y": 24.100805421447365,
-    "n_y_req": 93.40383025926585,
+    "n_y_req": 93.40383025926576,
     "sigma_ln": {
-     "value": 0.0298168900765705,
+     "value": 0.0298168900765176,
      "definition": "standard deviation of ln(requirement): parameter noise (Monte Carlo over the Richardson fit, seeded), window selection and jackknife terms in quadrature, as computed by sigma_log_total in GP_CALIBRATION.ipynb"
     }
    },
    {
     "eps_y_nm": 20.0,
     "D_y": 21.522988796342663,
-    "n_y_req": 90.12731130028916,
+    "n_y_req": 90.1273113002906,
     "sigma_ln": {
-     "value": 0.1424385818771354,
+     "value": 0.1424385818766419,
      "definition": "standard deviation of ln(requirement): parameter noise (Monte Carlo over the Richardson fit, seeded), window selection and jackknife terms in quadrature, as computed by sigma_log_total in GP_CALIBRATION.ipynb"
     }
    }

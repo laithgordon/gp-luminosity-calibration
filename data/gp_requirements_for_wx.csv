@@ -7,25 +7,25 @@
 # q_p = 0.2153 (constants.py): the envelope-integration exponent shared with the WarpX repository; q_n^pred = q_p + 1/4 = 0.4653
 # n_seeds: not recorded in the ladder exports; left empty rather than inferred
 # D_y for n_m_req rows is as exported (rounded to 2 decimals in the source); for n_y_req rows at full precision
-# constant C_y_fit   published 26.2 | stored in export 26.159342866775727 | reproduces: yes
-# constant q_n_fit   published 0.402 +- 0.152 | stored in export 0.4018739494488937 +- 0.1515311302538971 | reproduces: yes
-# constant C_m_fit   published 1.4e-07 | stored in export 1.4043588502957162e-07 +- 1.3133900976699317e-07 | reproduces: yes
-# constant s_fit     published 3.33 +- 0.25 | stored in export 3.3301844446749658 +- 0.2503343720604374 | reproduces: yes
+# constant C_y_fit   published 26.2 | stored in export 26.159342866778346 | reproduces: yes
+# constant q_n_fit   published 0.402 +- 0.152 | stored in export 0.4018739494487756 +- 0.1515311302538463 | reproduces: yes
+# constant C_m_fit   published 1.4e-07 | stored in export 1.4043588502957938e-07 +- 1.313390097670004e-07 | reproduces: yes
+# constant s_fit     published 3.33 +- 0.25 | stored in export 3.3301844446749587 +- 0.2503343720604374 | reproduces: yes
 # constant C_y_cons  published 50.0 -- not a ladder fit output (a chosen normalisation); not in data/gp_constants_export.csv
 # constant C_m_cons  published 2.305e-07 | stored in export 2.305e-07 | reproduces: yes
 # constant s_cons    published 3.515 | stored in export 3.5153 | reproduces: yes
 quantity,eps_y_nm,D_y,value,sigma_log,n_seeds
-n_y_req,1.0,97.3640511378073,132.66493152355466,0.3221358464638391,
-n_y_req,2.0,68.75216923874842,133.54817959007644,0.5340815949351884,
-n_y_req,4.0,48.52082680874171,115.86178030036692,0.6715627485215111,
-n_y_req,8.0,34.21554775844742,113.62270956706864,0.0715854338842078,
-n_y_req,12.0,27.87835762322576,90.85986852707344,0.5157301701610287,
-n_y_req,16.0,24.100805421447365,93.40383025926585,0.0298168900765705,
-n_y_req,20.0,21.522988796342663,90.12731130028916,0.1424385818771354,
-n_m_req,0.5,137.83,0.3730084003092892,0.6272,
-n_m_req,1.0,97.36,0.1355335550429394,0.3931,
-n_m_req,2.0,68.75,0.1418950322807474,0.3655,
-n_m_req,4.0,48.52,0.0287030353150979,0.7049,
-n_m_req,8.0,34.22,0.0095837431911533,0.1792,
-n_m_req,12.0,27.88,0.0037178734486448,0.3512,
+n_y_req,1.0,97.3640511378073,132.6649315235549,0.3221358464638144,
+n_y_req,2.0,68.75216923874842,133.54817959007732,0.5340815949352412,
+n_y_req,4.0,48.52082680874171,115.8617803003687,0.6715627485215567,
+n_y_req,8.0,34.21554775844742,113.62270956706428,0.0715854338841972,
+n_y_req,12.0,27.87835762322576,90.85986852707612,0.5157301701619382,
+n_y_req,16.0,24.100805421447365,93.40383025926576,0.0298168900765176,
+n_y_req,20.0,21.522988796342663,90.1273113002906,0.1424385818766419,
+n_m_req,0.5,137.83,0.3730084003092834,0.6272,
+n_m_req,1.0,97.36,0.1355335550429425,0.3931,
+n_m_req,2.0,68.75,0.1418950322807424,0.3655,
+n_m_req,4.0,48.52,0.0287030353150983,0.7049,
+n_m_req,8.0,34.22,0.0095837431911534,0.1792,
+n_m_req,12.0,27.88,0.0037178734486449,0.3512,
 n_m_req,20.0,21.52,0.0013200480902667,0.3657,
