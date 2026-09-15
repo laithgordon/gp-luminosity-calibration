@@ -1,6 +1,6 @@
 code,name,value,error,note
 GP++,q_pred,0.2153,,"derived pinch exponent, R = Lambda D^q"
-GP++,Lambda,1.88,,"normalisation of R over D_y in [21.5, 137.8]"
+GP++,Lambda,1.856,,"normalisation of R over D_y in [21.5, 137.8]"
 GP++,c_y,20.0,,"vertical cut multiplier, box is +/- c_y sigma_y*"
 GP++,q_fit,0.4018739494488937,0.15153113025389714,free power-law slope of n_y^req vs D_y
 GP++,C_y_fit,26.159342866775727,,normalisation of the free n_y fit
