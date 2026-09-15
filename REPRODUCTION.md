@@ -20,6 +20,8 @@ runs give byte-identical files. If an input is missing, or a fit it recomputes
 disagrees with the notebook's exports by more than 10⁻¹², it stops with an error
 and writes nothing.
 
+The committed `paper_numbers.json` is reproduced to floating-point last-digit precision: a few values can differ in their final digit between platforms, and no quoted value depends on those digits.
+
 ## What it covers
 
 | Section | Content | Source |
@@ -49,7 +51,7 @@ from it. The notebook, the export and this script all read both from there.
 
 ## Verification
 
-- **Clean clone.** From a clean clone, with the raw-output root pointed at a path that does not exist, the script completes and its output is byte-identical to the committed files.
+- **Clean clone.** From a clean clone, with the raw-output root pointed at a path that does not exist, the script completes and its output matches the committed files to floating-point last-digit precision.
 - **Determinism.** A second run gives byte-identical output.
 - **Failure.** Removing an input makes it stop with an error.
 - **Internal consistency.** Every derived quantity was recomputed from the rows of the same JSON file and agrees: ratios, the gain, H_D, seed scatter, the background ratios and reductions, and the recommendation table from the frozen loci.

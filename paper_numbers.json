@@ -8,7 +8,7 @@
    "data/gp_luminosity_for_wx.csv": "f04e5f24a90e6a10104cbdc7000ad5dc5b365f721e423d8d06aa3eebadcb9100",
    "data/gp_calibration_export.csv": "bc9f89bc45ed96fb3bd8551e5d82487f3cc748f06e753ca4d4f075672d060072",
    "data/gp_requirements_for_wx.csv": "d8cc3828eb675ae682a3fae5424a99e79dd2a1ee7751c419c3d0e8d02d2e61c8",
-   "data/gp_constants_export.csv": "9d5d1580f20297392ca79ffb98a3fce6d535db60e69a78ad8bd73c963a9bf722",
+   "data/gp_constants_export.csv": "72ebb6df5c059d5d2ef03488666fa18579241edcdae9b565a510195ddccbe001",
    "data/bib_stats_cache.csv": "8a29712dd65035cce534893f3ac741f77192a227fb4ec7ed3289fe186722a8d9",
    "data/lumi_extracted.csv": "dff1a79b28b318772ac6640bda679a609a4d66558e7cc159e944eac4ff3c2aca",
    "data/L_vs_nm_by_nx_20nm.csv": "6f5cfe684b9e53681f36d1ef2ff2924a82b8f6fe3e8ffddd5738e6fa0033b407",
@@ -16,7 +16,7 @@
    "inputs/acc_lumi_opt_C3_250_no_pairs.dat": "faff45ca3c10f269c4feadccaa039ab73bef0695dd780a70441efffa4742589d",
    "inputs/acc_C3_250_nominal.dat": "ef5e4d2d54c9da08fd2b66924db45713940b0761f48b240e20bf832c27aff09d",
    "inputs/decks/round4_cons_20nm.txt": "ec342fe910dd24e5239b68df75a98b7403b759a9953935843ce61070ef27902a",
-   "GP_CALIBRATION.ipynb": "0fc39f8a311ba93a0b47276bd40b23d2432affc4b201154ca8873a93e78fd196",
+   "GP_CALIBRATION.ipynb": "8e82da5543983c3d44aa25e187aaa36d79190b20d9bff6dbdc74d6ab78c01046",
    "constants.py": "ee4bf53ff195ff46eb823360ed88403e98586c8e6598ec4a3746e31814331dd2"
   }
  },
@@ -1004,7 +1004,7 @@
    },
    "chi2": 7.487840031425717,
    "ndf": 5,
-   "p_value": 0.18681236353340702
+   "p_value": 0.18681236353340755
   },
   "conservative_loci": {
    "status": "FROZEN: the values used to define the production runs, fixed when those runs were submitted; not recomputed from the fits above",
@@ -1261,7 +1261,7 @@
     },
     "reaching_mean": 62.7,
     "reaching_std": {
-     "value": 6.961002482082272,
+     "value": 6.9610024820822725,
      "definition": "sample standard deviation over seeds, ddof = 1"
     },
     "n_seeds": 10,
@@ -1289,12 +1289,12 @@
     },
     "produced_mean": 47333.4,
     "produced_std": {
-     "value": 579.3406597158531,
+     "value": 579.3406597158532,
      "definition": "sample standard deviation over seeds, ddof = 1"
     },
     "reaching_mean": 45.7,
     "reaching_std": {
-     "value": 6.464432603785801,
+     "value": 6.464432603785802,
      "definition": "sample standard deviation over seeds, ddof = 1"
     },
     "n_seeds": 10,
@@ -1421,7 +1421,7 @@
     },
     "produced_mean": 45806.2,
     "produced_std": {
-     "value": 398.7764063008521,
+     "value": 398.77640630085205,
      "definition": "sample standard deviation over seeds, ddof = 1"
     },
     "reaching_mean": 41.4,
@@ -1453,7 +1453,7 @@
   "produced_ratio_2nm_over_20nm": {
    "value": 2.460784784592479,
    "standard_error": {
-    "value": 0.01137171670705982,
+    "value": 0.011371716707059817,
     "definition": "standard error of the ratio of two means, first-order propagation of the two standard errors, treated as independent"
    }
   },
