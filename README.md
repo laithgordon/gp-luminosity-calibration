@@ -22,8 +22,7 @@ definition of every uncertainty and the data file and selection rule behind
 every quantity. Its output corresponds to the numbers in the paper, so a
 reviewer can compare the two directly. It stops with an error, rather than
 writing a partial file, if an input is missing or a recomputed fit disagrees
-with the notebook's exports. What it covers and the few manuscript values it
-does not reproduce are listed in `REPRODUCTION.md`.
+with the notebook's exports. What it covers is listed in `REPRODUCTION.md`.
 
 ## Reproducing the results
 

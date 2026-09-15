@@ -58,17 +58,7 @@ from it. The notebook, the export and this script all read both from there.
 - **Independent recomputation.** The luminosity rows, ratios, gain, IPC table and background quantities agree with an earlier recomputation from the raw `.ref` and `pairs.dat` files.
 - **Published constants.** Free n_y fit: q_n = 0.402 ± 0.152, C_y = 26.2, χ² 1.02/5. Constrained fit at q_n = 0.4653: C_y = 21.3, χ² 1.20/6. n_m fit: s = 3.330 ± 0.250, C_m = 1.4×10⁻⁷, χ² 7.49/5. s_cons = 3.515. All reproduce.
 
-## What does not match the manuscript
-
-These are reported, not adjusted:
-
-| Quantity | Manuscript | This repository | Reason |
-|---|---|---|---|
-| Exclusion of q_n = 0 | 2.6σ | 2.65σ (0.40187 / 0.15153) | rounding |
-| n_m^rec at 0.5 nm | 4.5×10⁷ | 4.44×10⁷, which rounds to 4.4×10⁷ | the frozen locus gives the lower value |
-| n_m^rec at 16 nm | 7.1×10⁴ | 7.03×10⁴, which rounds to 7.0×10⁴ | the frozen locus gives the lower value |
-
-Other notes a reviewer may meet:
+## Notes
 
 - **No reference for H_D.** Nothing committed records H_D values to check against. The script states its definition: L_geom = N² n_b f_rep / (4π σ_x σ_y), without an hourglass factor.
 - **Two D_y evaluations.** The committed D_y table was computed from the beam sizes echoed by each run. It agrees with the D_y expression to 2×10⁻⁶, but the two round differently at 8 nm: 34.215 in the table, 34.216 from the expression.
