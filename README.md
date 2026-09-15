@@ -69,8 +69,8 @@ python3 inputs/make_conservative_decks.py --check
 Step 5 reads `data/gp_calibration_export.csv` and `data/gp_constants_export.csv`,
 so it runs after step 4.
 
-The committed `data/lumi_bib_per_seed_cache.csv` is the cache as it was originally
-accumulated: 593 rows, including runs the figure no longer uses. Step 3 rewrites
+The committed `data/lumi_bib_per_seed_cache.csv` has 593 rows, including runs the
+figure does not use. Step 3 rewrites
 it with only the 263 runs on the figure's curves. For those 263, `n_reach`, the
 only column the figure uses, is identical; `n_total` differs by one particle in
 two runs. The figure is unchanged either way.

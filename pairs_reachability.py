@@ -34,8 +34,7 @@ def load_pairs_dat(path: str) -> dict[str, np.ndarray]:
     # Some pair.dat files have ragged rows (occasional truncation). Only the
     # first 8 columns feed the reachability test. pandas.read_csv with the C
     # engine is ~5-10x faster than np.genfromtxt on these multi-million-row
-    # text files; `on_bad_lines="skip"` tolerates truncated rows the same way
-    # the old `invalid_raise=False` did.
+    # text files; `on_bad_lines="skip"` tolerates truncated rows.
     import pandas as _pd
     _df = _pd.read_csv(path, sep=r"\s+", header=None,
                        usecols=range(8), engine="c",

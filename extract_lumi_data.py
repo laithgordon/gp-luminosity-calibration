@@ -142,7 +142,7 @@ COLUMNS = [
     "n_pairs", "e_pairs",
     "out_1", "out_2",
     "grids",
-    # appended 2026-09-09 (unit fix): raw per-crossing values and rate factors.
+    # raw per-crossing values and rate factors.
     # lumi_ee / lumi_fine above are cm^-2 s^-1 = *_m2 * 1e-4 * n_b * f_rep.
     "lumi_ee_m2", "lumi_fine_m2", "f_rep", "n_b",
 ]

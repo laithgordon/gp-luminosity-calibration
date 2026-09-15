@@ -419,7 +419,7 @@ def main():
     )
 
     print(
-        f"Rectangular asymptote (legacy ROI): theta >= {theta_asym:.6g} rad, pT >= {pt_asym:.6g} GeV/c"
+        f"Rectangular asymptote ROI: theta >= {theta_asym:.6g} rad, pT >= {pt_asym:.6g} GeV/c"
     )
     print(
         f"Boundary spans theta in [{theta_plot.min():.6g}, {theta_plot.max():.6g}] rad and pT in [{pt_plot.min():.6g}, {pt_plot.max():.6g}] GeV/c"

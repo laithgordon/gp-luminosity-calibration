@@ -12,8 +12,8 @@ pairs_reachability.count_reaching_particles.
 Run selection is the one the figure uses, applied to data/lumi_extracted.csv:
 offset_y = 0, FFT solver, n_t = 6, at most 15 seeds per (eps_x, eps_y) with the
 lowest seed numbers kept, and source_dir 'output' preferred when a run exists in
-more than one output tree. It is a port of the notebook that originally built the
-cache, with the paths made configurable; the selection and counting are unchanged.
+more than one output tree. The selection and counting are those of the notebook that built the cache; the
+raw-output paths are configurable.
 
     python3 bib_reach_per_seed.py [--workers N]
 """

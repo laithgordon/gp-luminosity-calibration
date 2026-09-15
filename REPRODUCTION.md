@@ -55,7 +55,7 @@ from it. The notebook, the export and this script all read both from there.
 - **Determinism.** A second run gives byte-identical output.
 - **Failure.** Removing an input makes it stop with an error.
 - **Internal consistency.** Every derived quantity was recomputed from the rows of the same JSON file and agrees: ratios, the gain, H_D, seed scatter, the background ratios and reductions, and the recommendation table from the frozen loci.
-- **Independent recomputation.** The luminosity rows, ratios, gain, IPC table and background quantities agree with an earlier recomputation from the raw `.ref` and `pairs.dat` files.
+- **Independent recomputation.** The luminosity rows, ratios, gain, IPC table and background quantities agree with a recomputation from the raw `.ref` and `pairs.dat` files.
 - **Published constants.** Free n_y fit: q_n = 0.402 ± 0.152, C_y = 26.2, χ² 1.02/5. Constrained fit at q_n = 0.4653: C_y = 21.3, χ² 1.20/6. n_m fit: s = 3.330 ± 0.250, C_m = 1.4×10⁻⁷, χ² 7.49/5. s_cons = 3.515. All reproduce.
 
 ## Notes

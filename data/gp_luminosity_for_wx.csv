@@ -9,7 +9,7 @@
 # L_std_1e34 = sample standard deviation (ddof=1); L_sem_1e34 = L_std / sqrt(n_seeds)
 # blocks: nominal = tab:code_comparison configuration (512x512x25, n_m=1e5); conservative = on-locus runs above; frozen_extension = 40-100 nm, NOT conservative, never merge
 # note: the nominal 20 nm row has do_photons=do_pairs=1 (all other nominal rows 0); runs differing only in those flags agree in lumi_ee to < 0.05%
-# note: frozen_extension runs are at n_y=128, n_m=50000 -- the pre-campaign 20 nm grid, not the conservative 20 nm grid
+# note: frozen_extension runs are at n_y=128, n_m=50000 -- not the conservative 20 nm grid (n_y=256, n_m=48411)
 # EXCLUDED conservative eps_y=0.5 nm: no run on the locus (n_y_cons=512, n_m_cons=44381750.2; on disk at n_y_cons: n_m=250000 ratio 0.0056 (15 seeds, photons/pairs 0/0))
 eps_y_nm,D_y,block,n_x,n_y,n_z,n_t,n_m,n_m_cons,ratio_nm,n_seeds,L_mean_1e34,L_std_1e34,L_sem_1e34,do_photons,do_pairs,deck_path
 0.5,137.828,nominal,512,512,25,6,100000,,,15,6.275203872000001,0.31506818056451874,0.08135025441641683,0,0,output_nm/C3_250/512_512_25_100000_test_C3_250_particles_0.624_emittx_0.9_emitty_0.0005_betax_12.0_betay_0.12_sigmaz_100_offsety_0_integration_method_2_nt6_seed_*.ref

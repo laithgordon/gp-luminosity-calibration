@@ -7,6 +7,6 @@ GP++,C_y_fit,26.159342866775727,,normalisation of the free n_y fit
 GP++,b_fit,3.1148844446749657,0.2503343720604374,measured slope of n_m^req/(n_x n_y n_z) vs D_y; b = s - q
 GP++,s_fit,3.3301844446749658,0.2503343720604374,b_fit + q_pred
 GP++,C_m_fit,1.4043588502957162e-07,1.3133900976699317e-07,normalisation of the n_m fit
-GP++,b_cons,3.3,,conservative locus slope actually run on (unchanged)
+GP++,b_cons,3.3,,conservative locus slope used by the runs
 GP++,s_cons,3.5153,,b_cons + q_pred
 GP++,C_m_cons,2.305e-07,,conservative locus normalisation

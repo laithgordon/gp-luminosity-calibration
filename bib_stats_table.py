@@ -54,13 +54,10 @@ def _sha256(path, chunk=1 << 22):
 def find_dumps(eps_nm, nx, ny, nz, nm, cap):
     """seed -> pair-dump path, globbing both output dirs and parsing emitt_y
     (the submit scripts write it verbatim, so 20 nm appears as both 0.02/0.020)."""
-    # Collect EVERY match per seed rather than first-wins. Two defects were
-    # possible with the old `setdefault` form:
-    #   * pattern 1 did not constrain offset_y, so a beam-offset scan file
-    #     (offset_y = 0.313 sigma_y) could displace the production file;
-    #   * whichever pattern/source_dir glob happened to come first silently won.
-    # Both globs now pin `_offsety_0_`, and an ambiguity that survives that is
-    # raised instead of being resolved arbitrarily.
+    # Collect EVERY match per seed rather than first-wins. Both globs pin
+    # `_offsety_0_`, so beam-offset scan files (offset_y = 0.313 sigma_y) are not
+    # matched, and an ambiguity that survives that is raised rather than resolved
+    # arbitrarily.
     cand: dict[int, set] = {}
     for src in ('output_nm', 'output'):
         d = os.path.join(str(RAW_ROOT), src, 'C3_250')

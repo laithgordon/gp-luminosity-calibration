@@ -77,7 +77,7 @@ def parse_ref(path: str) -> dict:
         "energy_GeV": _f(txt, r"energy\s*:\s*" + _num),
         "particles":  _f(txt, r"particles\s*:\s*" + _num),
         "n_macro_tracked": _f(txt, r"number of tracked macroparticles\s*:\s*" + _num, int),
-        # --- beam offsets / waist, as the run's own deck set them (round 2) ---
+        # --- beam offsets / waist, as the run's own deck set them ---
         "offset_x_nm": _f(txt, r"offset_x\s*:\s*" + _num),
         "offset_y_nm": _f(txt, r"offset_y\s*:\s*" + _num),
         "offset_z_um": _f(txt, r"offset_z\s*:\s*" + _num),

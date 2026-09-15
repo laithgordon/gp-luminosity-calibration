@@ -36,10 +36,10 @@ unpublished/
 # ── Published GP++ input file (the *.dat rule above is for raw dumps) ──
 !inputs/*.dat
 
-# ── Superseded material kept locally, never pushed (canonicalization, Rule 1) ──
+# ── Local material, not tracked ──
 archive/
 
-# ── Never pushed: verification round outputs, the archive, logs ──
+# ── Local outputs and logs, not tracked ──
 verification/
 *.log
 

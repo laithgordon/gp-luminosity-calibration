@@ -1,7 +1,6 @@
 # gp_requirements_for_wx.csv -- GUINEA-PIG++ tuning-ladder requirements, re-exported unchanged (no refit)
 # written by export_for_wx.py
 # source: data/gp_calibration_export.csv (written by GP_CALIBRATION.ipynb) for value, D_y and sigma_log
-# CHANGED 2026-09-14: the uncertainty column is now sigma_log, the budget behind the published fits. Earlier versions of this file carried sigma_tot from data/error_budget.csv, an older budget that no longer matches the notebook; do not mix the two versions
 # n_y_req rows: value = n_y^req (vertical cells)
 # n_m_req rows: value = n_m^req / (n_x n_y n_z), i.e. required macroparticles PER CELL, as exported -- multiply by n_x n_y n_z for an absolute n_m
 # sigma_log = standard deviation of ln(value): Monte Carlo parameter noise (seeded), window selection and jackknife terms in quadrature (sigma_log_total in GP_CALIBRATION.ipynb), dimensionless

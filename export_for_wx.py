@@ -178,7 +178,7 @@ def write_luminosity(path) -> None:
         "# L_std_1e34 = sample standard deviation (ddof=1); L_sem_1e34 = L_std / sqrt(n_seeds)",
         "# blocks: nominal = tab:code_comparison configuration (512x512x25, n_m=1e5); conservative = on-locus runs above; frozen_extension = 40-100 nm, NOT conservative, never merge",
         "# note: the nominal 20 nm row has do_photons=do_pairs=1 (all other nominal rows 0); runs differing only in those flags agree in lumi_ee to < 0.05%",
-        "# note: frozen_extension runs are at n_y=128, n_m=50000 -- the pre-campaign 20 nm grid, not the conservative 20 nm grid",
+        "# note: frozen_extension runs are at n_y=128, n_m=50000 -- not the conservative 20 nm grid (n_y=256, n_m=48411)",
     ] + notes
     with open(path, "w") as fh:
         fh.write("\n".join(hdr) + "\n" + ",".join(LUMI_COLS) + "\n")
@@ -203,7 +203,6 @@ def write_requirements(path) -> None:
         "# gp_requirements_for_wx.csv -- GUINEA-PIG++ tuning-ladder requirements, re-exported unchanged (no refit)",
         "# written by export_for_wx.py",
         "# source: data/gp_calibration_export.csv (written by GP_CALIBRATION.ipynb) for value, D_y and sigma_log",
-        "# CHANGED 2026-09-14: the uncertainty column is now sigma_log, the budget behind the published fits. Earlier versions of this file carried sigma_tot from data/error_budget.csv, an older budget that no longer matches the notebook; do not mix the two versions",
         "# n_y_req rows: value = n_y^req (vertical cells)",
         "# n_m_req rows: value = n_m^req / (n_x n_y n_z), i.e. required macroparticles PER CELL, as exported -- multiply by n_x n_y n_z for an absolute n_m",
         "# sigma_log = standard deviation of ln(value): Monte Carlo parameter noise (seeded), window selection and jackknife terms in quadrature (sigma_log_total in GP_CALIBRATION.ipynb), dimensionless",

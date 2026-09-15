@@ -5,10 +5,10 @@
   "luminosity_units": "1e34 cm^-2 s^-1",
   "determinism": "no random numbers are drawn; per-emittance requirement uncertainties are read from the notebook export, whose Monte Carlo term used rng_seed = 23",
   "inputs_sha256": {
-   "data/gp_luminosity_for_wx.csv": "f04e5f24a90e6a10104cbdc7000ad5dc5b365f721e423d8d06aa3eebadcb9100",
+   "data/gp_luminosity_for_wx.csv": "8e6e0b3b81b6ac9a2e66126ac28fa10f06ec3bf47430cfef4566e7ead6d64e15",
    "data/gp_calibration_export.csv": "bc9f89bc45ed96fb3bd8551e5d82487f3cc748f06e753ca4d4f075672d060072",
-   "data/gp_requirements_for_wx.csv": "d8cc3828eb675ae682a3fae5424a99e79dd2a1ee7751c419c3d0e8d02d2e61c8",
-   "data/gp_constants_export.csv": "5aaf57f8fe6da6c5684512240b548abfaaa9fa3f1a32fb3566b3cce2dfd16208",
+   "data/gp_requirements_for_wx.csv": "579ae359d166775e0f7863d70da85de6c91433b3dc0d84a198af2f5b8dc444a2",
+   "data/gp_constants_export.csv": "bef904670d14491df43f432968e113cbabb42323f225e3803e414364ee9abd0d",
    "data/bib_stats_cache.csv": "8a29712dd65035cce534893f3ac741f77192a227fb4ec7ed3289fe186722a8d9",
    "data/lumi_extracted.csv": "dff1a79b28b318772ac6640bda679a609a4d66558e7cc159e944eac4ff3c2aca",
    "data/L_vs_nm_by_nx_20nm.csv": "6f5cfe684b9e53681f36d1ef2ff2924a82b8f6fe3e8ffddd5738e6fa0033b407",
@@ -16,7 +16,7 @@
    "inputs/acc_lumi_opt_C3_250_no_pairs.dat": "faff45ca3c10f269c4feadccaa039ab73bef0695dd780a70441efffa4742589d",
    "inputs/acc_C3_250_nominal.dat": "ef5e4d2d54c9da08fd2b66924db45713940b0761f48b240e20bf832c27aff09d",
    "inputs/decks/round4_cons_20nm.txt": "ec342fe910dd24e5239b68df75a98b7403b759a9953935843ce61070ef27902a",
-   "GP_CALIBRATION.ipynb": "c82b0268c564d9d4b0b7a73a7c286edb7cc4d82865a75c2a0a166808ef82aad9",
+   "GP_CALIBRATION.ipynb": "dbb547183da990c3f0c9c62ac27c29b594f788a3f75de1b216b3ef8098fa6bfb",
    "constants.py": "ee4bf53ff195ff46eb823360ed88403e98586c8e6598ec4a3746e31814331dd2"
   }
  },
