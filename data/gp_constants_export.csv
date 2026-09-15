@@ -10,5 +10,3 @@ GP++,C_m_fit,1.4043588502957162e-07,1.3133900976699317e-07,normalisation of the 
 GP++,b_cons,3.3,,conservative locus slope actually run on (unchanged)
 GP++,s_cons,3.5153,,b_cons + q_pred
 GP++,C_m_cons,2.305e-07,,conservative locus normalisation
-GP++,kappa,0.28333398167234475,0.007606771208698866,"weighted mean, weights 1/sigma_tot^2"
-GP++,kappa_slope,-0.06342605055117993,0.15153113025389714,dln(kappa)/dln(D_y); consistent with 0 means R(D_y) holds
