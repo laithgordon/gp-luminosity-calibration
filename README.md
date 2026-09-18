@@ -28,7 +28,8 @@ with the notebook's exports. What it covers is listed in `REPRODUCTION.md`.
 
 Python 3 with `numpy`, `pandas`, `matplotlib` and `scipy`, plus Jupyter
 (`nbconvert`) for the notebook. The published figures were produced with Python
-3.13, numpy 2.3, pandas 2.3, matplotlib 3.10.5 and scipy 1.16.
+3.13, numpy 2.3, pandas 2.3, matplotlib 3.10.5 and scipy 1.16. GUINEA-PIG++ 1.2.2 produced the
+runs.
 
 The raw GUINEA-PIG++ output (`.ref` files and `pairs.dat` dumps, several GB) is
 not in git. Steps marked **raw** read it; point `GP_RAW_ROOT` at the directory
