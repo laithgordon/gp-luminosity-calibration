@@ -9,7 +9,8 @@
    "data/gp_calibration_export.csv": "7a5a47c80eba072210fa949fde0679d98abbc8c8446a8592d4ffee0ebefc1931",
    "data/gp_requirements_for_wx.csv": "17e19fdd626eceffbf8efdd4cec1a6bee2a3ced9cee0b35a652efb4905c65ea8",
    "data/gp_constants_export.csv": "28c143276dfdfebff98ab4897dfee360ab84b461f1f0bc693e4681e8ec89f5c9",
-   "data/bib_stats_cache.csv": "8a29712dd65035cce534893f3ac741f77192a227fb4ec7ed3289fe186722a8d9",
+   "data/bib_stats_cache.csv": "2f0a62ddbc54b22ae6d216fb7fab6a4babaa62e3795abfa57bd605b5a3db85cc",
+   "data/bib_run_luminosity.csv": "a69e0672b00da79888f6ec7e865b739f1d873d5174d52a2e05374a145e5907b5",
    "data/lumi_extracted.csv": "dff1a79b28b318772ac6640bda679a609a4d66558e7cc159e944eac4ff3c2aca",
    "data/L_vs_nm_by_nx_20nm.csv": "6f5cfe684b9e53681f36d1ef2ff2924a82b8f6fe3e8ffddd5738e6fa0033b407",
    "data/D_y_table.json": "706dec6bafe25afe9afcb84fceaaf893254f2e1ff4211ab195934f5c3aac61f5",
@@ -1004,7 +1005,7 @@
    },
    "chi2": 7.487840031425302,
    "ndf": 5,
-   "p_value": 0.18681236353343436
+   "p_value": 0.18681236353343428
   },
   "conservative_loci": {
    "status": "FROZEN: the values used to define the production runs, fixed when those runs were submitted; not recomputed from the fits above",
@@ -1177,7 +1178,7 @@
  "ipc_background_table": {
   "provenance": "data/bib_stats_cache.csv (bib_stats_table.py, pair dumps resolved by find_dumps), channel ALL, per bunch crossing",
   "reach_definition": "pairs whose helix from the IP reaches the SiD-o2-v04 barrel (B = 5 T, r_det = 14 mm, z_max = 76 mm)",
-  "datasets": "nominal: 512x512x25, n_m = 1e5. tuned: pre-campaign tuned grid, n_x = 512, n_z = 64, n_y and n_m per row",
+  "datasets": "nominal: 512x512x25, n_m = 1e5. tuned: the conservative locus, n_x = 512, n_z = 64, n_y and n_m per row",
   "rows": [
    {
     "dataset": "nominal",
@@ -1188,28 +1189,28 @@
      "n_z": 25,
      "n_m": 100000
     },
-    "produced_mean": 104982.6,
+    "produced_mean": 104757.8,
     "produced_std": {
-     "value": 2972.3983657047793,
+     "value": 3061.0090493169077,
      "definition": "sample standard deviation over seeds, ddof = 1"
     },
-    "reaching_mean": 101.2,
+    "reaching_mean": 102.1,
     "reaching_std": {
-     "value": 9.138441393974746,
+     "value": 7.156193898373011,
      "definition": "sample standard deviation over seeds, ddof = 1"
     },
     "n_seeds": 10,
     "seeds": [
      100805,
      105469,
-     105648,
      130471,
      135135,
      143455,
      145992,
      153768,
      159302,
-     167029
+     167029,
+     167815
     ]
    },
    {
@@ -1221,28 +1222,28 @@
      "n_z": 25,
      "n_m": 100000
     },
-    "produced_mean": 87081.0,
+    "produced_mean": 86767.6,
     "produced_std": {
-     "value": 1738.5460719936198,
+     "value": 1934.8310979973878,
      "definition": "sample standard deviation over seeds, ddof = 1"
     },
-    "reaching_mean": 85.0,
+    "reaching_mean": 85.9,
     "reaching_std": {
-     "value": 14.476033833738976,
+     "value": 14.059002651523883,
      "definition": "sample standard deviation over seeds, ddof = 1"
     },
     "n_seeds": 10,
     "seeds": [
      100805,
      105469,
-     105648,
      130471,
      135135,
      143455,
      145992,
      153768,
      159302,
-     167029
+     167029,
+     167815
     ]
    },
    {
@@ -1254,28 +1255,28 @@
      "n_z": 25,
      "n_m": 100000
     },
-    "produced_mean": 68956.0,
+    "produced_mean": 68657.8,
     "produced_std": {
-     "value": 814.0237506772555,
+     "value": 1167.7627042054962,
      "definition": "sample standard deviation over seeds, ddof = 1"
     },
-    "reaching_mean": 62.7,
+    "reaching_mean": 65.3,
     "reaching_std": {
-     "value": 6.9610024820822725,
+     "value": 6.074537019394977,
      "definition": "sample standard deviation over seeds, ddof = 1"
     },
     "n_seeds": 10,
     "seeds": [
      100805,
      105469,
-     105648,
      130471,
      135135,
      143455,
      145992,
      153768,
      159302,
-     167029
+     167029,
+     167815
     ]
    },
    {
@@ -1289,12 +1290,12 @@
     },
     "produced_mean": 47333.4,
     "produced_std": {
-     "value": 579.3406597158532,
+     "value": 579.3406597158531,
      "definition": "sample standard deviation over seeds, ddof = 1"
     },
     "reaching_mean": 45.7,
     "reaching_std": {
-     "value": 6.464432603785802,
+     "value": 6.464432603785801,
      "definition": "sample standard deviation over seeds, ddof = 1"
     },
     "n_seeds": 10,
@@ -1316,18 +1317,18 @@
     "eps_y_nm": 2.0,
     "grid": {
      "n_x": 512,
-     "n_y": 256,
+     "n_y": 512,
      "n_z": 64,
-     "n_m": 2235661
+     "n_m": 4471286
     },
-    "produced_mean": 112719.2,
+    "produced_mean": 115509.4,
     "produced_std": {
-     "value": 1323.0124547998614,
+     "value": 1577.8404510244022,
      "definition": "sample standard deviation over seeds, ddof = 1"
     },
-    "reaching_mean": 113.8,
+    "reaching_mean": 115.3,
     "reaching_std": {
-     "value": 15.788884979278585,
+     "value": 14.07953597720228,
      "definition": "sample standard deviation over seeds, ddof = 1"
     },
     "n_seeds": 10,
@@ -1349,18 +1350,18 @@
     "eps_y_nm": 4.0,
     "grid": {
      "n_x": 512,
-     "n_y": 128,
+     "n_y": 256,
      "n_z": 64,
-     "n_m": 353910
+     "n_m": 707831
     },
-    "produced_mean": 84784.6,
+    "produced_mean": 88613.6,
     "produced_std": {
-     "value": 1095.0819553297774,
+     "value": 1582.2363357672652,
      "definition": "sample standard deviation over seeds, ddof = 1"
     },
-    "reaching_mean": 83.0,
+    "reaching_mean": 83.7,
     "reaching_std": {
-     "value": 8.94427190999916,
+     "value": 7.4244341348160825,
      "definition": "sample standard deviation over seeds, ddof = 1"
     },
     "n_seeds": 10,
@@ -1382,18 +1383,18 @@
     "eps_y_nm": 8.0,
     "grid": {
      "n_x": 512,
-     "n_y": 128,
+     "n_y": 256,
      "n_z": 64,
-     "n_m": 250000
+     "n_m": 223499
     },
-    "produced_mean": 66949.0,
+    "produced_mean": 68133.6,
     "produced_std": {
-     "value": 759.7158825654642,
+     "value": 1152.524880425581,
      "definition": "sample standard deviation over seeds, ddof = 1"
     },
-    "reaching_mean": 64.6,
+    "reaching_mean": 66.7,
     "reaching_std": {
-     "value": 10.905656024895217,
+     "value": 12.499333315554606,
      "definition": "sample standard deviation over seeds, ddof = 1"
     },
     "n_seeds": 10,
@@ -1415,18 +1416,18 @@
     "eps_y_nm": 20.0,
     "grid": {
      "n_x": 512,
-     "n_y": 128,
+     "n_y": 256,
      "n_z": 64,
-     "n_m": 80000
+     "n_m": 48411
     },
-    "produced_mean": 45806.2,
+    "produced_mean": 46964.6,
     "produced_std": {
-     "value": 398.77640630085205,
+     "value": 700.536968649367,
      "definition": "sample standard deviation over seeds, ddof = 1"
     },
-    "reaching_mean": 41.4,
+    "reaching_mean": 35.5,
     "reaching_std": {
-     "value": 10.793001847905376,
+     "value": 6.704061787039588,
      "definition": "sample standard deviation over seeds, ddof = 1"
     },
     "n_seeds": 10,
@@ -1446,47 +1447,47 @@
   ]
  },
  "derived_background": {
-  "provenance": "tuned rows of ipc_background_table (this file); BIB-run luminosity from data/lumi_extracted.csv: the runs on the same grid and ten seeds as the BIB rows, offset_y = 0, with pair production on (n_pairs recorded in the .ref)",
+  "provenance": "tuned rows of ipc_background_table (this file); BIB-run luminosity from data/bib_run_luminosity.csv: read from the .ref of each BIB run itself, paired to that run's pair dump, on the same grid and ten seeds as the BIB rows, offset_y = 0, with pair production on (n_pairs recorded in the .ref)",
   "excluded": [
-   "pairs-off tuning-ladder runs on the 20 nm BIB grid with the same seeds: not the runs the background was counted in"
+   "pairs-off runs on the same grid and seeds: the BIB runs have pairs and photons on, so their own luminosity is the one tab:bib_yields normalises by"
   ],
   "produced_ratio_2nm_over_20nm": {
-   "value": 2.460784784592479,
+   "value": 2.4594992824382618,
    "standard_error": {
-    "value": 0.011371716707059817,
+    "value": 0.015730928654498058,
     "definition": "standard error of the ratio of two means, first-order propagation of the two standard errors, treated as independent"
    }
   },
   "reaching_ratio_2nm_over_20nm": {
-   "value": 2.748792270531401,
+   "value": 3.247887323943662,
    "standard_error": {
-    "value": 0.25670573272717123,
+    "value": 0.23097595882820074,
     "definition": "standard error of the ratio of two means, first-order propagation of the two standard errors, treated as independent"
    }
   },
   "BIB_RUN_luminosity_ratio_2nm_over_20nm": {
-   "value": 3.3036409334934396,
+   "value": 3.3716385580915804,
    "standard_error": {
-    "value": 0.019195787772136732,
+    "value": 0.02949053138979972,
     "definition": "standard error of the ratio of two means, first-order propagation of the two standard errors, treated as independent"
    },
-   "definition": "luminosity of the tuned-grid BIB runs themselves (photons and pairs on), NOT the conservative-run gain of derived_luminosity",
-   "L_2nm_1e34": 4.394434380000001,
-   "L_20nm_1e34": 1.3301791776000003,
+   "definition": "luminosity of the conservative-locus BIB runs themselves (photons and pairs on), NOT the conservative-run gain of derived_luminosity",
+   "L_2nm_1e34": 4.551191904,
+   "L_20nm_1e34": 1.3498457280000002,
    "n_seeds": 10
   },
   "produced_per_luminosity_reduction_pct": {
-   "value": 25.512946650944947,
+   "value": 27.05329352294539,
    "uncertainty": {
-    "value": 0.5529985470564626,
+    "value": 0.7904289676008119,
     "definition": "first-order propagation of the standard errors of the produced ratio and the BIB-run luminosity ratio, treated as independent"
    },
    "definition": "100 (1 - produced ratio / BIB-run luminosity ratio)"
   },
   "reaching_per_luminosity_reduction_pct": {
-   "value": 16.795065630068727,
+   "value": 3.670358848249855,
    "uncertainty": {
-    "value": 7.785414030138693,
+    "value": 6.9021746903301455,
     "definition": "first-order propagation of the standard errors of the reaching ratio and the BIB-run luminosity ratio, treated as independent"
    },
    "definition": "100 (1 - reaching ratio / BIB-run luminosity ratio)"

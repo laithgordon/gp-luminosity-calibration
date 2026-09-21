@@ -34,7 +34,7 @@ The committed `paper_numbers.json` is reproduced to floating-point last-digit pr
 | 6 | Recommendation table | frozen loci and D_y |
 | 7 | D_y and its expression | beam of `inputs/acc_C3_250_nominal.dat` |
 | 8 | IPC background table, eight rows with their ten seeds | `data/bib_stats_cache.csv` |
-| 9 | 2 nm / 20 nm produced and reaching ratios, the BIB-run luminosity ratio, background-per-luminosity reductions | section 8 and the pairs-on BIB runs in `data/lumi_extracted.csv` |
+| 9 | 2 nm / 20 nm produced and reaching ratios, the BIB-run luminosity ratio, background-per-luminosity reductions | section 8 and the pairs-on BIB runs' own luminosity in `data/bib_run_luminosity.csv` |
 | 10 | n_x convergence at 20 nm | `data/L_vs_nm_by_nx_20nm.csv` |
 
 q_p = 0.2153 is the envelope-integration exponent, defined once in `constants.py`
@@ -45,7 +45,7 @@ from it. The notebook, the export and this script all read both from there.
 
 - **κ.** This repository exports κ's inputs and does not compute κ. The WarpX repository computes it for both simulators with a single definition of R(D_y) and a single weighting.
 - **Other simulator.** WarpX quantities, which the WarpX repository reproduces.
-- **Beyond the snapshot.** The 40–100 nm frozen extension, which is not a GUINEA-PIG++ configuration the paper reports. Also the conservative BIB reruns and the 143 runs added to the raw tree after the 2026-09-10 luminosity snapshot, none of which the paper uses.
+- **Beyond the snapshot.** The 40–100 nm frozen extension, which is not a GUINEA-PIG++ configuration the paper reports. Also the 143 runs added to the raw tree after the 2026-09-10 luminosity snapshot, none of which the paper uses.
 - **Raw output and figures.** Regenerating the committed data from raw output, and regenerating figures. The README documents both.
 - **Intermediates.** Per-seed values, intermediate caches and diagnostics.
 

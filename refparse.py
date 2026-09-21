@@ -83,6 +83,8 @@ def parse_ref(path: str) -> dict:
         "offset_z_um": _f(txt, r"offset_z\s*:\s*" + _num),
         "waist_x_um":  _f(txt, r"waist_x\s*:\s*" + _num),
         "waist_y_um":  _f(txt, r"waist_y\s*:\s*" + _num),
+        # --- pair production, as the run itself counted it ---
+        "n_pairs": _f(txt, r"\bn_pairs=" + _num, float),
         # --- grid occupancy ---
         "out_1": _f(txt, r"\bout\.1=" + _num, int),
         "out_2": _f(txt, r"\bout\.2=" + _num, int),

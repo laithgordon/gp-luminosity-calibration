@@ -53,7 +53,7 @@ Which rule set each published configuration is tabulated in the top-level
 | `round4_cons_{2,4,8,12,16,20}nm.txt` | conservative locus | conservative luminosity |
 | `phase9_batch3.txt` | ladder rungs, including 512×512×64, `n_m` = 1.41×10⁷ at 1 nm | conservative luminosity at 1 nm |
 | `pair_dump_tuned_highemit.txt` | 512×128×64, `n_m` = 5×10⁴, ε_y = 40–100 nm | frozen extension |
-| `pair_dump_2nm.txt`, `pair_dump_4nm.txt`, `pair_dump_calibrated.txt` | pre-campaign tuned grid at 2, 4, 8, 20 nm, pairs on | tuned rows of `tab:bib_yields` |
+| `bib_cons_{2,4,8,20}nm.txt` | conservative locus at 2, 4, 8, 20 nm, pairs on | tuned rows of `tab:bib_yields` |
 
 ## Running
 

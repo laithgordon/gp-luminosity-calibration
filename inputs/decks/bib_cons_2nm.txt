@@ -1,0 +1,4 @@
+# BIB (pairs ON) at the conservative locus, eps_y = 2 nm.
+# n_y = 2^ceil(log2(50*D_y^0.402)) ; n_m = ceil(2.305e-7*D_y^3.300*512*n_y*64)
+# particles emitt_x emitt_y beta_x beta_y sigma_z offset_y n_x n_y n_z n_m integration_method n_t
+0.624 0.9 0.002 12.0 0.12 100 0 512 512 64 4471286 2 6

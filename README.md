@@ -45,7 +45,7 @@ export GP_RAW_ROOT=/path/to/GuineaPig_Feb_2025
 python3 extract_lumi_data.py --restrict-to data/lumi_extracted.csv
 
 # 2. raw   BIB statistics per seed, then the tab:bib_yields numbers
-python3 bib_stats_table.py --refresh       # -> data/bib_stats_cache.csv
+python3 bib_stats_table.py --refresh       # -> data/bib_stats_cache.csv, data/bib_run_luminosity.csv
 python3 bib_stats_render.py                # -> data/bib_stats_summary.csv, data/bib_stats_table.md
 
 # 3. raw   detector reach per seed for the luminosity-vs-BIB figure
@@ -136,13 +136,8 @@ current fit.
 | Configuration | Used for | `n_y` | `n_m` |
 |---|---|---|---|
 | Nominal, 512×512×25 | nominal rows of the code comparison and of `tab:bib_yields` | fixed 512 | fixed 100 000 |
-| Pre-campaign tuned grid, n_x = 512, n_z = 64: `n_y` = 256, 128, 128, 128 at 2, 4, 8, 20 nm | tuned rows of `tab:bib_yields` | `34.70·D_y^0.312`, rounded up to a power of two | the `n_m` locus at that `n_y` at 2 and 4 nm (2 235 661; 353 910); 250 000 and 80 000 at 8 and 20 nm, above the locus |
-| Frozen extension, 40–100 nm, 512×128×64 | `frozen_extension` block of `gp_luminosity_for_wx.csv` | same pre-campaign rule, saturated at 128 | 50 000 floor |
-| Conservative locus, 1–20 nm, n_x = 512, n_z = 64 | `conservative` block of `gp_luminosity_for_wx.csv`; `tab:ny_recommendations` | `50·D_y^0.402`, rounded up (512, 512, 256, 256, 256, 256, 256) | `⌈2.305×10⁻⁷·D_y^3.300·512·n_y·64⌉`; at 1 nm the existing ladder rung 14 100 000 (ratio 1.0003) |
-
-The pre-campaign and conservative rules round the same way and differ only in
-normalisation and exponent: the conservative `n_y` is exactly twice the
-pre-campaign `n_y` at every ε_y.
+| Frozen extension, 40–100 nm, 512×128×64 | `frozen_extension` block of `gp_luminosity_for_wx.csv` | `34.70·D_y^0.312`, rounded up to a power of two, saturated at 128 | 50 000 floor |
+| Conservative locus, 1–20 nm, n_x = 512, n_z = 64 | `conservative` block of `gp_luminosity_for_wx.csv`; `tab:ny_recommendations`; tuned rows of `tab:bib_yields` | `50·D_y^0.402`, rounded up (512, 512, 256, 256, 256, 256, 256) | `⌈2.305×10⁻⁷·D_y^3.300·512·n_y·64⌉`; at 1 nm the existing ladder rung 14 100 000 (ratio 1.0003) |
 
 ## Contents
 
@@ -152,7 +147,7 @@ pre-campaign `n_y` at every ε_y.
 | `constants.py` | Frozen conservative-locus constants and locus functions, and `q_p` (envelope-integration exponent, shared with the WarpX repository) with `q_n^pred = q_p + 1/4`. |
 | `extract_lumi_data.py` | Raw `.ref` → `data/lumi_extracted.csv`. |
 | `GP_CALIBRATION.ipynb` | Tuning ladders, fits, and every figure except `L_vs_nm_by_nx_20nm`. |
-| `bib_stats_table.py`, `bib_stats_render.py` | BIB statistics from `pairs.dat` (`find_dumps` refuses ambiguous dumps) → `tab:bib_yields`. |
+| `bib_stats_table.py`, `bib_stats_render.py` | BIB statistics from `pairs.dat` (`find_dumps` refuses ambiguous dumps) → `tab:bib_yields`; `bib_stats_table.py` also writes each BIB run's own luminosity from its `.ref`. |
 | `bib_reach_per_seed.py` | Detector reach per seed for `lumi_bib_tradeoff_PRL`. |
 | `pairs_reachability.py`, `reachability_analysis.py` | Detector-reach test (SiD-o2-v04: B = 5 T, r_det = 14 mm, z_max = 76 mm). `reachability_analysis.py` is from [dntounis/Beam_Beam_Backgrounds](https://github.com/dntounis/Beam_Beam_Backgrounds). |
 | `refparse.py`, `export_for_wx.py` | Raw `.ref` parser and the WarpX export. |
@@ -164,6 +159,7 @@ pre-campaign `n_y` at every ε_y.
 | `data/lumi_extracted.csv` | notebook, `bib_reach_per_seed.py` |
 | `data/lumi_bib_per_seed_cache.csv` | notebook |
 | `data/bib_stats_cache.csv` | `bib_stats_render.py` |
+| `data/bib_run_luminosity.csv` | `reproduce_paper_numbers.py` |
 | `data/gp_calibration_export.csv`, `data/gp_constants_export.csv` | `export_for_wx.py` |
 | `data/D_y_table.json` | `export_for_wx.py`, `inputs/make_conservative_decks.py` |
 | `data/L_vs_nm_by_nx_20nm.csv` | `nx_nm_convergence.py` |

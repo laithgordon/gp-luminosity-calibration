@@ -38,6 +38,7 @@ INPUTS = {
     "requirements_for_warpx": "data/gp_requirements_for_wx.csv",
     "constants_export": "data/gp_constants_export.csv",
     "bib_cache": "data/bib_stats_cache.csv",
+    "bib_run_luminosity": "data/bib_run_luminosity.csv",
     "luminosity_snapshot": "data/lumi_extracted.csv",
     "nx_convergence_table": "data/L_vs_nm_by_nx_20nm.csv",
     "D_y_table": "data/D_y_table.json",
@@ -417,7 +418,7 @@ def main() -> None:
     out["ipc_background_table"] = {
         "provenance": f"{INPUTS['bib_cache']} (bib_stats_table.py, pair dumps resolved by find_dumps), channel ALL, per bunch crossing",
         "reach_definition": "pairs whose helix from the IP reaches the SiD-o2-v04 barrel (B = 5 T, r_det = 14 mm, z_max = 76 mm)",
-        "datasets": "nominal: 512x512x25, n_m = 1e5. tuned: pre-campaign tuned grid, n_x = 512, n_z = 64, n_y and n_m per row",
+        "datasets": "nominal: 512x512x25, n_m = 1e5. tuned: the conservative locus, n_x = 512, n_z = 64, n_y and n_m per row",
         "rows": ipc_rows,
     }
 
@@ -427,16 +428,17 @@ def main() -> None:
     se = lambda r, k: r[k]["value"] / math.sqrt(r["n_seeds"])
     ipc_r, ipc_s = ratio_se(t2["produced_mean"], se(t2, "produced_std"), t20["produced_mean"], se(t20, "produced_std"))
     rch_r, rch_s = ratio_se(t2["reaching_mean"], se(t2, "reaching_std"), t20["reaching_mean"], se(t20, "reaching_std"))
-    snap = pd.read_csv(P["luminosity_snapshot"])
+    runl = pd.read_csv(P["bib_run_luminosity"], comment="#")
     bib_lumi = {}
     for key, r in (("2nm", t2), ("20nm", t20)):
         g_ = r["grid"]
-        sel = snap[(snap.n_x == g_["n_x"]) & (snap.n_y == g_["n_y"]) & (snap.n_z == g_["n_z"]) & (snap.n_m == g_["n_m"])
-                   & np.isclose(snap.emitt_y, r["eps_y_nm"] / 1000) & (snap.offset_y.fillna(0) == 0) & snap.seed.isin(r["seeds"])
-                   & snap.n_pairs.notna() & (snap.n_pairs > 0)]
+        sel = runl[(runl.dataset == r["dataset"]) & np.isclose(runl.eps_y_nm, r["eps_y_nm"])
+                   & (runl.n_x == g_["n_x"]) & (runl.n_y == g_["n_y"]) & (runl.n_z == g_["n_z"])
+                   & (runl.n_m == g_["n_m"]) & runl.seed.isin(r["seeds"])
+                   & runl.n_pairs.notna() & (runl.n_pairs > 0)]
         per_seed = sel.groupby("seed").lumi_ee.agg(["min", "max"])
         if len(per_seed) != r["n_seeds"]:
-            fail(f"BIB-run luminosity at {key}: {len(per_seed)} of {r['n_seeds']} seeds in {INPUTS['luminosity_snapshot']}")
+            fail(f"BIB-run luminosity at {key}: {len(per_seed)} of {r['n_seeds']} seeds in {INPUTS['bib_run_luminosity']}")
         if not np.allclose(per_seed["min"], per_seed["max"], rtol=0, atol=0):
             fail(f"BIB-run luminosity at {key}: two pair-production runs claim one seed and disagree")
         v = per_seed["min"].values / 1e34
@@ -449,13 +451,13 @@ def main() -> None:
     pr, pe = reduction(ipc_r, ipc_s)
     rr, re_ = reduction(rch_r, rch_s)
     out["derived_background"] = {
-        "provenance": f"tuned rows of ipc_background_table (this file); BIB-run luminosity from {INPUTS['luminosity_snapshot']}: the runs on the same grid and ten seeds as the BIB rows, offset_y = 0, with pair production on (n_pairs recorded in the .ref)",
-        "excluded": ["pairs-off tuning-ladder runs on the 20 nm BIB grid with the same seeds: not the runs the background was counted in"],
+        "provenance": f"tuned rows of ipc_background_table (this file); BIB-run luminosity from {INPUTS['bib_run_luminosity']}: read from the .ref of each BIB run itself, paired to that run's pair dump, on the same grid and ten seeds as the BIB rows, offset_y = 0, with pair production on (n_pairs recorded in the .ref)",
+        "excluded": ["pairs-off runs on the same grid and seeds: the BIB runs have pairs and photons on, so their own luminosity is the one tab:bib_yields normalises by"],
         "produced_ratio_2nm_over_20nm": {"value": ipc_r, "standard_error": unc(ipc_s, SE_RATIO)},
         "reaching_ratio_2nm_over_20nm": {"value": rch_r, "standard_error": unc(rch_s, SE_RATIO)},
         "BIB_RUN_luminosity_ratio_2nm_over_20nm": {
             "value": lr, "standard_error": unc(ls, SE_RATIO),
-            "definition": "luminosity of the tuned-grid BIB runs themselves (photons and pairs on), NOT the conservative-run gain of derived_luminosity",
+            "definition": "luminosity of the conservative-locus BIB runs themselves (photons and pairs on), NOT the conservative-run gain of derived_luminosity",
             "L_2nm_1e34": bib_lumi["2nm"][0], "L_20nm_1e34": bib_lumi["20nm"][0], "n_seeds": bib_lumi["2nm"][2]},
         "produced_per_luminosity_reduction_pct": {"value": pr, "uncertainty": unc(pe, "first-order propagation of the standard errors of the produced ratio and the BIB-run luminosity ratio, treated as independent"),
                                                    "definition": "100 (1 - produced ratio / BIB-run luminosity ratio)"},
