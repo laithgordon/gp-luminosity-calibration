@@ -555,7 +555,7 @@ def render_md(o: dict) -> str:
     M += [f"| {r['eps_y_nm']:g} | {r['D_y']:.1f} | {r['n_y_rec']} | {sf(r['n_m_rec'])}{' (outside fitted D_y band)' if r['outside_fitted_D_y_band'] else ''} |" for r in rt["rows"]]
     dp = o["disruption_parameter"]
     M += ["", "## 7. D_y", "", f"`{dp['expression']}`", "", "| ε_y [nm] | D_y | deck value |", "|---|---|---|"]
-    M += [f"| {r['eps_y_nm']:g} | {r['D_y']:.3f} | {'' if r['D_y_deck_value'] is None else f'{r['D_y_deck_value']:.3f}'} |" for r in dp["rows"]]
+    M += [f"| {r['eps_y_nm']:g} | {r['D_y']:.3f} | {'' if r['D_y_deck_value'] is None else format(r['D_y_deck_value'], '.3f')} |" for r in dp["rows"]]
     ib = o["ipc_background_table"]
     M += ["", "## 8. IPC background (per bunch crossing)", "", "| dataset | ε_y [nm] | n_y | n_m | produced | reaching | seeds |", "|---|---|---|---|---|---|---|"]
     M += [f"| {r['dataset']} | {r['eps_y_nm']:g} | {r['grid']['n_y']} | {r['grid']['n_m']:,} | {r['produced_mean']:,.0f} ± {r['produced_std']['value']:,.0f} | {r['reaching_mean']:.1f} ± {r['reaching_std']['value']:.1f} | {r['n_seeds']} |" for r in ib["rows"]]
