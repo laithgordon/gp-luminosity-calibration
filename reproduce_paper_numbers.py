@@ -46,6 +46,7 @@ INPUTS = {
     "beam_deck": "inputs/acc_C3_250_nominal.dat",
     "production_decks": "inputs/decks/round4_cons_20nm.txt",
     "notebook": "GP_CALIBRATION.ipynb",
+    "fit_routines": "gpfit.py",
     "frozen_locus": "constants.py",
 }
 PARAMETER_BLOCK = "Jim_pars_Aug2023"      # the block inputs/submit_template_S3DF_SLURM.sh runs

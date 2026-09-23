@@ -17,7 +17,8 @@
    "inputs/acc_lumi_opt_C3_250_no_pairs.dat": "faff45ca3c10f269c4feadccaa039ab73bef0695dd780a70441efffa4742589d",
    "inputs/acc_C3_250_nominal.dat": "ef5e4d2d54c9da08fd2b66924db45713940b0761f48b240e20bf832c27aff09d",
    "inputs/decks/round4_cons_20nm.txt": "ec342fe910dd24e5239b68df75a98b7403b759a9953935843ce61070ef27902a",
-   "GP_CALIBRATION.ipynb": "6c9028923f26ab60ba4c86acb27851b3825216d0bc119700cc67eba528594244",
+   "GP_CALIBRATION.ipynb": "8f95ddbc60ee121971e25c4dbe3570670137770acd8f44760d8d4d4d684fd3ee",
+   "gpfit.py": "363f2227f32f6c6895675cfeaf39cc9424f9e8287cdbbf2feb0c5c703ed9a55f",
    "constants.py": "ee4bf53ff195ff46eb823360ed88403e98586c8e6598ec4a3746e31814331dd2"
   }
  },
@@ -1005,7 +1006,7 @@
    },
    "chi2": 7.487840031425302,
    "ndf": 5,
-   "p_value": 0.18681236353343428
+   "p_value": 0.18681236353343436
   },
   "conservative_loci": {
    "status": "FROZEN: the values used to define the production runs, fixed when those runs were submitted; not recomputed from the fits above",
@@ -1290,12 +1291,12 @@
     },
     "produced_mean": 47333.4,
     "produced_std": {
-     "value": 579.3406597158531,
+     "value": 579.3406597158532,
      "definition": "sample standard deviation over seeds, ddof = 1"
     },
     "reaching_mean": 45.7,
     "reaching_std": {
-     "value": 6.464432603785801,
+     "value": 6.464432603785802,
      "definition": "sample standard deviation over seeds, ddof = 1"
     },
     "n_seeds": 10,
@@ -1328,7 +1329,7 @@
     },
     "reaching_mean": 115.3,
     "reaching_std": {
-     "value": 14.07953597720228,
+     "value": 14.079535977202278,
      "definition": "sample standard deviation over seeds, ddof = 1"
     },
     "n_seeds": 10,
@@ -1356,7 +1357,7 @@
     },
     "produced_mean": 88613.6,
     "produced_std": {
-     "value": 1582.2363357672652,
+     "value": 1582.236335767265,
      "definition": "sample standard deviation over seeds, ddof = 1"
     },
     "reaching_mean": 83.7,
@@ -1422,7 +1423,7 @@
     },
     "produced_mean": 46964.6,
     "produced_std": {
-     "value": 700.536968649367,
+     "value": 700.5369686493672,
      "definition": "sample standard deviation over seeds, ddof = 1"
     },
     "reaching_mean": 35.5,
@@ -1454,7 +1455,7 @@
   "produced_ratio_2nm_over_20nm": {
    "value": 2.4594992824382618,
    "standard_error": {
-    "value": 0.015730928654498058,
+    "value": 0.01573092865449806,
     "definition": "standard error of the ratio of two means, first-order propagation of the two standard errors, treated as independent"
    }
   },
@@ -1479,7 +1480,7 @@
   "produced_per_luminosity_reduction_pct": {
    "value": 27.05329352294539,
    "uncertainty": {
-    "value": 0.7904289676008119,
+    "value": 0.7904289676008122,
     "definition": "first-order propagation of the standard errors of the produced ratio and the BIB-run luminosity ratio, treated as independent"
    },
    "definition": "100 (1 - produced ratio / BIB-run luminosity ratio)"

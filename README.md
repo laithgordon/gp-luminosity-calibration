@@ -147,6 +147,8 @@ current fit.
 | `constants.py` | Frozen conservative-locus constants and locus functions, and `q_p` (envelope-integration exponent, shared with the WarpX repository) with `q_n^pred = q_p + 1/4`. |
 | `extract_lumi_data.py` | Raw `.ref` → `data/lumi_extracted.csv`. |
 | `GP_CALIBRATION.ipynb` | Tuning ladders, fits, and every figure except `L_vs_nm_by_nx_20nm`. |
+| `gpfit.py` | Richardson fits of the ladders, the +-5 % crossing that sets each requirement, and its uncertainty; imported by the notebook. |
+| `gpplots.py` | Figure output directory and the shared sweep plot; imported by the notebook. |
 | `bib_stats_table.py`, `bib_stats_render.py` | BIB statistics from `pairs.dat` (`find_dumps` refuses ambiguous dumps) → `tab:bib_yields`; `bib_stats_table.py` also writes each BIB run's own luminosity from its `.ref`. |
 | `bib_reach_per_seed.py` | Detector reach per seed for `lumi_bib_tradeoff_PRL`. |
 | `pairs_reachability.py`, `reachability_analysis.py` | Detector-reach test (SiD-o2-v04: B = 5 T, r_det = 14 mm, z_max = 76 mm). `reachability_analysis.py` is from [dntounis/Beam_Beam_Backgrounds](https://github.com/dntounis/Beam_Beam_Backgrounds). |
