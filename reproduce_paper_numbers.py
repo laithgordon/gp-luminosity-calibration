@@ -40,6 +40,7 @@ INPUTS = {
     "bib_cache": "data/bib_stats_cache.csv",
     "bib_run_luminosity": "data/bib_run_luminosity.csv",
     "luminosity_snapshot": "data/lumi_extracted.csv",
+    "bib_reach_cache": "data/lumi_bib_per_seed_cache.csv",
     "nx_convergence_table": "data/L_vs_nm_by_nx_20nm.csv",
     "D_y_table": "data/D_y_table.json",
     "input_deck": "inputs/acc_lumi_opt_C3_250_no_pairs.dat",
@@ -493,6 +494,54 @@ def main() -> None:
         "excluded": [f"n_x = {c['n_x']}: not converged at n_m = 1e7" for c in conv if not c["converged"]],
     }
 
+    # ── 11. exploratory emittance scan: luminosity and reaching background at the sweep ends ──
+    SCAN_GRID = "n_x = n_y = 512, n_z = 25, n_t = 6, n_m = 1e5, integration_method 2, offset_y = 0"
+    scan = pd.read_csv(P["luminosity_snapshot"])
+    keep = ((scan.n_x == 512) & (scan.n_y == 512) & (scan.n_z == 25) & (scan.offset_y == 0)
+            & (scan.particles == 0.624) & (scan.beta_x == 12.0) & (scan.beta_y == 0.12) & (scan.sigma_z == 100)
+            & ((scan.integration_method == 2) | scan.integration_method.isna())
+            & ((scan.n_t == 6) | scan.n_t.isna()) & ((scan.n_m == 100000) | scan.n_m.isna())
+            & scan.emitt_x.isin([0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]))
+    s = scan[keep].copy()
+    s["eps_x_nm"], s["eps_y_nm"] = s.emitt_x * 1000, s.emitt_y * 1000
+    s = s[s.eps_y_nm <= 20]
+    s["L_1e34"] = s.lumi_ee / 1e34
+    s["src"] = s.source_dir.map({"output": 0, "output_nm": 1, "output_no_pairs": 2}).fillna(3)
+    s = (s.sort_values(["eps_x_nm", "eps_y_nm", "seed", "src"])
+          .drop_duplicates(subset=["eps_x_nm", "eps_y_nm", "seed"], keep="first")
+          .sort_values(["eps_x_nm", "eps_y_nm", "seed"])
+          .groupby(["eps_x_nm", "eps_y_nm"], as_index=False).head(15))
+    s = s.merge(pd.read_csv(P["bib_reach_cache"])[["filename", "source_dir", "n_reach"]],
+                on=["filename", "source_dir"], how="left")
+    scan_agg = s.groupby(["eps_x_nm", "eps_y_nm"], as_index=False).agg(
+        n_seeds=("seed", "nunique"), L_1e34=("L_1e34", "mean"), N_reaching=("n_reach", "mean"))
+
+    def scan_point(ex, ey):
+        hit = scan_agg[(scan_agg.eps_x_nm == ex) & (scan_agg.eps_y_nm == ey)]
+        if len(hit) != 1 or not np.isfinite(hit.iloc[0].N_reaching):
+            fail(f"exploratory scan: no aggregated point at (eps_x, eps_y) = ({ex:g}, {ey:g}) nm")
+        return hit.iloc[0]
+
+    base = scan_point(900.0, 20.0)
+    ends = []
+    for sweep, held, pt in (("eps_y 20 -> 0.5 nm", "eps_x = 900 nm", scan_point(900.0, 0.5)),
+                            ("eps_x 900 -> 100 nm", "eps_y = 20 nm", scan_point(100.0, 20.0))):
+        ends.append(dict(sweep=sweep, held_fixed=held, eps_x_nm=float(pt.eps_x_nm), eps_y_nm=float(pt.eps_y_nm),
+                         L_1e34=float(pt.L_1e34), N_reaching=float(pt.N_reaching), n_seeds=int(pt.n_seeds),
+                         L_over_baseline=float(pt.L_1e34 / base.L_1e34),
+                         N_over_baseline=float(pt.N_reaching / base.N_reaching),
+                         ratio=float((pt.L_1e34 / base.L_1e34) / (pt.N_reaching / base.N_reaching))))
+    out["exploratory_emittance_scan"] = {
+        "provenance": f"{INPUTS['luminosity_snapshot']} at the configuration of the previous C3 studies ({SCAN_GRID}), "
+                      f"one row per (eps_x, eps_y, seed) preferring source_dir 'output', first 15 seeds; "
+                      f"background reaching the detector per crossing from {INPUTS['bib_reach_cache']}",
+        "definition": "factors are the sweep end divided by the PS1 baseline (eps_x, eps_y) = (900, 20) nm; "
+                      "ratio = L_over_baseline / N_over_baseline, the ordinate of fig:lumi_bib_tradeoff",
+        "baseline": dict(eps_x_nm=900.0, eps_y_nm=20.0, L_1e34=float(base.L_1e34),
+                         N_reaching=float(base.N_reaching), n_seeds=int(base.n_seeds)),
+        "sweep_ends": ends,
+    }
+
     # ── write ──
     js = json.dumps(out, indent=1, allow_nan=False, ensure_ascii=False) + "\n"
     (REPO / "paper_numbers.json").write_text(js)
@@ -572,6 +621,17 @@ def render_md(o: dict) -> str:
     M += ["## 10. n_x convergence at ε_y = 20 nm", "", "| n_x | L converged | seeds | converged |", "|---|---|---|---|"]
     M += [f"| {r['n_x']} | {r['L_converged_1e34']:.4f} | {r['n_seeds']} | {'yes' if r['converged'] else 'no'} |" for r in nx["rows"]]
     M += ["", f"Agreement between converged n_x: {100*nx['agreement_between_converged_n_x']['max_pairwise_relative_difference']:.2f} %", ""]
+
+    es = o["exploratory_emittance_scan"]; eb = es["baseline"]
+    M += ["## 11. Exploratory emittance scan (fig:lumi_bib_tradeoff)", "",
+          f"Baseline (ε_x, ε_y) = ({eb['eps_x_nm']:g}, {eb['eps_y_nm']:g}) nm: "
+          f"L = {eb['L_1e34']:.3f}, background reaching the detector = {eb['N_reaching']:.1f} per crossing "
+          f"({eb['n_seeds']} seeds).", "",
+          "| sweep | held fixed | L | N reaching | L/L_0 | N/N_0 | ratio | seeds |", "|---|---|---|---|---|---|---|---|"]
+    M += [f"| {r['sweep']} | {r['held_fixed']} | {r['L_1e34']:.3f} | {r['N_reaching']:.1f} | "
+          f"{r['L_over_baseline']:.2f} | {r['N_over_baseline']:.2f} | {r['ratio']:.2f} | {r['n_seeds']} |"
+          for r in es["sweep_ends"]]
+    M += [""]
     return "\n".join(M)
 
 

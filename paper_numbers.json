@@ -12,6 +12,7 @@
    "data/bib_stats_cache.csv": "2f0a62ddbc54b22ae6d216fb7fab6a4babaa62e3795abfa57bd605b5a3db85cc",
    "data/bib_run_luminosity.csv": "a69e0672b00da79888f6ec7e865b739f1d873d5174d52a2e05374a145e5907b5",
    "data/lumi_extracted.csv": "dff1a79b28b318772ac6640bda679a609a4d66558e7cc159e944eac4ff3c2aca",
+   "data/lumi_bib_per_seed_cache.csv": "1a9d2b58d14b93e52b923a9a25746d09df42671411d7e29ea9ce08b9d6de84db",
    "data/L_vs_nm_by_nx_20nm.csv": "6f5cfe684b9e53681f36d1ef2ff2924a82b8f6fe3e8ffddd5738e6fa0033b407",
    "data/D_y_table.json": "706dec6bafe25afe9afcb84fceaaf893254f2e1ff4211ab195934f5c3aac61f5",
    "inputs/acc_lumi_opt_C3_250_no_pairs.dat": "faff45ca3c10f269c4feadccaa039ab73bef0695dd780a70441efffa4742589d",
@@ -1533,6 +1534,43 @@
   },
   "excluded": [
    "n_x = 2048: not converged at n_m = 1e7"
+  ]
+ },
+ "exploratory_emittance_scan": {
+  "provenance": "data/lumi_extracted.csv at the configuration of the previous C3 studies (n_x = n_y = 512, n_z = 25, n_t = 6, n_m = 1e5, integration_method 2, offset_y = 0), one row per (eps_x, eps_y, seed) preferring source_dir 'output', first 15 seeds; background reaching the detector per crossing from data/lumi_bib_per_seed_cache.csv",
+  "definition": "factors are the sweep end divided by the PS1 baseline (eps_x, eps_y) = (900, 20) nm; ratio = L_over_baseline / N_over_baseline, the ordinate of fig:lumi_bib_tradeoff",
+  "baseline": {
+   "eps_x_nm": 900.0,
+   "eps_y_nm": 20.0,
+   "L_1e34": 1.3679591576000003,
+   "N_reaching": 44.4,
+   "n_seeds": 15
+  },
+  "sweep_ends": [
+   {
+    "sweep": "eps_y 20 -> 0.5 nm",
+    "held_fixed": "eps_x = 900 nm",
+    "eps_x_nm": 900.0,
+    "eps_y_nm": 0.5,
+    "L_1e34": 6.351908696000001,
+    "N_reaching": 147.2,
+    "n_seeds": 15,
+    "L_over_baseline": 4.6433467408076945,
+    "N_over_baseline": 3.315315315315315,
+    "ratio": 1.400574696276234
+   },
+   {
+    "sweep": "eps_x 900 -> 100 nm",
+    "held_fixed": "eps_y = 20 nm",
+    "eps_x_nm": 100.0,
+    "eps_y_nm": 20.0,
+    "L_1e34": 13.923918960000002,
+    "N_reaching": 928.9285714285714,
+    "n_seeds": 15,
+    "L_over_baseline": 10.178607221306706,
+    "N_over_baseline": 20.921814671814673,
+    "ratio": 0.486506901096828
+   }
   ]
  }
 }

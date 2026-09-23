@@ -176,3 +176,12 @@ Seeds per row: nominal 2 nm: 100805, 105469, 130471, 135135, 143455, 145992, 153
 | 2048 | 1.4043 | 1 | no |
 
 Agreement between converged n_x: 0.54 %
+
+## 11. Exploratory emittance scan (fig:lumi_bib_tradeoff)
+
+Baseline (ε_x, ε_y) = (900, 20) nm: L = 1.368, background reaching the detector = 44.4 per crossing (15 seeds).
+
+| sweep | held fixed | L | N reaching | L/L_0 | N/N_0 | ratio | seeds |
+|---|---|---|---|---|---|---|---|
+| eps_y 20 -> 0.5 nm | eps_x = 900 nm | 6.352 | 147.2 | 4.64 | 3.32 | 1.40 | 15 |
+| eps_x 900 -> 100 nm | eps_y = 20 nm | 13.924 | 928.9 | 10.18 | 20.92 | 0.49 | 15 |

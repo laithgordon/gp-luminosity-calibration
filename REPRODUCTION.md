@@ -36,6 +36,7 @@ The committed `paper_numbers.json` is reproduced to floating-point last-digit pr
 | 8 | IPC background table, eight rows with their ten seeds | `data/bib_stats_cache.csv` |
 | 9 | 2 nm / 20 nm produced and reaching ratios, the BIB-run luminosity ratio, background-per-luminosity reductions | section 8 and the pairs-on BIB runs' own luminosity in `data/bib_run_luminosity.csv` |
 | 10 | n_x convergence at 20 nm | `data/L_vs_nm_by_nx_20nm.csv` |
+| 11 | Luminosity and background reaching the detector at the ends of the exploratory emittance sweeps | `data/lumi_extracted.csv`, `data/lumi_bib_per_seed_cache.csv` |
 
 q_p = 0.2153 is the envelope-integration exponent, defined once in `constants.py`
 and shared with the WarpX repository; q_n^pred = q_p + 1/4 = 0.4653 is derived
